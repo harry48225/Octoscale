@@ -43,6 +43,7 @@ void setup() {
   display.setTextSize(1);
   display.setTextColor(SH110X_WHITE);
   display.setCursor(0,0);
+  scale.set_scale(400.90);
 
   scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
 }
@@ -52,6 +53,9 @@ void loop() {
   display.setCursor(0,0);
   display.println(scale.get_units(40));
   display.display();
+
+  if(!digitalRead(BUTTON_B)) scale.tare(40);
+
   if(!digitalRead(BUTTON_C)) {
     display.clearDisplay();
     display.println("Calibration mode");
@@ -63,12 +67,15 @@ void loop() {
 
     while(digitalRead(BUTTON_A)) delay(10);
     
-    float factor = scale.get_units(100) / 100.f;
+    float factor = scale.get_units(255) / 100.f;
 
     scale.set_scale(factor);
 
     display.clearDisplay();
     display.println("Calibrated!");
-    delay(500);
+    display.print("Factor: ");
+    display.print(factor);
+    display.display();
+    delay(2000);
   }
 }
