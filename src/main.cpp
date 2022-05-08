@@ -48,10 +48,21 @@ void setup() {
   scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
 }
 
+float average_reading = 0;
+float alpha = 0.2;
+
+int interval = 5;
+int count = 0;
+
 void loop() {
+  while (count < interval) {
+    average_reading = average_reading * (1-alpha) + scale.get_units() * alpha;
+    count++;
+  }
+  count=0;
   display.clearDisplay();
   display.setCursor(0,0);
-  display.println(scale.get_units(40));
+  display.println(round(average_reading*10.0)/10.0, 1);
   display.display();
 
   if(!digitalRead(BUTTON_B)) scale.tare(40);
