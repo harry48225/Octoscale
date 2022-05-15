@@ -3,7 +3,7 @@
 // Constants for 1 euro rolling average
 #define MIN_CUTOFF 0.0001
 #define D_CUTOFF 0.5
-#define BETA 0.005
+#define BETA 0.01
 #define PI 3.14159265358979323846
 
 class Scale {
