@@ -50,8 +50,24 @@ void startTimer() {
   
 }
 
+enum State {
+  IDLE,
+  TIMER_WAITING_FOR_START,
+  TIMING,
+  TIMING_STOPPED,
+  CALIBRATION
+};
+
+State state = IDLE;
+unsigned long startTime = 0;
 
 void loop() {
+  if(!digitalRead(BUTTON_A)) state = TIMER_WAITING_FOR_START;
+
+  if(!digitalRead(BUTTON_B)) scale.tare();
+
+  if(!digitalRead(BUTTON_C)) state=CALIBRATION;
+
   display.clearDisplay();
   display.setCursor(0,0);
 
@@ -65,13 +81,21 @@ void loop() {
   } else {
     display.println("UNSETTLED");
   }
+  if (state == TIMER_WAITING_FOR_START) {
+   display.println("Waiting for start"); 
+  }
+  if (state == TIMING) {
+    display.println("Duration: ");
+    display.print(millis() - startTime);
+  }
   display.display();
 
-  if(!digitalRead(BUTTON_A)) startTimer();
-
-  if(!digitalRead(BUTTON_B)) scale.tare();
-
-  if(!digitalRead(BUTTON_C)) {
+  if (state == TIMER_WAITING_FOR_START && !scale.hasSettled) {
+    startTime = millis();
+    state = TIMING;
+  }
+    
+  if (state == CALIBRATION) {
     display.clearDisplay();
     display.println("Calibration mode");
     display.println("Place a 100g mass");
