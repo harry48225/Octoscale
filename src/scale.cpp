@@ -9,15 +9,15 @@ Scale::Scale(int doutPin, int sckPin) {
 }
 
 double Scale::getReading() {
-  return smoothedReading;
+  return smoothedReading - offset;
 }
 
 double Scale::getLastSettledReading() {
-  return lastSettledReading;
+  return lastSettledReading - offset;
 }
 
 void Scale::tare() {
-  loadCell.tare(50);
+  offset = smoothedReading;
 }
 
 void Scale::setScale() {
@@ -43,7 +43,7 @@ double Scale::exponentialSmoothing(double a, double x, double x_prev) {
 
 void Scale::updateReading() {
   long t = micros();
-  double x = loadCell.get_units();
+  double x = getUnits(1);
   double t_e = (t - t_prev)/1e6;
   // Filtered derivative
   double a_d = smoothingFactor(t_e, D_CUTOFF);

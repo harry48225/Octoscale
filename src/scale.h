@@ -22,6 +22,7 @@ class Scale {
 
     bool hasSettled = false;
   private:
+    double offset = 0;
     HX711 loadCell;
     unsigned long lastSettledMillis = 0;
     double smoothedReading = 0;
