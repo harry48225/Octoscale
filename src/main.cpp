@@ -77,6 +77,10 @@ void loop() {
   display.println("Reading:");
   display.println(round(mass*10.0)/10.0, 1);
   display.println(mass);
+  display.print("last settled: ");
+  display.println(scale.getLastSettledReading());
+  display.print("delta time: ");
+  display.println(scale.secondsBetweenSettledReadings);
   if (scale.hasSettled) {
     display.println("settled");
   } else {
@@ -105,6 +109,19 @@ void loop() {
   if (state == TIMER_WAITING_FOR_START && !scale.hasSettled) {
     startTime = millis();
     state = TIMING;
+  }
+
+  // Do auto tare
+  if (scale.hasSettled && abs(scale.getReading() - scale.getLastSettledReading()) > 100 && scale.secondsBetweenSettledReadings < 3) {
+    display.clearDisplay();
+    display.setCursor(0,0);
+    display.println("AUTO TARE");
+    display.print("mass delta: ");
+    display.println(abs(scale.getReading() - scale.getLastSettledReading()));
+    display.print("time delta: ");
+    display.println(scale.secondsBetweenSettledReadings);
+    display.display();
+    scale.tare();
   }
     
   if (state == CALIBRATION) {

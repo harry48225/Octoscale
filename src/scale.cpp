@@ -63,6 +63,8 @@ void Scale::updateReading() {
   } else {
     if (hasSettled) {
       lastSettledReading = smoothedReading;
+      secondsBetweenSettledReadings = (millis() - lastSettledMillis)/1000;
+      lastSettledMillis = millis();
     }
     hasSettled = false;
   }

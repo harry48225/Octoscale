@@ -6,13 +6,14 @@
 #define BETA 0.01
 #define PI 3.14159265358979323846
 
-#define SETTLED_TOLERANCE 0.1
+#define SETTLED_TOLERANCE 0.05
 
 class Scale {
   public:
     Scale(int doutPin, int sclPin);
     double getReading();
     double getLastSettledReading();
+    unsigned long secondsBetweenSettledReadings = -1;
     void updateReading();
     void tare();
     void setScale();
@@ -22,6 +23,7 @@ class Scale {
     bool hasSettled = false;
   private:
     HX711 loadCell;
+    unsigned long lastSettledMillis = 0;
     double smoothedReading = 0;
     double lastSettledReading = 0;
     double x_prev = 0;
