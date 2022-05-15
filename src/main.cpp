@@ -115,6 +115,11 @@ void loop() {
   if (scale.hasSettled && abs(scale.getReading() - scale.getLastSettledReading()) > 100 && scale.secondsBetweenSettledReadings < 3) {
     display.println("AUTO TARE");
     display.display();
+    // Take some more readings
+    for (int i = 0; i < 40; i++) {
+      scale.updateReading();
+      delay(20);
+    }
     scale.tare();
     delay(200);
   }
