@@ -54,6 +54,12 @@ void Scale::updateReading() {
   Serial.println(a);
   double x_hat = exponentialSmoothing(a, x, x_prev);
 
+  if (abs(x_hat - smoothedReading) < SETTLED_TOLERANCE) {
+    hasSettled = true;
+  } else {
+    hasSettled = false;
+  }
+
   x_prev = x_hat;
   dx_prev = dx_hat;
   t_prev = t;

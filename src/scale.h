@@ -6,6 +6,8 @@
 #define BETA 0.01
 #define PI 3.14159265358979323846
 
+#define SETTLED_TOLERANCE 0.1
+
 class Scale {
   public:
     Scale(int doutPin, int sclPin);
@@ -15,6 +17,8 @@ class Scale {
     void setScale();
     void setScale(float factor);
     float getUnits(int samples);
+
+    bool hasSettled = false;
   private:
     HX711 loadCell;
     double smoothedReading = 0;

@@ -46,6 +46,10 @@ void setup() {
   display.setCursor(0,0);
 }
 
+void startTimer() {
+  
+}
+
 
 void loop() {
   display.clearDisplay();
@@ -56,7 +60,14 @@ void loop() {
   display.println("Reading:");
   display.println(round(mass*10.0)/10.0, 1);
   display.println(mass);
+  if (scale.hasSettled) {
+    display.println("settled");
+  } else {
+    display.println("UNSETTLED");
+  }
   display.display();
+
+  if(!digitalRead(BUTTON_A)) startTimer();
 
   if(!digitalRead(BUTTON_B)) scale.tare();
 
