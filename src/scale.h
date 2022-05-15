@@ -11,7 +11,8 @@
 class Scale {
   public:
     Scale(int doutPin, int sclPin);
-    float getReading();
+    double getReading();
+    double getLastSettledReading();
     void updateReading();
     void tare();
     void setScale();
@@ -22,6 +23,7 @@ class Scale {
   private:
     HX711 loadCell;
     double smoothedReading = 0;
+    double lastSettledReading = 0;
     double x_prev = 0;
     double dx_prev = 0;
     long t_prev = 0;

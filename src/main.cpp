@@ -60,6 +60,7 @@ enum State {
 
 State state = IDLE;
 unsigned long startTime = 0;
+unsigned long duration = 0;
 
 void loop() {
   if(!digitalRead(BUTTON_A)) state = TIMER_WAITING_FOR_START;
@@ -88,6 +89,16 @@ void loop() {
     display.print("Duration: ");
     long seconds = (millis() - startTime)/1000;
     display.printf("%02d:%02d", seconds / 60, seconds % 60);
+
+    // Something greater than 50g must have been taken off the scale
+    if (scale.getLastSettledReading() - scale.getReading() > 50) {
+      state = TIMING_STOPPED;
+      duration = (millis() - startTime)/1000;
+    }
+  }
+  if (state == TIMING_STOPPED) {
+    display.print("Brew Time: ");
+    display.printf("%02d:%02d", duration / 60, duration % 60);
   }
   display.display();
 

@@ -8,8 +8,12 @@ Scale::Scale(int doutPin, int sckPin) {
   loadCell.tare();
 }
 
-float Scale::getReading() {
+double Scale::getReading() {
   return smoothedReading;
+}
+
+double Scale::getLastSettledReading() {
+  return lastSettledReading;
 }
 
 void Scale::tare() {
@@ -57,6 +61,9 @@ void Scale::updateReading() {
   if (abs(x_hat - smoothedReading) < SETTLED_TOLERANCE) {
     hasSettled = true;
   } else {
+    if (hasSettled) {
+      lastSettledReading = smoothedReading;
+    }
     hasSettled = false;
   }
 
