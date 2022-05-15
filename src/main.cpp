@@ -85,8 +85,9 @@ void loop() {
    display.println("Waiting for start"); 
   }
   if (state == TIMING) {
-    display.println("Duration: ");
-    display.print(millis() - startTime);
+    display.print("Duration: ");
+    long seconds = (millis() - startTime)/1000;
+    display.printf("%02d:%02d", seconds / 60, seconds % 60);
   }
   display.display();
 
