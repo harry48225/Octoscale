@@ -7,6 +7,7 @@
 #define PI 3.14159265358979323846
 
 #define SETTLED_TOLERANCE 0.02
+#define UNSETTLED_TOLERANCE 0.1
 
 class Scale {
   public:

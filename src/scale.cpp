@@ -66,7 +66,10 @@ void Scale::updateReading() {
       secondsBetweenSettledReadings = (millis() - lastSettledMillis)/1000;
       lastSettledMillis = millis();
     }
-    hasSettled = false;
+
+    if (abs(x_hat - smoothedReading > UNSETTLED_TOLERANCE)) {
+      hasSettled = false;
+    }
   }
 
   x_prev = x_hat;
