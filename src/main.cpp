@@ -63,7 +63,11 @@ State state = IDLE;
 unsigned long startTime = 0;
 unsigned long duration = 0;
 
-float readings[][2] = {{0, 0}, {10, 10}, {20, 20}, {30, 30}, {40, 31}, {50, 32}, {55,35}};
+//float readings[][2] = {{0, 0}, {10, 10}, {20, 20}, {30, 30}, {40, 31}, {50, 32}, {55,35}};
+float readings[10024][2];
+long nextReading = 0;
+
+unsigned long lastReadingMillis = millis();
 
 void loop() {
   display.clearDisplay();
@@ -107,6 +111,15 @@ void loop() {
   if (state == TIMER_WAITING_FOR_START && !scale.hasSettled) {
     startTime = millis();
     state = TIMING;
+    nextReading = 0;
+  }
+
+  if (millis() - lastReadingMillis > 100) {
+    readings[nextReading][0] = millis();
+    readings[nextReading][1] = scale.getReading();
+    nextReading ++;
+    lastReadingMillis = millis();
+
   }
 
   // Do auto tare
@@ -144,6 +157,6 @@ void loop() {
     delay(2000);
   }
 
-  drawGraph(display, readings, 7, 0, 31, 128, 32);
+  drawGraph(display, readings, nextReading, 0, 31, 128, 32);
   display.display();
 }
