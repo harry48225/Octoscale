@@ -3,6 +3,7 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SH110X.h>
 #include "scale.h"
+#include "graph.h"
 
 #define BUTTON_A  1
 #define BUTTON_B  38
@@ -62,25 +63,23 @@ State state = IDLE;
 unsigned long startTime = 0;
 unsigned long duration = 0;
 
+float readings[][2] = {{0, 0}, {10, 10}, {20, 20}, {30, 30}, {40, 31}, {50, 32}, {55,35}};
+
 void loop() {
+  display.clearDisplay();
   if(!digitalRead(BUTTON_A)) state = TIMER_WAITING_FOR_START;
 
   if(!digitalRead(BUTTON_B)) scale.tare();
 
   if(!digitalRead(BUTTON_C)) state=CALIBRATION;
 
-  display.clearDisplay();
+  display.fillRect(0,0,127,32, SH110X_BLACK);
   display.setCursor(0,0);
 
   scale.updateReading();
   double mass = scale.getReading();
-  display.println("Reading:");
-  display.println(round(mass*10.0)/10.0, 1);
-  display.println(mass);
-  display.print("last settled: ");
-  display.println(scale.getLastSettledReading());
-  display.print("delta time: ");
-  display.println(scale.secondsBetweenSettledReadings);
+  display.printf("%.1f %.2f\n",mass, mass);
+  display.printf("sttl: %.1f, dT: %.f\n", scale.getLastSettledReading(), scale.secondsBetweenSettledReadings);
   if (scale.hasSettled) {
     display.println("settled");
   } else {
@@ -104,7 +103,6 @@ void loop() {
     display.print("Brew Time: ");
     display.printf("%02d:%02d", duration / 60, duration % 60);
   }
-  display.display();
 
   if (state == TIMER_WAITING_FOR_START && !scale.hasSettled) {
     startTime = millis();
@@ -143,7 +141,9 @@ void loop() {
     display.println("Calibrated!");
     display.print("Factor: ");
     display.print(factor);
-    display.display();
     delay(2000);
   }
+
+  drawGraph(display, readings, 7, 0, 31, 128, 32);
+  display.display();
 }
