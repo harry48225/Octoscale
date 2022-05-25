@@ -64,8 +64,9 @@ unsigned long startTime = 0;
 unsigned long duration = 0;
 
 //float readings[][2] = {{0, 0}, {10, 10}, {20, 20}, {30, 30}, {40, 31}, {50, 32}, {55,35}};
-float readings[10024][2];
+float readings[160][2];
 long nextReading = 0;
+int readingInterval = 20;
 
 unsigned long lastReadingMillis = millis();
 
@@ -114,12 +115,25 @@ void loop() {
     nextReading = 0;
   }
 
-  if (millis() - lastReadingMillis > 100) {
+  // update reading history for graph
+  if (millis() - lastReadingMillis > readingInterval) {
     readings[nextReading][0] = millis();
     readings[nextReading][1] = scale.getReading();
     nextReading ++;
     lastReadingMillis = millis();
 
+    // Display is only 160 pixels across so it doesn't really make sense
+    // to store more than 160 readings,
+    if (nextReading == 160) {
+      // Mean all the readings
+      for (int i = 0; i<nextReading - 1; i+=2) {
+        readings[i/2][0] = (readings[i][0] + readings[i+1][0])/2;
+        readings[i/2][1] = (readings[i][1] + readings[i+1][1])/2;
+      }
+
+      nextReading=80;
+      readingInterval*=2;
+    }
   }
 
   // Do auto tare
