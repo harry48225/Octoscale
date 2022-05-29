@@ -91,6 +91,15 @@ void displayBrewTime() {
   display.printf("%02d:%02d", duration / 60, duration % 60);
 }
 
+void displayAutoTare() {
+  display.clearDisplay();
+  display.setCursor(0,12);
+  display.setFont(&FreeMono12pt7b);
+  display.println("AUTO");
+  display.println("TARE");
+  display.display();
+}
+
 void loop() {
   if(!digitalRead(BUTTON_A)) state = TIMER_WAITING_FOR_START;
 
@@ -126,12 +135,7 @@ void loop() {
 
   // Do auto tare
   if (autotareEnabled && scale.hasSettled && abs(scale.getReading() - scale.getLastSettledReading()) > 100 && scale.millisBetweenSettledReadings < 2000) {
-    display.clearDisplay();
-    display.setCursor(0,12);
-    display.setFont(&FreeMono12pt7b);
-    display.println("AUTO");
-    display.println("TARE");
-    display.display();
+    displayAutoTare();
     // Take some more readings
     for (int i = 0; i < 40; i++) {
       scale.updateReading();
