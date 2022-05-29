@@ -59,9 +59,7 @@ void setup() {
   pinMode(BUTTON_C, INPUT_PULLUP);
 }
 
-void displayMass() {
-  scale.updateReading();
-  double mass = scale.getReading();
+void displayMass(double mass) {
   display.setCursor(0,16);
   display.setFont(&FreeMono18pt7b);
   display.printf("%.1f\n",mass);
@@ -79,6 +77,11 @@ void startTimer() {
 
 void stopTimer() {
   state = TIMING_STOPPED;
+  display.clearDisplay();
+  display.setCursor(8,30);
+  display.println("<<brew complete>>");
+  display.display();
+  delay(500);
 }
 
 void displayTimer() {
@@ -87,8 +90,21 @@ void displayTimer() {
   display.printf("%02d:%02d", seconds / 60, seconds % 60);
 }
 
+void displayBrewCompleteAnimation() {
+  for (int i = 0; i < 5; i++) {
+    display.clearDisplay();
+    display.setCursor(20,30);
+    display.println("<<BREW COMPLETE>>");
+    display.display();
+    delay(500);
+    display.clearDisplay();
+    display.display();
+    delay(500);
+  }
+}
+
 void displayBrewStats() {
-  display.printf("%.1fg in %02dm:%02ds,", brewMass, brewDuration / 60, brewDuration % 60);
+  display.printf("in %02dm:%02ds,", brewDuration / 60, brewDuration % 60);
 }
 
 void displayAutoTare() {
@@ -110,7 +126,14 @@ void loop() {
   display.clearDisplay();
   display.setCursor(0,0);
 
-  displayMass();
+  double mass = -1;
+  if (state == TIMING_STOPPED) {
+    mass = brewMass;
+  } else {
+    scale.updateReading();
+    mass = scale.getReading();
+  }
+  displayMass(mass);
   
   // handle timing states
   if (state == TIMER_WAITING_FOR_START) {
