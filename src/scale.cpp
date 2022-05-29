@@ -49,25 +49,23 @@ void Scale::updateReading() {
   double a_d = smoothingFactor(t_e, D_CUTOFF);
   double dx = (x - x_prev) / t_e;
   double dx_hat = exponentialSmoothing(a_d, dx, dx_prev);
-  Serial.println(dx_hat);
 
   // Filtered signal
   double cutoff = (MIN_CUTOFF) + (BETA * abs(dx_hat));
-  Serial.println(cutoff);
   double a = smoothingFactor(t_e, cutoff);
-  Serial.println(a);
   double x_hat = exponentialSmoothing(a, x, x_prev);
 
-  if (abs(x_hat - smoothedReading) < SETTLED_TOLERANCE) {
+  Serial.printf("\r x_hat: %.f, dx_hat: %.f                                         ", x_hat, dx_hat);
+  if (abs(dx_hat) < SETTLED_TOLERANCE) {
     hasSettled = true;
   } else {
     if (hasSettled) {
       lastSettledReading = smoothedReading;
-      secondsBetweenSettledReadings = (millis() - lastSettledMillis)/1000;
+      millisBetweenSettledReadings = (millis() - lastSettledMillis);
       lastSettledMillis = millis();
     }
 
-    if (abs(x_hat - smoothedReading > UNSETTLED_TOLERANCE)) {
+    if (abs(dx_hat) > UNSETTLED_TOLERANCE) {
       hasSettled = false;
     }
   }

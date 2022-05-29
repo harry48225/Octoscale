@@ -84,7 +84,7 @@ void loop() {
   scale.updateReading();
   double mass = scale.getReading();
   display.printf("%.1f %.2f\n",mass, mass);
-  display.printf("sttl: %.1f, dT: %.f\n", scale.getLastSettledReading(), scale.secondsBetweenSettledReadings);
+  display.printf("sttl: %.1f, dT: %.f\n", scale.getLastSettledReading(), scale.millisBetweenSettledReadings);
   if (scale.hasSettled) {
     display.println("settled");
   } else {
@@ -137,7 +137,7 @@ void loop() {
   }
 
   // Do auto tare
-  if (scale.hasSettled && abs(scale.getReading() - scale.getLastSettledReading()) > 100 && scale.secondsBetweenSettledReadings < 3) {
+  if (scale.hasSettled && abs(scale.getReading() - scale.getLastSettledReading()) > 100 && scale.millisBetweenSettledReadings < 3) {
     display.println("AUTO TARE");
     display.display();
     // Take some more readings

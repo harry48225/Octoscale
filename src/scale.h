@@ -6,15 +6,15 @@
 #define BETA 0.01
 #define PI 3.14159265358979323846
 
-#define SETTLED_TOLERANCE 0.02
-#define UNSETTLED_TOLERANCE 0.1
+#define SETTLED_TOLERANCE 10
+#define UNSETTLED_TOLERANCE 50
 
 class Scale {
   public:
     Scale(int doutPin, int sclPin);
     double getReading();
     double getLastSettledReading();
-    unsigned long secondsBetweenSettledReadings = -1;
+    float millisBetweenSettledReadings = -1;
     void updateReading();
     void tare();
     void setScale();

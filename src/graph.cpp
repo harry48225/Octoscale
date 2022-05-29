@@ -4,7 +4,7 @@
 int linearIterpolate(float x, float min, float max, int range) {
   if (max == min) return -1;
   float prop = (x - min)/(max - min);
-  Serial.printf("prop: %f, range: %d, prop*range: %f \n", prop, range, prop * (float) range);
+  //Serial.printf("prop: %f, range: %d, prop*range: %f \n", prop, range, prop * (float) range);
   return (int) (prop * (float)range);
 }
 
@@ -25,7 +25,7 @@ void drawGraph(Adafruit_SH1107 &display, float points[][2], int numberOfPoints, 
     largestY = max(largestY, points[i][1]);
   }
 
-  Serial.printf("smol x: %f, big x: %f, smol y: %f, big y: %f", smallestX, largestX, smallestY, largestY);
+  //Serial.printf("smol x: %f, big x: %f, smol y: %f, big y: %f", smallestX, largestX, smallestY, largestY);
   int x_prev = -1;
   int y_prev = -1;
   // Now scale and plot the points
@@ -35,7 +35,7 @@ void drawGraph(Adafruit_SH1107 &display, float points[][2], int numberOfPoints, 
     
     if (x_prev != -1 && y_prev != -1) {
       display.drawLine(x_prev, y_prev, x, y, SH110X_WHITE);
-      Serial.printf("plotting at %d, %d \n", x, y);
+      //Serial.printf("plotting at %d, %d \n", x, y);
     }
 
     x_prev = x;
