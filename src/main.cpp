@@ -62,7 +62,7 @@ void setup() {
 void displayMass(double mass) {
   display.setCursor(0,16);
   display.setFont(&FreeMono18pt7b);
-  display.printf("%.1f\n",mass);
+  display.printf("%-3.1f\n",mass);
   display.setFont();
   display.setCursor(0,16+10);
   //display.printf("sttl: %.1f, dT: %.f\n", scale.getLastSettledReading(), scale.millisBetweenSettledReadings);
@@ -137,6 +137,8 @@ void loop() {
   
   // handle timing states
   if (state == TIMER_WAITING_FOR_START) {
+    Graph::reset();
+    Graph::stop();
    display.println("timer primed");
    if (!scale.hasSettled) {
       startTimer();
