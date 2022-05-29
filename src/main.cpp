@@ -27,6 +27,8 @@ enum State {
   CALIBRATION
 };
 
+#define STOP_TIMER_REMOVAL_MASS 50
+
 State state = IDLE;
 bool autotareEnabled = true;
 unsigned long startTime = 0;
@@ -55,8 +57,38 @@ void setup() {
   pinMode(BUTTON_C, INPUT_PULLUP);
 }
 
+void displayMass() {
+  scale.updateReading();
+  double mass = scale.getReading();
+  display.setCursor(0,16);
+  display.setFont(&FreeMono18pt7b);
+  display.printf("%.1f\n",mass);
+  display.setFont();
+  display.setCursor(0,16+10);
+  //display.printf("sttl: %.1f, dT: %.f\n", scale.getLastSettledReading(), scale.millisBetweenSettledReadings);
+}
+
 void startTimer() {
-  
+  startTime = millis();
+  Graph::reset();
+  autotareEnabled = false;
+  state = TIMING;
+}
+
+void stopTimer() {
+  state = TIMING_STOPPED;
+  duration = (millis() - startTime)/1000;
+}
+
+void displayTimer() {
+  display.print("timing: ");
+  long seconds = (millis() - startTime)/1000;
+  display.printf("%02d:%02d", seconds / 60, seconds % 60);
+}
+
+void displayBrewTime() {
+  display.print("Brew Time: ");
+  display.printf("%02d:%02d", duration / 60, duration % 60);
 }
 
 void loop() {
@@ -69,43 +101,27 @@ void loop() {
   display.clearDisplay();
   display.setCursor(0,0);
 
-  // Display mass
-  scale.updateReading();
-  double mass = scale.getReading();
-  display.setCursor(0,16);
-  display.setFont(&FreeMono18pt7b);
-  display.printf("%.1f\n",mass);
-  display.setFont();
-  display.setCursor(0,16+10);
-  //display.printf("sttl: %.1f, dT: %.f\n", scale.getLastSettledReading(), scale.millisBetweenSettledReadings);
+  displayMass();
   
   // handle timing states
   if (state == TIMER_WAITING_FOR_START) {
    display.println("timer primed");
-
    if (!scale.hasSettled) {
-      startTime = millis();
-      Graph::reset();
-      autotareEnabled = false;
-      state = TIMING;
+      startTimer();
    }
   }
 
   if (state == TIMING) {
-    display.print("timing: ");
-    long seconds = (millis() - startTime)/1000;
-    display.printf("%02d:%02d", seconds / 60, seconds % 60);
+    displayTimer();
 
     // Something greater than 50g must have been taken off the scale
-    if (scale.getLastSettledReading() - scale.getReading() > 50) {
-      state = TIMING_STOPPED;
-      duration = (millis() - startTime)/1000;
+    if (scale.getLastSettledReading() - scale.getReading() > STOP_TIMER_REMOVAL_MASS) {
+      stopTimer();
     }
   }
 
   if (state == TIMING_STOPPED) {
-    display.print("Brew Time: ");
-    display.printf("%02d:%02d", duration / 60, duration % 60);
+    displayBrewTime();
   }
 
   // Do auto tare
