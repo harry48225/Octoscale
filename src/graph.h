@@ -1,3 +1,11 @@
 #include <Adafruit_SH110X.h>
 #include <Adafruit_GFX.h>
-void drawGraph(Adafruit_SH1107 &display, float points[][2], int numberOfPoints, int x0, int y0, int width, int height);
+
+#define INITIAL_READING_INTERVAL 20
+// Might be more appropriate to make this a class rather than
+// a namespace...
+namespace Graph {
+  void reset();
+  void update(float newReading);
+  void draw(Adafruit_SH1107 &display, int x0, int y0, int width, int height);
+}

@@ -19,40 +19,6 @@ Adafruit_SH1107 display = Adafruit_SH1107(64, 128, &Wire);
 
 Scale scale = Scale(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
 
-void setup() {
-  Serial.begin(115200);
-
-  Serial.println("128x64 OLED FeatherWing test");
-  delay(250); // wait for the OLED to power up
-  display.begin(0x3C, true); // Address 0x3C default
-
-  Serial.println("OLED begun");
-
-  // Show image buffer on the display hardware.
-  // Since the buffer is intialized with an Adafruit splashscreen
-  // internally, this will display the splashscreen.
-  display.display();
-  delay(1000);
-
-  // Clear the buffer.
-  display.clearDisplay();
-  display.display();
-
-  display.setRotation(1);
-
-  pinMode(BUTTON_A, INPUT_PULLUP);
-  pinMode(BUTTON_B, INPUT_PULLUP);
-  pinMode(BUTTON_C, INPUT_PULLUP);
-
-  display.setTextSize(1);
-  display.setTextColor(SH110X_WHITE);
-  display.setCursor(0,0);
-}
-
-void startTimer() {
-  
-}
-
 enum State {
   IDLE,
   TIMER_WAITING_FOR_START,
@@ -62,25 +28,45 @@ enum State {
 };
 
 State state = IDLE;
+bool autotareEnabled = true;
 unsigned long startTime = 0;
 unsigned long duration = 0;
 
-//float readings[][2] = {{0, 0}, {10, 10}, {20, 20}, {30, 30}, {40, 31}, {50, 32}, {55,35}};
-float readings[160][2];
-long nextReading = 0;
-int readingInterval = 20;
 
-unsigned long lastReadingMillis = millis();
+void setup() {
+  Serial.begin(115200);
+  delay(250); // wait for the OLED to power up
+  display.begin(0x3C, true); // Address 0x3C default
+  // Show image buffer on the display hardware.
+  // Since the buffer is intialized with an Adafruit splashscreen
+  // internally, this will display the splashscreen.
+
+  // Clear the buffer.
+  display.clearDisplay();
+  display.display();
+  display.setRotation(1);
+  display.setTextSize(1);
+  display.setTextColor(SH110X_WHITE);
+  display.setCursor(0,0);
+
+  // setup buttons
+  pinMode(BUTTON_A, INPUT_PULLUP);
+  pinMode(BUTTON_B, INPUT_PULLUP);
+  pinMode(BUTTON_C, INPUT_PULLUP);
+}
+
+void startTimer() {
+  
+}
 
 void loop() {
-  display.clearDisplay();
   if(!digitalRead(BUTTON_A)) state = TIMER_WAITING_FOR_START;
 
   if(!digitalRead(BUTTON_B)) scale.tare();
 
   if(!digitalRead(BUTTON_C)) state=CALIBRATION;
 
-  display.fillRect(0,0,127,32, SH110X_BLACK);
+  display.clearDisplay();
   display.setCursor(0,0);
 
   // Display mass
@@ -93,12 +79,20 @@ void loop() {
   display.setCursor(0,16+10);
   //display.printf("sttl: %.1f, dT: %.f\n", scale.getLastSettledReading(), scale.millisBetweenSettledReadings);
   
-  
+  // handle timing states
   if (state == TIMER_WAITING_FOR_START) {
-   display.println("Waiting for start"); 
+   display.println("timer primed");
+
+   if (!scale.hasSettled) {
+      startTime = millis();
+      Graph::reset();
+      autotareEnabled = false;
+      state = TIMING;
+   }
   }
+
   if (state == TIMING) {
-    display.print("Duration: ");
+    display.print("timing: ");
     long seconds = (millis() - startTime)/1000;
     display.printf("%02d:%02d", seconds / 60, seconds % 60);
 
@@ -108,41 +102,14 @@ void loop() {
       duration = (millis() - startTime)/1000;
     }
   }
+
   if (state == TIMING_STOPPED) {
     display.print("Brew Time: ");
     display.printf("%02d:%02d", duration / 60, duration % 60);
   }
 
-  if (state == TIMER_WAITING_FOR_START && !scale.hasSettled) {
-    startTime = millis();
-    state = TIMING;
-    nextReading = 0;
-    readingInterval = 20;
-  }
-
-  // update reading history for graph
-  if (millis() - lastReadingMillis > readingInterval) {
-    readings[nextReading][0] = millis();
-    readings[nextReading][1] = scale.getReading();
-    nextReading++;
-    lastReadingMillis = millis();
-
-    // Display is only 160 pixels across so it doesn't really make sense
-    // to store more than 160 readings,
-    if (nextReading == 160) {
-      // Mean all the readings
-      for (int i = 0; i<nextReading - 1; i+=2) {
-        readings[i/2][0] = (readings[i][0] + readings[i+1][0])/2;
-        readings[i/2][1] = (readings[i][1] + readings[i+1][1])/2;
-      }
-
-      nextReading=80;
-      readingInterval*=2;
-    }
-  }
-
   // Do auto tare
-  if (scale.hasSettled && abs(scale.getReading() - scale.getLastSettledReading()) > 100 && scale.millisBetweenSettledReadings < 2000) {
+  if (autotareEnabled && scale.hasSettled && abs(scale.getReading() - scale.getLastSettledReading()) > 100 && scale.millisBetweenSettledReadings < 2000) {
     display.clearDisplay();
     display.setCursor(0,12);
     display.setFont(&FreeMono12pt7b);
@@ -180,6 +147,7 @@ void loop() {
     delay(2000);
   }
 
-  drawGraph(display, readings, nextReading, 0, 41, 128, 22);
+  Graph::update(scale.getReading());
+  Graph::draw(display, 0, 41, 128, 22);
   display.display();
 }
