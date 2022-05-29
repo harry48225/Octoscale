@@ -6,8 +6,17 @@ namespace Graph {
   float readings[160][2];
   long nextReading = 0;
   int readingInterval = INITIAL_READING_INTERVAL;
+  bool running = true;
 
   unsigned long lastReadingMillis = millis();
+
+  void stop() {
+    running = false;
+  }
+
+  void resume() {
+    running = true;
+  }
 
   void reset() {
     readingInterval = INITIAL_READING_INTERVAL;
@@ -15,6 +24,7 @@ namespace Graph {
   }
 
   void update(float newReading) {
+    if (!running) return;
     // update reading history for graph
     if (millis() - lastReadingMillis > readingInterval) {
       readings[nextReading][0] = millis();

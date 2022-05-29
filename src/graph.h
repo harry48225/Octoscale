@@ -7,5 +7,7 @@
 namespace Graph {
   void reset();
   void update(float newReading);
+  void stop();
+  void resume();
   void draw(Adafruit_SH1107 &display, int x0, int y0, int width, int height);
 }

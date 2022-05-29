@@ -32,7 +32,9 @@ enum State {
 State state = IDLE;
 bool autotareEnabled = true;
 unsigned long startTime = 0;
-unsigned long duration = 0;
+bool brewStatsGathered = false;
+unsigned long brewDuration = 0;
+float brewMass = 0;
 
 
 void setup() {
@@ -77,7 +79,6 @@ void startTimer() {
 
 void stopTimer() {
   state = TIMING_STOPPED;
-  duration = (millis() - startTime)/1000;
 }
 
 void displayTimer() {
@@ -86,9 +87,8 @@ void displayTimer() {
   display.printf("%02d:%02d", seconds / 60, seconds % 60);
 }
 
-void displayBrewTime() {
-  display.print("Brew Time: ");
-  display.printf("%02d:%02d", duration / 60, duration % 60);
+void displayBrewStats() {
+  display.printf("%.1fg in %02dm:%02ds,", brewMass, brewDuration / 60, brewDuration % 60);
 }
 
 void displayAutoTare() {
@@ -125,12 +125,20 @@ void loop() {
 
     // Something greater than 50g must have been taken off the scale
     if (scale.getLastSettledReading() - scale.getReading() > STOP_TIMER_REMOVAL_MASS) {
-      stopTimer();
+      if (!brewStatsGathered) {
+        brewDuration = (millis() - startTime)/1000;
+        brewMass = scale.getLastSettledReading();
+        Graph::stop();
+      }
+      if (scale.hasSettled) stopTimer();
+    } else {
+      brewStatsGathered = false;
+      Graph::resume();
     }
   }
 
   if (state == TIMING_STOPPED) {
-    displayBrewTime();
+    displayBrewStats();
   }
 
   // Do auto tare
