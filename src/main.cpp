@@ -119,7 +119,7 @@ void loop() {
   if (millis() - lastReadingMillis > readingInterval) {
     readings[nextReading][0] = millis();
     readings[nextReading][1] = scale.getReading();
-    nextReading ++;
+    nextReading++;
     lastReadingMillis = millis();
 
     // Display is only 160 pixels across so it doesn't really make sense
@@ -137,7 +137,7 @@ void loop() {
   }
 
   // Do auto tare
-  if (scale.hasSettled && abs(scale.getReading() - scale.getLastSettledReading()) > 100 && scale.millisBetweenSettledReadings < 3) {
+  if (scale.hasSettled && abs(scale.getReading() - scale.getLastSettledReading()) > 100 && scale.millisBetweenSettledReadings < 2000) {
     display.println("AUTO TARE");
     display.display();
     // Take some more readings

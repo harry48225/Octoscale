@@ -18,6 +18,7 @@ double Scale::getLastSettledReading() {
 
 void Scale::tare() {
   offset = smoothedReading;
+  lastSettledReading = offset;
 }
 
 void Scale::setScale() {
@@ -57,16 +58,17 @@ void Scale::updateReading() {
 
   Serial.printf("\r x_hat: %.f, dx_hat: %.f                                         ", x_hat, dx_hat);
   if (abs(dx_hat) < SETTLED_TOLERANCE) {
-    hasSettled = true;
-  } else {
-    if (hasSettled) {
-      lastSettledReading = smoothedReading;
+    if (!hasSettled) {
       millisBetweenSettledReadings = (millis() - lastSettledMillis);
       lastSettledMillis = millis();
     }
-
-    if (abs(dx_hat) > UNSETTLED_TOLERANCE) {
+    
+    hasSettled = true;
+  } else {
+    if (abs(dx_hat) > UNSETTLED_TOLERANCE && hasSettled) {
+      lastSettledReading = smoothedReading;
       hasSettled = false;
+      lastSettledMillis = millis();
     }
   }
 
