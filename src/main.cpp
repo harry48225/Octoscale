@@ -2,6 +2,8 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SH110X.h>
+#include <Fonts/FreeMono12pt7b.h>
+#include <Fonts/FreeMono18pt7b.h>
 #include "scale.h"
 #include "graph.h"
 
@@ -81,15 +83,17 @@ void loop() {
   display.fillRect(0,0,127,32, SH110X_BLACK);
   display.setCursor(0,0);
 
+  // Display mass
   scale.updateReading();
   double mass = scale.getReading();
-  display.printf("%.1f %.2f\n",mass, mass);
-  display.printf("sttl: %.1f, dT: %.f\n", scale.getLastSettledReading(), scale.millisBetweenSettledReadings);
-  if (scale.hasSettled) {
-    display.println("settled");
-  } else {
-    display.println("UNSETTLED");
-  }
+  display.setCursor(0,16);
+  display.setFont(&FreeMono18pt7b);
+  display.printf("%.1f\n",mass);
+  display.setFont();
+  display.setCursor(0,16+10);
+  //display.printf("sttl: %.1f, dT: %.f\n", scale.getLastSettledReading(), scale.millisBetweenSettledReadings);
+  
+  
   if (state == TIMER_WAITING_FOR_START) {
    display.println("Waiting for start"); 
   }
@@ -113,6 +117,7 @@ void loop() {
     startTime = millis();
     state = TIMING;
     nextReading = 0;
+    readingInterval = 20;
   }
 
   // update reading history for graph
@@ -138,7 +143,11 @@ void loop() {
 
   // Do auto tare
   if (scale.hasSettled && abs(scale.getReading() - scale.getLastSettledReading()) > 100 && scale.millisBetweenSettledReadings < 2000) {
-    display.println("AUTO TARE");
+    display.clearDisplay();
+    display.setCursor(0,12);
+    display.setFont(&FreeMono12pt7b);
+    display.println("AUTO");
+    display.println("TARE");
     display.display();
     // Take some more readings
     for (int i = 0; i < 40; i++) {
@@ -171,6 +180,6 @@ void loop() {
     delay(2000);
   }
 
-  drawGraph(display, readings, nextReading, 0, 31, 128, 32);
+  drawGraph(display, readings, nextReading, 0, 41, 128, 22);
   display.display();
 }
