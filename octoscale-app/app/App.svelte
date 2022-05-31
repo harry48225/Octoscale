@@ -4,7 +4,7 @@
             <button on:tap="{() => connectToScale()}">Refresh</button>
             <button on:tap="{readChar}">Read</button>
             <label text="{connected}"/>
-            <label text="{mass}"/>
+            <label text="{Math.round(displayedMass)}"/>
         </stackLayout>
     </page>
 </frame>
@@ -66,7 +66,7 @@
             onDisconnected: function (connectedPeripheral) {
                 console.log("disconnected with UUID: " + connectedPeripheral.UUID);
                 connected = false;
-                connectToScale();
+                //connectToScale();
             }
         })  
         ble.clearAdvertismentCache();
@@ -78,23 +78,43 @@
         // //await ble.connect({UUID: scaleUUID});
         // //console.log("reconnect");
         console.log("connect to scale finished");
+
+        setTimeout(readCharLoop, 20);
     } 
 
+    //let interpolatingAmount: number | null = null;
+
+    // let adjustMass = (adjustment: number, count: number, limit: number) => {
+    //     displayedMass += adjustment;
+    //     count++;
+    //     if (count != limit) {
+    //         setTimeout(() => adjustMass(adjustment, count+1, limit), 10);
+    //     }
+    // }
+
+    let interpolateMassLoop = async () => {
+        // Should probably use a 1euro filter
+        displayedMass = displayedMass * 0.6 + mass * 0.4;
+        setTimeout(interpolateMassLoop, 10);
+    }
+
+    setTimeout(interpolateMassLoop, 100);
+
+    let readCharLoop = async () => {
+        await readChar()
+        setTimeout(readCharLoop, 100);
+    }
+
     let readChar = async () => {
-        console.log("trying to read");
         let ble = getBluetoothInstance();
-        let val = ble.read({
+        let readValue = await ble.read({
             peripheralUUID: scaleUUID!,
             serviceUUID: "ade4af7e-f409-473c-ace4-c49d11393be3",
             characteristicUUID: "4f00104b-12c2-40d7-b6b9-d3e654222b25",
             timeout: 1000,
-        }).then((val) => {
-            console.log(val);
-            let data = new Uint8Array(val.value);
-            console.log(String.fromCharCode(...data));
-        }).catch((e) => {console.log(e)});
-        console.dir(val);
-        console.log("read")
+        });
+        let data = new Uint8Array(readValue.value);
+        mass = +String.fromCharCode(...data);
     }
 
     onMount(async () => {
@@ -102,5 +122,6 @@
     })
 
     export let connected = false;
-    export let mass = 0.0;
+    export let mass = 0;
+    export let displayedMass = 0.0;
 </script>
