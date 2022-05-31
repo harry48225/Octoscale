@@ -6,6 +6,7 @@
 #include <Fonts/FreeMono18pt7b.h>
 #include "scale.h"
 #include "graph.h"
+#include "bluetooth.h"
 
 #define BUTTON_A  1
 #define BUTTON_B  38
@@ -57,6 +58,8 @@ void setup() {
   pinMode(BUTTON_A, INPUT_PULLUP);
   pinMode(BUTTON_B, INPUT_PULLUP);
   pinMode(BUTTON_C, INPUT_PULLUP);
+
+  BLE::init();
 }
 
 void displayMass(double mass) {
@@ -134,6 +137,8 @@ void loop() {
     mass = scale.getReading();
   }
   displayMass(mass);
+
+  BLE::update(mass);
   
   // handle timing states
   if (state == TIMER_WAITING_FOR_START) {
