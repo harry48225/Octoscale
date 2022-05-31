@@ -60,6 +60,8 @@ void setup() {
   pinMode(BUTTON_C, INPUT_PULLUP);
 
   BLE::init();
+
+  BLE::update(69);
 }
 
 void displayMass(double mass) {
@@ -120,6 +122,7 @@ void displayAutoTare() {
 }
 
 void loop() {
+  Serial.println(BLE::isDeviceConnected());
   if(!digitalRead(BUTTON_A)) state = TIMER_WAITING_FOR_START;
 
   if(!digitalRead(BUTTON_B)) scale.tare();
@@ -137,8 +140,6 @@ void loop() {
     mass = scale.getReading();
   }
   displayMass(mass);
-
-  BLE::update(mass);
   
   // handle timing states
   if (state == TIMER_WAITING_FOR_START) {
