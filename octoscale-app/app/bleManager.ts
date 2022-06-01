@@ -29,7 +29,7 @@ export const connectToScale = async () => {
   }
 
   await ble.startScanning({
-    filters:[{serviceUUID: 'ade4af7e-f409-473c-ace4-c49d11393be3'}],
+    filters:[{serviceUUID: SERVICE_UUID}],
     seconds: 4,
     onDiscovered: (peripheral) => {
         console.log(`found ${peripheral.name}`)
@@ -56,6 +56,7 @@ export const connectToScale = async () => {
       }
   });
 
+  // For some strange reason need to discover the services before the connection works...
   const services = await ble.discoverAll({peripheralUUID: scaleUUID});
 
   readMassLoop();
@@ -65,8 +66,8 @@ const readMass = async () => {
   let ble = getBluetoothInstance();
   let readValue = await ble.read({
       peripheralUUID: scaleUUID!,
-      serviceUUID: "ade4af7e-f409-473c-ace4-c49d11393be3",
-      characteristicUUID: "4f00104b-12c2-40d7-b6b9-d3e654222b25",
+      serviceUUID: SERVICE_UUID,
+      characteristicUUID: MASS_CHARACTERISTIC_UUID,
       timeout: 1000,
   });
   let data = new Uint8Array(readValue.value);
@@ -95,7 +96,7 @@ export const tare = async () => {
     }
     await ble.write({
       peripheralUUID: scaleUUID,
-      serviceUUID: "ade4af7e-f409-473c-ace4-c49d11393be3",
+      serviceUUID: SERVICE_UUID,
       characteristicUUID: TARE_CHARACTERISTIC_UUID,
       value: "1",
       encoding: 'utf-8',

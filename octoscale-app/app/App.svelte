@@ -6,9 +6,9 @@
     import { onMount } from 'svelte';
     import { connectToScale, isConnected, displayedMass, tare } from  './bleManager';
     
-    Trace.addCategories(BleTraceCategory);
-    Trace.addCategories(Trace.categories.All);
-    Trace.enable();
+    //Trace.addCategories(BleTraceCategory);
+    //Trace.addCategories(Trace.categories.All);
+    //Trace.enable();
 
     let mass: number;
     displayedMass.subscribe(val => mass = val);
