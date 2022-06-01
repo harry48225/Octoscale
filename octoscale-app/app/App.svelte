@@ -1,19 +1,11 @@
-<frame>
-    <page>
-        <stackLayout>
-            <button on:tap="{() => connectToScale()}">Refresh</button>
-            <label text="{connected}"/>
-            <label text="{Math.round(mass*10)/10}"/>
-        </stackLayout>
-    </page>
-</frame>
-
 <script lang="ts">
+    import MassDisplay from './components/MassDisplay.svelte';
+
     import { Trace } from '@nativescript/core';
     import { BleTraceCategory } from '@nativescript-community/ble';
     import { onMount } from 'svelte';
     import { connectToScale, isConnected, displayedMass } from  './bleManager';
-
+    
     Trace.addCategories(BleTraceCategory);
     Trace.addCategories(Trace.categories.All);
     Trace.enable();
@@ -28,3 +20,13 @@
         await connectToScale();
     })
 </script>
+
+<frame>
+    <page>
+        <stackLayout>
+            <MassDisplay mass={mass}/>
+            <button on:tap="{() => connectToScale()}">Refresh</button>
+            <label text="{connected}"/>
+        </stackLayout>
+    </page>
+</frame>

@@ -77,8 +77,8 @@ const readMassLoop = async () => {
 
 let interpolateMassLoop = async () => {
   // Should probably use a 1euro filter
-  displayedMass.update(dMass => dMass * 0.6 + mass * 0.4);
-  setTimeout(interpolateMassLoop, 10);
+  displayedMass.update(dMass => dMass * 0.8 + mass * 0.2);
+  setTimeout(interpolateMassLoop, 20);
 }
 
 interpolateMassLoop();
