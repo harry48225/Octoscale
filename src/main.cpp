@@ -127,6 +127,11 @@ void loop() {
 
   if(!digitalRead(BUTTON_C)) state=CALIBRATION;
 
+  if (BLE::isPendingTare()) {
+    scale.tare();
+    BLE::clearPendingTare();
+  }
+
   display.clearDisplay();
   display.setCursor(0,0);
 
