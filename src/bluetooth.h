@@ -4,4 +4,6 @@ namespace BLE {
   void update(float mass);
   bool isPendingTare();
   void clearPendingTare();
+  void startTiming();
+  void stopTiming();
 }

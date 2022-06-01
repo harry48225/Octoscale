@@ -152,12 +152,12 @@ void loop() {
    display.println("timer primed");
    if (!scale.hasSettled) {
       startTimer();
+      BLE::startTiming();
    }
   }
 
   if (state == TIMING) {
     displayTimer();
-
     // Something greater than 50g must have been taken off the scale
     if (scale.getLastSettledReading() - scale.getReading() > STOP_TIMER_REMOVAL_MASS) {
       if (!brewStatsGathered) {
@@ -165,7 +165,10 @@ void loop() {
         brewMass = scale.getLastSettledReading();
         Graph::stop();
       }
-      if (scale.hasSettled) stopTimer();
+      if (scale.hasSettled) {
+        stopTimer();
+        BLE::stopTiming();
+      }
     } else {
       brewStatsGathered = false;
       Graph::resume();
