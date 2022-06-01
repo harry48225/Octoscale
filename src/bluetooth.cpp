@@ -50,7 +50,7 @@ namespace BLE {
 
   void update(float mass) {
     char massString[16];
-    sprintf(massString, "%.f", mass);
+    sprintf(massString, "%.1f", mass);
     massCharacteristic.setValue(massString);
   }
 }

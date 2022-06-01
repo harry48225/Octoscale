@@ -4,7 +4,7 @@
             <button on:tap="{() => connectToScale()}">Refresh</button>
             <button on:tap="{readChar}">Read</button>
             <label text="{connected}"/>
-            <label text="{Math.round(displayedMass)}"/>
+            <label text="{Math.round(displayedMass*10)/10}"/>
         </stackLayout>
     </page>
 </frame>
