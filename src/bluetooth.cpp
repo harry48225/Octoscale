@@ -32,6 +32,7 @@ namespace BLE {
     BLECharacteristic::PROPERTY_READ |
     BLECharacteristic::PROPERTY_NOTIFY
   );
+  BLEDescriptor isTimingDescriptor(BLEUUID((uint16_t)0x2902)); // Needed to advertise the notify property
 
   BLECharacteristic timerDurationCharacteristic(
     TIMER_DURATION_CHARACTERISTIC_UUID,
@@ -68,6 +69,7 @@ namespace BLE {
     pService->addCharacteristic(&tareCharacteristic);
 
     isTimingCharacteristic.setValue("0");
+    isTimingCharacteristic.addDescriptor(&isTimingDescriptor);
     pService->addCharacteristic(&isTimingCharacteristic);
 
     timerDurationCharacteristic.setValue("0");
@@ -99,10 +101,12 @@ namespace BLE {
 
   void startTiming() {
     isTimingCharacteristic.setValue("1");
+    isTimingCharacteristic.notify();
   }
 
   void stopTiming() {
     isTimingCharacteristic.setValue("0");
+    isTimingCharacteristic.notify();
   }
 
   void updateTimerDuration(long seconds) {

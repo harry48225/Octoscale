@@ -13,6 +13,8 @@ export const isConnected = writable(false);
 let mass: number = 0.0;
 export const displayedMass = writable(0.0);
 
+export const isTiming = writable(false);
+
 export const connectToScale = async () => {
   const ble = getBluetoothInstance();
   
@@ -60,6 +62,27 @@ export const connectToScale = async () => {
   const services = await ble.discoverAll({peripheralUUID: scaleUUID});
 
   readMassLoop();
+
+  ble.startNotifying({
+    peripheralUUID: scaleUUID,
+    serviceUUID: SERVICE_UUID,
+    characteristicUUID: TIMER_IS_TIMING_CHARACTERISTIC_UUID,
+    onNotify: (result) => {
+      const timing = decodeResultValue(result.value);
+      if (timing == "1") {
+        console.log("Started timing");
+        isTiming.update(() => true);
+      } else {
+        isTiming.update(() => false);
+        console.log("stopped timing");
+      }
+    } 
+  });
+}
+
+const decodeResultValue = (val: ArrayBuffer) => {
+  const data = new Uint8Array(val);
+  return String.fromCharCode(...data);
 }
 
 const readMass = async () => {
