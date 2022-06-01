@@ -87,9 +87,8 @@ void stopTimer() {
   delay(500);
 }
 
-void displayTimer() {
+void displayTimer(long seconds) {
   display.print("timing: ");
-  long seconds = (millis() - startTime)/1000;
   display.printf("%02d:%02d", seconds / 60, seconds % 60);
 }
 
@@ -157,7 +156,10 @@ void loop() {
   }
 
   if (state == TIMING) {
-    displayTimer();
+    long seconds = (millis() - startTime)/1000;
+    displayTimer(seconds);
+    // This should probably be in millis ... 
+    BLE::updateTimerDuration(seconds);
     // Something greater than 50g must have been taken off the scale
     if (scale.getLastSettledReading() - scale.getReading() > STOP_TIMER_REMOVAL_MASS) {
       if (!brewStatsGathered) {

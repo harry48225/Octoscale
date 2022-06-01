@@ -33,6 +33,12 @@ namespace BLE {
     BLECharacteristic::PROPERTY_NOTIFY
   );
 
+  BLECharacteristic timerDurationCharacteristic(
+    TIMER_DURATION_CHARACTERISTIC_UUID,
+    BLECharacteristic::PROPERTY_READ |
+    BLECharacteristic::PROPERTY_NOTIFY
+  );
+
   class MyServerCallbacks: public BLEServerCallbacks {
     void onConnect(BLEServer* pServer) {
       deviceConnected = true;
@@ -64,6 +70,9 @@ namespace BLE {
     isTimingCharacteristic.setValue("0");
     pService->addCharacteristic(&isTimingCharacteristic);
 
+    timerDurationCharacteristic.setValue("0");
+    pService->addCharacteristic(&timerDurationCharacteristic);
+
     pService->start();
     BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
     pAdvertising->addServiceUUID(SERVICE_UUID);
@@ -94,5 +103,11 @@ namespace BLE {
 
   void stopTiming() {
     isTimingCharacteristic.setValue("0");
+  }
+
+  void updateTimerDuration(long seconds) {
+    char secondsString[16];
+    sprintf(secondsString, "%d", seconds);
+    timerDurationCharacteristic.setValue(secondsString);
   }
 }

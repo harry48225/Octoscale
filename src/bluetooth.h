@@ -6,4 +6,5 @@ namespace BLE {
   void clearPendingTare();
   void startTiming();
   void stopTiming();
+  void updateTimerDuration(long seconds);
 }
