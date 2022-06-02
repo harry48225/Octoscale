@@ -17,8 +17,10 @@ namespace BLE {
   bool deviceConnected = false;
   BLECharacteristic massCharacteristic(
     MASS_CHARACTERISTIC_UUID,
-    BLECharacteristic::PROPERTY_READ
+    BLECharacteristic::PROPERTY_READ |
+    BLECharacteristic::PROPERTY_NOTIFY
   );
+  BLEDescriptor massDescriptor(BLEUUID((uint16_t)0x2902));
 
   BLECharacteristic tareCharacteristic(
     TARE_CHARACTERISTIC_UUID,
@@ -63,6 +65,7 @@ namespace BLE {
     BLEService *pService = pServer->createService(SERVICE_UUID);
 
     massCharacteristic.setValue("0");
+    massCharacteristic.addDescriptor(&massDescriptor);
     pService->addCharacteristic(&massCharacteristic);
 
     tareCharacteristic.setValue("0");
@@ -88,6 +91,7 @@ namespace BLE {
     char massString[16];
     sprintf(massString, "%.1f", mass);
     massCharacteristic.setValue(massString);
+    massCharacteristic.notify();
   }
 
   bool isPendingTare() {

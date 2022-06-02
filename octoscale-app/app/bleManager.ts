@@ -61,8 +61,6 @@ export const connectToScale = async () => {
   // For some strange reason need to discover the services before the connection works...
   const services = await ble.discoverAll({peripheralUUID: scaleUUID});
 
-  readMassLoop();
-
   ble.startNotifying({
     peripheralUUID: scaleUUID,
     serviceUUID: SERVICE_UUID,
@@ -78,6 +76,16 @@ export const connectToScale = async () => {
       }
     } 
   });
+
+  ble.startNotifying({
+    peripheralUUID: scaleUUID,
+    serviceUUID: SERVICE_UUID,
+    characteristicUUID: MASS_CHARACTERISTIC_UUID,
+    onNotify: (result) => {
+      const massString = decodeResultValue(result.value);
+      mass = +massString;
+    }
+  })
 }
 
 const decodeResultValue = (val: ArrayBuffer) => {
@@ -85,29 +93,9 @@ const decodeResultValue = (val: ArrayBuffer) => {
   return String.fromCharCode(...data);
 }
 
-const readMass = async () => {
-  let ble = getBluetoothInstance();
-  let readValue = await ble.read({
-      peripheralUUID: scaleUUID!,
-      serviceUUID: SERVICE_UUID,
-      characteristicUUID: MASS_CHARACTERISTIC_UUID,
-      timeout: 1000,
-  });
-  let data = new Uint8Array(readValue.value);
-  mass = +String.fromCharCode(...data);
-}
-
-const readMassLoop = async () => {
-  if (!isConnected) {
-    return;
-  }
-  await readMass();
-  setTimeout(readMassLoop, 100);
-}
-
 let interpolateMassLoop = async () => {
   // Should probably use a 1euro filter
-  displayedMass.update(dMass => dMass * 0.8 + mass * 0.2);
+  displayedMass.update(dMass => dMass * 0.2 + mass * 0.8);
   setTimeout(interpolateMassLoop, 20);
 }
 
