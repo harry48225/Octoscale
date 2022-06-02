@@ -1,11 +1,15 @@
 <script lang="ts">
     import MassDisplay from './components/MassDisplay.svelte';
     import Timer from './components/Timer.svelte';
+    import TareButon from './components/ActionButtons.svelte';
 
     import { Trace } from '@nativescript/core';
     import { BleTraceCategory } from '@nativescript-community/ble';
     import { onMount } from 'svelte';
     import { connectToScale, isConnected, displayedMass, tare, isTiming, timerDurationSeconds } from  './bleManager';
+import ActionButtons from './components/ActionButtons.svelte';
+import ConnectionBanner from './components/ConnectionBanner.svelte';
+import Graph from './components/Graph.svelte';
     
     //Trace.addCategories(BleTraceCategory);
     //Trace.addCategories(Trace.categories.All);
@@ -30,12 +34,31 @@
 
 <frame>
     <page>
-        <stackLayout>
+        <flexboxLayout>
+            <ConnectionBanner isConnected={connected}/>
             <MassDisplay mass={mass}/>
-            <button on:tap="{() => connectToScale()}">Refresh</button>
-            <label text="{connected}"/>
-            <button on:tap="{tare}">Tare</button>
             <Timer isTiming={timing} durationSeconds={duration}/>
-        </stackLayout>
+            <Graph/>
+            <button style={"fle"} on:tap="{() => connectToScale()}">Refresh</button>
+            <ActionButtons tareCallback={tare}/>
+        </flexboxLayout>
     </page>
 </frame>
+
+<style lang="scss">
+    page {
+        background-color: whitesmoke;
+        padding-bottom: 100px;
+    }
+
+    FlexboxLayout {
+        flex-direction: column;
+        justify-items: center;
+        justify-content: space-between;
+    }
+
+    Graph {
+        color: red;
+        flex-grow: 1;
+    }
+</style>

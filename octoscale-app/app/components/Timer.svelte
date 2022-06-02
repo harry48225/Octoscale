@@ -10,24 +10,20 @@
 </script>
 
 <flexboxLayout>
-  <label text="{isTiming ? "T" : "-"}"/>
   <label class="duration" text="{timeString}"/>
 </flexboxLayout>
 
 <style lang="scss">
   FlexboxLayout {
-    background-color: darkcyan;
     text-align: center;
-    font-size: 100px;
-    color: white;
+    font-size: 40px;
+    color: lightcoral;
     justify-content: space-around;
     padding-left: 20em;
+    width: 100%;
     Label {
-      text-shadow: 10px 20px 10px darkgrey;
+      width: 100%;
+      text-shadow: 4px 4px 2px gray;
     }
-  }
-
-  .duration {
-    flex-grow: 1;
   }
 </style>

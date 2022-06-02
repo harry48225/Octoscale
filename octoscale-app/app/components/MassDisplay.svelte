@@ -12,12 +12,11 @@
 
 <style lang="scss">
   Label {
-    background-color: darkred;
     text-align: center;
     width:100%;
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size: 100px;
-    color: white;
-    text-shadow: 10px 20px 10px grey;
+    color: wheat;
+    text-shadow: 10px 10px 2px gray;
   }
 </style>
