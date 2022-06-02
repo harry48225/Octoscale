@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { fade } from 'svelte-native/transitions';
+
   export let isTiming: boolean;
   export let durationSeconds: number;
 
@@ -10,8 +12,11 @@
 </script>
 
 <flexboxLayout>
+  {#if isTiming}
   <label class="duration" text="{timeString}"/>
+  {/if}
 </flexboxLayout>
+
 
 <style lang="scss">
   FlexboxLayout {
@@ -21,6 +26,7 @@
     justify-content: space-around;
     padding-left: 20em;
     width: 100%;
+    height:200px;
     Label {
       width: 100%;
       text-shadow: 4px 4px 2px gray;

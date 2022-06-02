@@ -56,9 +56,4 @@ import Graph from './components/Graph.svelte';
         justify-items: center;
         justify-content: space-between;
     }
-
-    Graph {
-        color: red;
-        flex-grow: 1;
-    }
 </style>
