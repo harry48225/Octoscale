@@ -4,7 +4,7 @@
     import { Trace } from '@nativescript/core';
     import { BleTraceCategory } from '@nativescript-community/ble';
     import { onMount } from 'svelte';
-    import { connectToScale, isConnected, displayedMass, tare } from  './bleManager';
+    import { connectToScale, isConnected, displayedMass, tare, isTiming, timerDurationSeconds } from  './bleManager';
     
     //Trace.addCategories(BleTraceCategory);
     //Trace.addCategories(Trace.categories.All);
@@ -15,6 +15,12 @@
 
     let connected: boolean;
     isConnected.subscribe(val => connected = val);
+
+    let timing: boolean;
+    isTiming.subscribe(val => timing = !!val);
+
+    let duration: number;
+    timerDurationSeconds.subscribe(val => duration = val);
 
     onMount(async () => {
         await connectToScale();
@@ -28,6 +34,8 @@
             <button on:tap="{() => connectToScale()}">Refresh</button>
             <label text="{connected}"/>
             <button on:tap="{tare}">Tare</button>
+            <label text="{timing ? 'timing' : 'not timing'}"/>
+            <label text="{duration}"/>
         </stackLayout>
     </page>
 </frame>

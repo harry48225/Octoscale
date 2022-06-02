@@ -14,6 +14,7 @@ let mass: number = 0.0;
 export const displayedMass = writable(0.0);
 
 export const isTiming = writable(false);
+export const timerDurationSeconds = writable(0);
 
 export const connectToScale = async () => {
   const ble = getBluetoothInstance();
@@ -84,6 +85,17 @@ export const connectToScale = async () => {
     onNotify: (result) => {
       const massString = decodeResultValue(result.value);
       mass = +massString;
+    }
+  })
+
+  // Maybe should read these on first connect.
+  ble.startNotifying({
+    peripheralUUID: scaleUUID,
+    serviceUUID: SERVICE_UUID,
+    characteristicUUID: TIMER_DURATION_CHARACTERISTIC_UUID,
+    onNotify: (result) => {
+      const durationString = decodeResultValue(result.value);
+      timerDurationSeconds.update(secs => +durationString);
     }
   })
 }

@@ -41,6 +41,7 @@ namespace BLE {
     BLECharacteristic::PROPERTY_READ |
     BLECharacteristic::PROPERTY_NOTIFY
   );
+  BLEDescriptor timerDurationDescriptor(BLEUUID((uint16_t)0x2902));
 
   class MyServerCallbacks: public BLEServerCallbacks {
     void onConnect(BLEServer* pServer) {
@@ -76,6 +77,7 @@ namespace BLE {
     pService->addCharacteristic(&isTimingCharacteristic);
 
     timerDurationCharacteristic.setValue("0");
+    timerDurationCharacteristic.addDescriptor(&timerDurationDescriptor);
     pService->addCharacteristic(&timerDurationCharacteristic);
 
     pService->start();
@@ -117,5 +119,6 @@ namespace BLE {
     char secondsString[16];
     sprintf(secondsString, "%d", seconds);
     timerDurationCharacteristic.setValue(secondsString);
+    timerDurationCharacteristic.notify();
   }
 }
