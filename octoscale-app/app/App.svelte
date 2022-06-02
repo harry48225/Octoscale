@@ -1,5 +1,6 @@
 <script lang="ts">
     import MassDisplay from './components/MassDisplay.svelte';
+    import Timer from './components/Timer.svelte';
 
     import { Trace } from '@nativescript/core';
     import { BleTraceCategory } from '@nativescript-community/ble';
@@ -34,8 +35,7 @@
             <button on:tap="{() => connectToScale()}">Refresh</button>
             <label text="{connected}"/>
             <button on:tap="{tare}">Tare</button>
-            <label text="{timing ? 'timing' : 'not timing'}"/>
-            <label text="{duration}"/>
+            <Timer isTiming={timing} durationSeconds={duration}/>
         </stackLayout>
     </page>
 </frame>
