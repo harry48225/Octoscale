@@ -1,0 +1,5 @@
+(fp_lib_table
+  (lib (name "LoadCell")(type "KiCad")(uri "${KIPRJMOD}/LoadCell.pretty")(options "")(descr ""))
+  (lib (name "panelisation")(type "KiCad")(uri "/home/harry/Documents/octosnail/panelisation.pretty")(options "")(descr ""))
+  (lib (name "TouchPads")(type "KiCad")(uri "/home/harry/Documents/twilight/pcb/TouchPads.pretty")(options "")(descr ""))
+)
