@@ -200,6 +200,7 @@ void loop() {
     display.println("Then press A");
     display.display();
     scale.setScale();
+    scale.tareLoadCell();
     scale.tare();
 
     while(digitalRead(BUTTON_A)) delay(10);
@@ -209,10 +210,14 @@ void loop() {
     scale.setScale(factor);
 
     display.clearDisplay();
+    display.setCursor(0,0);
     display.println("Calibrated!");
     display.print("Factor: ");
     display.print(factor);
+    display.display();
     delay(2000);
+
+    state = IDLE;
   }
 
   Graph::update(scale.getReading());

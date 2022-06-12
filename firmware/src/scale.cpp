@@ -21,6 +21,10 @@ void Scale::tare() {
   lastSettledReading = offset;
 }
 
+void Scale::tareLoadCell() {
+  loadCell.tare();
+}
+
 void Scale::setScale() {
   loadCell.set_scale();
 }

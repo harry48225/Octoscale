@@ -17,6 +17,7 @@ class Scale {
     float millisBetweenSettledReadings = -1;
     void updateReading();
     void tare();
+    void tareLoadCell();
     void setScale();
     void setScale(float factor);
     float getUnits(int samples);
