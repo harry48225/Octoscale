@@ -59,7 +59,21 @@ namespace BLE {
   }
 
   void init() {
+    //esp_bt_controller_init();
+    //esp_bt_controller_enable(ESP_BT_MODE_BLE);
+    esp_bt_controller_config_t cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
+    cfg.bluetooth_mode = ESP_BT_MODE_BLE;
+    cfg.sleep_mode = ESP_BT_SLEEP_MODE_1;
+    cfg.sleep_clock = ESP_BT_SLEEP_CLOCK_MAIN_XTAL;
+    cfg.txpwr_dft = ESP_PWR_LVL_N27;
+    esp_bt_controller_init(&cfg);
+
     BLEDevice::init("octoscale");
+    // if (esp_bt_sleep_enable() == ESP_OK) {
+    //   Serial.println("BT SLEEPING");
+    // } else {
+    //   Serial.println("SLEEP ERROR");
+    // }
     BLEServer *pServer = BLEDevice::createServer();
     pServer->setCallbacks(new MyServerCallbacks());
 
