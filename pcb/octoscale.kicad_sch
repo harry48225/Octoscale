@@ -6918,6 +6918,20 @@
     (pin "2" (uuid 52057724-e8db-4cc7-8aa3-5c79bc69bd62))
   )
 
+  (symbol (lib_id "Connector:TestPoint") (at 56.642 61.214 90) (unit 1)
+    (in_bom yes) (on_board yes) (fields_autoplaced)
+    (uuid b6e871d1-589a-4c01-92d5-10276bde3831)
+    (property "Reference" "TP13" (id 0) (at 53.34 55.88 90))
+    (property "Value" "TestPoint" (id 1) (at 53.34 58.42 90))
+    (property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm" (id 2) (at 56.642 56.134 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "~" (id 3) (at 56.642 56.134 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid e61cf739-4c79-4255-89b9-1d15720ad68d))
+  )
+
   (symbol (lib_id "power:+BATT") (at 93.345 254.635 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid bd60ec26-d440-4c94-9224-d6ddaa14250f)
@@ -8237,6 +8251,9 @@
     )
     (path "/a349133f-36a9-4283-8459-66dff57b0bef"
       (reference "TP12") (unit 1) (value "TestPoint") (footprint "TestPoint:TestPoint_Pad_D1.5mm")
+    )
+    (path "/b6e871d1-589a-4c01-92d5-10276bde3831"
+      (reference "TP13") (unit 1) (value "TestPoint") (footprint "TestPoint:TestPoint_Pad_D1.5mm")
     )
     (path "/717c666a-71be-4f20-a086-8c131f43aa8f"
       (reference "U1") (unit 1) (value "TP4065") (footprint "easyeda2kicad:SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BR")
