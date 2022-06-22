@@ -8704,7 +8704,7 @@
   (gr_text "+" (at 157.8 61.4) (layer "B.SilkS") (tstamp c3e2db3a-e6e3-470a-a24b-66160db6e2c5)
     (effects (font (size 2 2) (thickness 0.15)) (justify mirror))
   )
-  (gr_text "batt_sense" (at 153.4 53) (layer "B.SilkS") (tstamp c403db6a-9907-407e-9951-4f8c453fca85)
+  (gr_text "batt_sense" (at 154.9 52.4 90) (layer "B.SilkS") (tstamp c403db6a-9907-407e-9951-4f8c453fca85)
     (effects (font (size 0.6 0.6) (thickness 0.15)) (justify mirror))
   )
   (gr_text "Octoscale:\na smart coffee\nscale aimed at \nespresso." (at 192.5 121) (layer "B.SilkS") (tstamp d38e1a1d-c299-4774-8541-af5773e84eb8)
