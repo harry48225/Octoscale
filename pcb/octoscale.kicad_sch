@@ -7334,7 +7334,7 @@
     (property "Value" "3v Zener, BZT52C3V0T" (id 1) (at 151.638 47.371 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "Diode_SMD:D_SOD-523" (id 2) (at 148.336 46.101 90)
+    (property "Footprint" "Diode_SMD:D_SOD-323" (id 2) (at 148.336 46.101 90)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (id 3) (at 148.336 46.101 90)
@@ -8255,7 +8255,7 @@
       (reference "D15") (unit 1) (value "1N4148") (footprint "Diode_SMD:D_SOD-323_HandSoldering")
     )
     (path "/d8709094-c0a5-4903-a813-2e8a6969aa9b"
-      (reference "D16") (unit 1) (value "3v Zener, BZT52C3V0T") (footprint "Diode_SMD:D_SOD-523")
+      (reference "D16") (unit 1) (value "3v Zener, BZT52C3V0T") (footprint "Diode_SMD:D_SOD-323")
     )
     (path "/84ee92d0-8911-4b51-a476-6cdc8fcc07e4"
       (reference "DS1") (unit 1) (value "OLED-128O064D") (footprint "Display:OLED-128O064D")
