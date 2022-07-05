@@ -4,7 +4,6 @@ import { navigate } from "svelte-native";
 import SliderSetting from "./components/SliderSetting.svelte";
 import Home from "./Home.svelte";
 
-let betaValue = 10
 </script>
 
 <page>
@@ -12,13 +11,17 @@ let betaValue = 10
     <actionItem text="home" on:tap={() => {navigate({page: Home})}}/>
   </actionBar>
   <stackLayout>
-    <label>Advanced settings</label>
+    <label>Developer settings</label>
     <SliderSetting name="min cut-off"/>
     <SliderSetting name="D cut-off"/>
     <SliderSetting name="beta"/>
+    <SliderSetting name="settled tolerance"/>
+    <SliderSetting name="unsettled tolerance"/>
   </stackLayout>
 </page>
 
 <style lang="scss">
-
+  Label {
+    font-size: 16px;
+  }
 </style>

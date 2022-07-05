@@ -5,7 +5,7 @@
 </script>
   
 <flexboxLayout>
-  <label>{name}</label>
+  <label textWrap={true}>{name}</label>
   <slider minValue=0 maxValue=100 bind:value={rawValue}/>
   <textField bind:text={value} keyboardType="number"/>
 </flexboxLayout>
@@ -28,9 +28,10 @@
     }
 
     Label {
-      font-size: 16px;
+      font-size: 12px;
       text-align: center;
-      min-width: 240px;
+      max-width: 200px;
+      width: 200px;
     }
   }
 </style>
