@@ -2,13 +2,12 @@
   export let isConnected: boolean;
 </script>
 
-<label text="{isConnected ? 'connected to scale' : 'not connected to scale'}"/>
+<label text="{isConnected ? 'connected' : 'disconnected'}" style="background-color:{isConnected ? "darkgreen" : "darkred"}"/>
 
 <style lang="scss">
   Label {
-    font-size: 20px;
+    font-size: 16px;
     color: white;
-    background-color: slategray;
     width: 100%;
     text-align: center;
   }

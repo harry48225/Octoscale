@@ -3,6 +3,7 @@
 </script>
 
 <flexboxLayout>
+  <button text="time" />
   <button on:tap="{tareCallback}" text="tare"/>
 </flexboxLayout>
 
@@ -11,10 +12,9 @@
     justify-content: space-around;
   }
   Button {
-    font-size: 40px;
-    border-radius: 50%;
+    font-size: 32px;
     width: 300px;
+    border-radius: 10%;
     height: 300px;
-    box-shadow: 10px 10px 2px grey;
   }
 </style>
