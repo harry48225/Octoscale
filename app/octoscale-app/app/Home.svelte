@@ -40,7 +40,6 @@
 
 <style lang="scss">
     page {
-        background-color: whitesmoke;
         padding-bottom: 100px;
     }
 

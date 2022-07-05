@@ -6,3 +6,9 @@ import Settings from "./Settings.svelte";
 <frame>
   <Settings/>
 </frame>
+
+<style global lang="scss">
+  Page {
+      background-color: whitesmoke;
+  }
+</style>
