@@ -1,8 +1,11 @@
 <script lang="ts">
-  export let isConnected: boolean;
+  import { isConnected } from '../bleManager';
+  let connected: boolean;
+  isConnected.subscribe(val => connected = val);
+
 </script>
 
-<label text="{isConnected ? 'connected' : 'disconnected'}" style="background-color:{isConnected ? "darkgreen" : "darkred"}"/>
+<label text="{connected ? 'connected' : 'disconnected'}" style="background-color:{connected ? "darkgreen" : "darkred"}"/>
 
 <style lang="scss">
   Label {

@@ -1,6 +1,7 @@
 <script lang="ts">
 
 import { navigate } from "svelte-native";
+import ConnectionBanner from "./components/ConnectionBanner.svelte";
 import SliderSetting from "./components/SliderSetting.svelte";
 import Home from "./Home.svelte";
 
@@ -11,6 +12,7 @@ import Home from "./Home.svelte";
     <actionItem text="home" on:tap={() => {navigate({page: Home})}}/>
   </actionBar>
   <flexboxLayout flexDirection="column">
+    <ConnectionBanner/>
     <stackLayout>
       <label>Developer settings</label>
       <SliderSetting name="min cut-off"/>

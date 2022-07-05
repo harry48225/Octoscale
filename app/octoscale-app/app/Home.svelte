@@ -2,7 +2,7 @@
     import MassDisplay from './components/MassDisplay.svelte';
     import Timer from './components/Timer.svelte';
     import { onMount } from 'svelte';
-    import { connectToScale, isConnected, displayedMass, tare, isTiming, timerDurationSeconds } from  './bleManager';
+    import { connectToScale, displayedMass, tare, isTiming, timerDurationSeconds } from  './bleManager';
     import ActionButtons from './components/ActionButtons.svelte';
     import ConnectionBanner from './components/ConnectionBanner.svelte';
     import Graph from './components/Graph.svelte';
@@ -11,9 +11,6 @@
         
     let mass: number;
     displayedMass.subscribe(val => mass = val);
-
-    let connected: boolean;
-    isConnected.subscribe(val => connected = val);
 
     let timing: boolean;
     isTiming.subscribe(val => timing = !!val);
@@ -32,7 +29,7 @@
         <actionItem text="settings" on:tap={() => navigate({page: Settings})}/>
     </actionBar>
     <flexboxLayout>
-        <ConnectionBanner isConnected={connected}/>
+        <ConnectionBanner/>
         <MassDisplay mass={mass}/>
         <Timer isTiming={timing} durationSeconds={duration}/>
         <Graph/>
