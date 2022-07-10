@@ -1,13 +1,31 @@
 <script lang="ts">
+  import { TextField } from "@nativescript/core";
+
+  // Hacky workaround to the on:returnPress type not existing on text fields
+  const onReturnPress = {onreturnPress : (e: { object: { text: string; }; }) => {value=parseFloat(e.object.text)}}
+
+
   export let name: String;
-  let rawValue: number = 0;
-  $: value = rawValue / 100.0
+
+  const stepSize = 0.001
+
+  // $: stepSize = 10**(Math.floor(Math.log10(value)))
+  // $: console.log(stepSize)
+  const max = 0.1;
+  const min = 0;
+  let value: number = 0
 </script>
   
 <flexboxLayout>
   <label textWrap={true}>{name}</label>
-  <slider minValue=0 maxValue=100 bind:value={rawValue}/>
-  <textField bind:text={value} keyboardType="number"/>
+  <slider minValue={min/stepSize} maxValue={max/stepSize} value={value/stepSize} on:valueChange={(e) => {
+    const newValue = e.object.value * stepSize
+    if (value != newValue) {
+      value = newValue
+    }
+    }}/>
+  <textField text={value.toString()} returnKeyType="done" closeOnReturn={true} keyboardType="number"
+  {...onReturnPress}/>
 </flexboxLayout>
 
 <style lang="scss">
