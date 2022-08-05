@@ -37,6 +37,7 @@ import Home from "./Home.svelte";
   FlexboxLayout {
     StackLayout {
       flex-grow: 1;
+      margin: 32px;
     }
   }
 </style>
