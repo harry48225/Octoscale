@@ -1,13 +1,16 @@
 <script lang="ts">
-  import { TextField } from "@nativescript/core";
-
-  // Hacky workaround to the on:returnPress type not existing on text fields
-  const onReturnPress = {onreturnPress : (e: { object: { text: string; }; }) => {value=parseFloat(e.object.text)}}
-
-
-  export let name: String;
-
+  import NumberField, { ReturnPressEvent } from "./NumberField.svelte";
+  const PRECISION = 3
+  export let name: String
   const stepSize = 0.001
+
+  const updateValue = (newValue: number) => {
+    if (newValue.toPrecision(PRECISION) == value.toPrecision(PRECISION)) return
+    value = parseFloat(newValue.toPrecision(PRECISION))
+  }
+  const updateValueFromNumberField = (e: ReturnPressEvent) => {
+    updateValue(parseFloat(e.detail.object.text));
+  }
 
   // $: stepSize = 10**(Math.floor(Math.log10(value)))
   // $: console.log(stepSize)
@@ -18,14 +21,9 @@
   
 <flexboxLayout>
   <label textWrap={true}>{name}</label>
-  <slider minValue={min/stepSize} maxValue={max/stepSize} value={value/stepSize} on:valueChange={(e) => {
-    const newValue = e.object.value * stepSize
-    if (value != newValue) {
-      value = newValue
-    }
-    }}/>
-  <textField text={value.toString()} returnKeyType="done" closeOnReturn={true} keyboardType="number"
-  {...onReturnPress}/>
+  <slider minValue={min/stepSize} maxValue={max/stepSize} value={value/stepSize} on:valueChange={e => {
+    updateValue(e.value * stepSize)}}/>
+  <NumberField bind:value={value} on:returnPress = {updateValueFromNumberField}/>
 </flexboxLayout>
 
 <style lang="scss">
@@ -39,7 +37,7 @@
       flex-grow: 1;
     }
 
-    TextField {
+    NumberField {
       font-size: 16px;
       text-align: right;
       min-width: 100px;
