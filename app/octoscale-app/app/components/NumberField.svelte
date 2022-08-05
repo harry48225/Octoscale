@@ -6,15 +6,13 @@
   // @ts-nocheck
   // Disable error checking to disable errors for the on:returnPress
   // a bit of a hack...
-  import { createEventDispatcher } from "svelte";
-  export let value: number; 
+  import { createEventDispatcher } from "svelte"; 
   const dispatch = createEventDispatcher();
-
-  
-
   const returnPress = (e: ReturnPressEvent) => {
     dispatch('returnPress', e)
   };
+
+  export let value: number;
 </script>
 
 <textField text={value.toString()} 
@@ -22,6 +20,4 @@
   closeOnReturn="true" 
   keyboardType="number" 
   on:returnPress={returnPress}
->
-
-</textField>
+/>
