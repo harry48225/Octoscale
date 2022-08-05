@@ -4,19 +4,26 @@
   $: displayedMass = mass.toFixed(1);
 </script>
 
-<label>
-  <formattedString>
-    <span text="{displayedMass}"/>
-  </formattedString>
-</label>
+<stackLayout>
+  <label>
+    <formattedString>
+      <span text="{displayedMass}"/>
+    </formattedString>
+  </label>
+</stackLayout>
 
 <style lang="scss">
-  Label {
+  StackLayout {
+    background-color: #E4E6C3;
+    margin: 16px;
+    border-radius: 64px;
+
+    Label {
     text-align: center;
     width:100%;
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size: 100px;
-    color: wheat;
-    text-shadow: 10px 10px 2px gray;
+    color: #222725;
+  }
   }
 </style>

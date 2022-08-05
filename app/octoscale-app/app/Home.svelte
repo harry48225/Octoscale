@@ -39,6 +39,15 @@
 
 
 <style lang="scss">
+    ActionBar {
+        background-color: #899878;
+        color: #F7F7F2;
+
+        ActionItem {
+            color: #F7F7F2;
+        }
+    }
+
     page {
         padding-bottom: 100px;
     }
