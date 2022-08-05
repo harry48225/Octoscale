@@ -19,9 +19,12 @@
   
 <flexboxLayout>
   <label textWrap={true}>{label}</label>
-  <slider minValue={min/stepSize} maxValue={max/stepSize} value={value/stepSize} on:valueChange={e => {
-    updateValue(e.value * stepSize)}}/>
-  <NumberField value={value} on:returnPress={updateValueFromNumberField}/>
+  <slider minValue={min/stepSize} 
+    maxValue={max/stepSize} 
+    value={value/stepSize} 
+    on:valueChange={e => {updateValue(e.value * stepSize)}}/>
+  <NumberField value={value.toPrecision(SIGNIFICANT_FIGURES)}
+    on:returnPress={updateValueFromNumberField}/>
 </flexboxLayout>
 
 <style lang="scss">

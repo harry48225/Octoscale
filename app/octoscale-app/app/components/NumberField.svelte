@@ -12,10 +12,10 @@
     dispatch('returnPress', e)
   };
 
-  export let value: number;
+  export let value: string;
 </script>
 
-<textField text={value.toString()} 
+<textField text={value} 
   returnKeyType="done" 
   closeOnReturn="true" 
   keyboardType="number" 
