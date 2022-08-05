@@ -1,29 +1,27 @@
 <script lang="ts">
   import NumberField, { ReturnPressEvent } from "./NumberField.svelte";
-  const PRECISION = 3
-  export let name: String
-  const stepSize = 0.001
+  const SIGNIFICANT_FIGURES = 3;
+  export let label: String
+  export let min = 0;
+  export let max = 1;
+  export let value = 0;
+  $: stepSize = 10**(Math.floor(Math.log10(max)) - SIGNIFICANT_FIGURES);
 
   const updateValue = (newValue: number) => {
-    if (newValue.toPrecision(PRECISION) == value.toPrecision(PRECISION)) return
-    value = parseFloat(newValue.toPrecision(PRECISION))
+    if (newValue.toPrecision(SIGNIFICANT_FIGURES) === value.toPrecision(SIGNIFICANT_FIGURES)) return
+    if (newValue > max || newValue < min) return;
+    value = parseFloat(newValue.toPrecision(SIGNIFICANT_FIGURES));
   }
   const updateValueFromNumberField = (e: ReturnPressEvent) => {
     updateValue(parseFloat(e.detail.object.text));
   }
-
-  // $: stepSize = 10**(Math.floor(Math.log10(value)))
-  // $: console.log(stepSize)
-  const max = 0.1;
-  const min = 0;
-  let value: number = 0
 </script>
   
 <flexboxLayout>
-  <label textWrap={true}>{name}</label>
+  <label textWrap={true}>{label}</label>
   <slider minValue={min/stepSize} maxValue={max/stepSize} value={value/stepSize} on:valueChange={e => {
     updateValue(e.value * stepSize)}}/>
-  <NumberField bind:value={value} on:returnPress = {updateValueFromNumberField}/>
+  <NumberField value={value} on:returnPress={updateValueFromNumberField}/>
 </flexboxLayout>
 
 <style lang="scss">
@@ -35,12 +33,6 @@
 
     Slider {
       flex-grow: 1;
-    }
-
-    NumberField {
-      font-size: 16px;
-      text-align: right;
-      min-width: 100px;
     }
 
     Label {

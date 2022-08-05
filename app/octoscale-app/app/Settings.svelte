@@ -15,11 +15,11 @@ import Home from "./Home.svelte";
     <ConnectionBanner/>
     <stackLayout>
       <label>Developer settings</label>
-      <SliderSetting name="min cut-off"/>
-      <SliderSetting name="D cut-off"/>
-      <SliderSetting name="beta"/>
-      <SliderSetting name="settled tolerance"/>
-      <SliderSetting name="unsettled tolerance"/>
+      <SliderSetting label="min cut-off"/>
+      <SliderSetting label="D cut-off"/>
+      <SliderSetting label="beta"/>
+      <SliderSetting label="settled tolerance"/>
+      <SliderSetting label="unsettled tolerance"/>
     </stackLayout>
 
     <flexboxLayout justifyContent="space-around">

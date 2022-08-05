@@ -21,3 +21,11 @@
   keyboardType="number" 
   on:returnPress={returnPress}
 />
+
+<style lang="scss">
+  TextField {
+      font-size: 16px;
+      text-align: right;
+      min-width: 100px;
+    }
+</style>
