@@ -8,6 +8,7 @@
     import Graph from './components/Graph.svelte';
     import { navigate } from 'svelte-native';
     import Settings from './Settings.svelte';
+    import BottomNavigationBar from './components/BottomNavigationBar.svelte';
         
     let mass: number;
     displayedMass.subscribe(val => mass = val);
@@ -34,6 +35,7 @@
         <Timer isTiming={timing} durationSeconds={duration}/>
         <Graph/>
         <ActionButtons tareCallback={tare}/>
+        <BottomNavigationBar/>
     </flexboxLayout>
 </page>
 
@@ -46,10 +48,6 @@
         ActionItem {
             color: #F7F7F2;
         }
-    }
-
-    page {
-        padding-bottom: 32px;
     }
 
     FlexboxLayout {

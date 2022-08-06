@@ -12,4 +12,4 @@ import Settings from "./Settings.svelte";
       background-color: #F7F7F2;
   }
 </style>
-// Colours https://coolors.co/f7f7f2-e4e6c3-899878-222725-121113
+// Colours https://coolors.co/f7f7f2-e4e6c3-899878-9b1d20-121113
