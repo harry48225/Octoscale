@@ -49,7 +49,7 @@
     }
 
     page {
-        padding-bottom: 100px;
+        padding-bottom: 32px;
     }
 
     FlexboxLayout {
