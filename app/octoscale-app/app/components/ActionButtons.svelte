@@ -15,12 +15,4 @@
     padding: 16px;
     border-radius: 64px;
   }
-  Button {
-    font-size: 32px;
-    width: 300px;
-    border-radius: 64px;
-    height: 200px;
-    background-color: #899878;
-    color: #E4E6C3;
-  }
 </style>

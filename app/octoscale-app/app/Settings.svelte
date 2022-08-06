@@ -31,15 +31,6 @@ import Home from "./Home.svelte";
 </page>
 
 <style lang="scss">
-  ActionBar {
-        background-color: #899878;
-        color: #F7F7F2;
-  }
-
-  Label {
-    font-size: 16px;
-  }
-
   FlexboxLayout {
     StackLayout {
       flex-grow: 1;

@@ -40,11 +40,6 @@
 
 
 <style lang="scss">
-    ActionBar {
-        background-color: #899878;
-        color: #F7F7F2;
-    }
-
     FlexboxLayout {
         flex-direction: column;
         justify-items: center;

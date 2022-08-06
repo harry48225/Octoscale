@@ -23,8 +23,7 @@ import Home from '../Home.svelte';
   }
 
   Button {
-    font-size: 32px;
-    border-radius: 32px;
+    font-size: 28px;
     background-color: #E4E6C3;
     color: #899878;
     width: 160px;
