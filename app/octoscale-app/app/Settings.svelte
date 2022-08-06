@@ -1,6 +1,7 @@
 <script lang="ts">
 
 import { navigate } from "svelte-native";
+import BottomNavigationBar from "./components/BottomNavigationBar.svelte";
 import ConnectionBanner from "./components/ConnectionBanner.svelte";
 import SliderSetting from "./components/SliderSetting.svelte";
 import Home from "./Home.svelte";
@@ -9,7 +10,6 @@ import Home from "./Home.svelte";
 
 <page>
   <actionBar title="Settings">
-    <actionItem text="home" on:tap={() => {navigate({page: Home})}}/>
   </actionBar>
   <flexboxLayout flexDirection="column">
     <ConnectionBanner/>
@@ -26,10 +26,16 @@ import Home from "./Home.svelte";
       <button>query scale</button>
       <button>apply</button>
     </flexboxLayout>
+    <BottomNavigationBar/>
   </flexboxLayout>
 </page>
 
 <style lang="scss">
+  ActionBar {
+        background-color: #899878;
+        color: #F7F7F2;
+  }
+
   Label {
     font-size: 16px;
   }

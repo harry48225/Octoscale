@@ -27,7 +27,6 @@
 
 <page>
     <actionBar title="octoscale">
-        <actionItem text="settings" on:tap={() => navigate({page: Settings})}/>
     </actionBar>
     <flexboxLayout>
         <ConnectionBanner/>
@@ -44,10 +43,6 @@
     ActionBar {
         background-color: #899878;
         color: #F7F7F2;
-
-        ActionItem {
-            color: #F7F7F2;
-        }
     }
 
     FlexboxLayout {
