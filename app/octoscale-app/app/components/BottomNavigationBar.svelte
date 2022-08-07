@@ -15,6 +15,8 @@ import Home from '../Home.svelte';
     background-color: #899878;
     padding: 16px;
     max-height: 196px;
+    min-height: 196px;
+    height: 196px;
     border-top-width: 8px;
     border-top-color: #121113;
     border-top-style: solid;
@@ -28,5 +30,6 @@ import Home from '../Home.svelte';
     color: #899878;
     width: 160px;
     height: 160px;
+    min-height: 160px;
   }
 </style>

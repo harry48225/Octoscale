@@ -3,6 +3,7 @@
 import { navigate } from "svelte-native";
 import BottomNavigationBar from "./components/BottomNavigationBar.svelte";
 import ConnectionBanner from "./components/ConnectionBanner.svelte";
+import SettingsSection from "./components/SettingsSection.svelte";
 import SliderSetting from "./components/SliderSetting.svelte";
 import Home from "./Home.svelte";
 
@@ -13,15 +14,25 @@ import Home from "./Home.svelte";
   </actionBar>
   <flexboxLayout flexDirection="column">
     <ConnectionBanner/>
-    <stackLayout>
-      <label>Developer settings</label>
-      <SliderSetting label="min cut-off"/>
-      <SliderSetting label="D cut-off"/>
-      <SliderSetting label="beta"/>
-      <SliderSetting label="settled tolerance"/>
-      <SliderSetting label="unsettled tolerance"/>
-    </stackLayout>
+    <scrollView>
+      <stackLayout>
+        <SettingsSection title="Developer settings">
+          <SliderSetting label="min cut-off"/>
+          <SliderSetting label="D cut-off"/>
+          <SliderSetting label="beta"/>
+          <SliderSetting label="settled tolerance"/>
+          <SliderSetting label="unsettled tolerance"/>
+        </SettingsSection>
 
+        <SettingsSection title="Developer settings">
+          <SliderSetting label="min cut-off"/>
+          <SliderSetting label="D cut-off"/>
+          <SliderSetting label="beta"/>
+          <SliderSetting label="settled tolerance"/>
+          <SliderSetting label="unsettled tolerance"/>
+        </SettingsSection>
+      </stackLayout>
+    </scrollView>
     <flexboxLayout justifyContent="space-around">
       <button>query scale</button>
       <button>apply</button>
@@ -31,10 +42,8 @@ import Home from "./Home.svelte";
 </page>
 
 <style lang="scss">
-  FlexboxLayout {
-    StackLayout {
-      flex-grow: 1;
-      margin: 32px;
-    }
+  ScrollView {
+    flex-grow: 1;
+    margin: 32px;
   }
 </style>

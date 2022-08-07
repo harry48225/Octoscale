@@ -13,5 +13,7 @@
     color: white;
     width: 100%;
     text-align: center;
+    height: 72px;
+    min-height: 72px;
   }
 </style>
