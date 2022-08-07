@@ -26,6 +26,7 @@
   TextField {
       font-size: 16px;
       text-align: right;
-      min-width: 100px;
+      min-width: 120px;
+      max-width: 120px;
     }
 </style>

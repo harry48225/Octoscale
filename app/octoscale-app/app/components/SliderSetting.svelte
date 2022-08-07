@@ -1,4 +1,6 @@
 <script lang="ts">
+import LabelledSetting from "./LabelledSetting.svelte";
+
   import NumberField, { ReturnPressEvent } from "./NumberField.svelte";
   const SIGNIFICANT_FIGURES = 3;
   export let label: String
@@ -16,33 +18,18 @@
     updateValue(parseFloat(e.detail.object.text));
   }
 </script>
-  
-<flexboxLayout>
-  <label textWrap={true}>{label}</label>
+
+<LabelledSetting label={label}>
   <slider minValue={min/stepSize} 
     maxValue={max/stepSize} 
     value={value/stepSize} 
     on:valueChange={e => {updateValue(e.value * stepSize)}}/>
   <NumberField value={value.toPrecision(SIGNIFICANT_FIGURES)}
     on:returnPress={updateValueFromNumberField}/>
-</flexboxLayout>
+</LabelledSetting>
 
 <style lang="scss">
-  FlexboxLayout {
-    justify-content: space-between;
-    align-items: center;
-    padding-left: 32px;
-    padding-right: 32px;
-
-    Slider {
-      flex-grow: 1;
-    }
-
-    Label {
-      font-size: 12px;
-      text-align: center;
-      max-width: 200px;
-      width: 200px;
-    }
+  Slider {
+    flex-grow: 1;
   }
 </style>
