@@ -32,7 +32,10 @@
     <MassDisplay mass={mass}/>
     <Timer isTiming={timing} durationSeconds={duration}/>
     <Graph/>
-    <ActionButtons tareCallback={tare}/>
+    <ActionButtons>
+      <button text="time" />
+      <button on:tap="{tare}" text="tare"/>
+    </ActionButtons>
     <BottomNavigationBar/>
   </flexboxLayout>
 </page>

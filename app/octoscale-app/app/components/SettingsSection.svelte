@@ -13,14 +13,14 @@
   Label {
     background-color: #899878;
     padding: 32px;
-    border-radius: 32px;
+    border-radius: 40px;
     font-weight: 500;
     color: #F7F7F2;
   }
 
   FlexboxLayout {
     background-color: #E4E6C3;
-    border-radius: 32px;
+    border-radius: 64px;
     padding: 64px;
     flex-direction: column;
     margin-bottom: 64px;

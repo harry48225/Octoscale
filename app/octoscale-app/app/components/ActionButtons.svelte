@@ -1,10 +1,5 @@
-<script lang="ts">
-  export let tareCallback: () => {};
-</script>
-
 <flexboxLayout>
-  <button text="time" />
-  <button on:tap="{tareCallback}" text="tare"/>
+  <slot/>
 </flexboxLayout>
 
 <style lang="scss">
@@ -14,5 +9,6 @@
     margin: 16px;
     padding: 16px;
     border-radius: 64px;
+    min-height: 200px;
   }
 </style>

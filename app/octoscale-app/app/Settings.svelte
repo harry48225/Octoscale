@@ -1,6 +1,7 @@
 <script lang="ts">
 
 import { navigate } from "svelte-native";
+import ActionButtons from "./components/ActionButtons.svelte";
 import BottomNavigationBar from "./components/BottomNavigationBar.svelte";
 import ConnectionBanner from "./components/ConnectionBanner.svelte";
 import SettingsSection from "./components/SettingsSection.svelte";
@@ -33,10 +34,10 @@ import Home from "./Home.svelte";
         </SettingsSection>
       </stackLayout>
     </scrollView>
-    <flexboxLayout justifyContent="space-around">
+    <ActionButtons>
       <button>query scale</button>
       <button>apply</button>
-    </flexboxLayout>
+    </ActionButtons>
     <BottomNavigationBar/>
   </flexboxLayout>
 </page>
