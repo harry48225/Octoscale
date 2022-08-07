@@ -20,6 +20,12 @@ import Home from "./Home.svelte";
       <stackLayout>
         <SettingsSection title="General">
           <ToggleSetting label="auto tare"/>
+          <ToggleSetting label="beeps"/>
+        </SettingsSection>
+
+        <SettingsSection title="Timer">
+          <ToggleSetting label="auto start"/>
+          <ToggleSetting label="auto stop"/>
         </SettingsSection>
 
         <SettingsSection title="Developer settings">
@@ -42,6 +48,9 @@ import Home from "./Home.svelte";
 <style lang="scss">
   ScrollView {
     flex-grow: 1;
-    margin: 32px;
+    
+    StackLayout {
+      padding: 32px;
+    }
   }
 </style>
