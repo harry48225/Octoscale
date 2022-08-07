@@ -2,7 +2,7 @@
   import { Canvas } from '@nativescript/canvas';
 
   type Point = {x: number, y: number}
-  export const data: Point[] = [{x: 0, y: 0}, {x: 10, y: 10}, {x: 20, y: 30}, {x: 30, y: 35}];
+  export const data: Point[] = [{x: 0, y: 0}, {x: 10, y: 10}, {x: 20, y: 30}, {x: 30, y: 35}, {x: 50, y: 38}];
 
   const drawFilledRegion = (canvas: Canvas, ctx: CanvasRenderingContext2D, data: Point[]) => {
     ctx.fillStyle = '#E4E6C3';
