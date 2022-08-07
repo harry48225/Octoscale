@@ -6,6 +6,7 @@
   "dependencies": {
     "@nativescript-community/ble": "^3.1.8",
     "@nativescript-community/perms": "^2.2.7",
+    "@nativescript/canvas": "^1.0.0",
     "@nativescript/core": "~8.2.0",
     "@nativescript/theme": "~3.0.2",
     "svelte-native": "~1.0.0"

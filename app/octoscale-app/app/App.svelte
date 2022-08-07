@@ -4,7 +4,7 @@ import Settings from "./Settings.svelte";
 
 </script>
 <frame>
-  <Settings/>
+  <Home/>
 </frame>
 
 <style global lang="scss">
