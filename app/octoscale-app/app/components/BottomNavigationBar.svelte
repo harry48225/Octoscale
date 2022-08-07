@@ -28,7 +28,6 @@ import Home from '../Home.svelte';
     font-size: 28px;
     background-color: #E4E6C3;
     color: #899878;
-    width: 160px;
     height: 160px;
     min-height: 160px;
   }

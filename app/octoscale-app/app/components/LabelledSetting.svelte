@@ -15,7 +15,7 @@
     padding-right: 32px;
 
     Label {
-      font-size: 12px;
+      font-size: 14px;
       text-align: center;
       max-width: 200px;
       width: 200px;

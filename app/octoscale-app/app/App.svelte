@@ -19,6 +19,7 @@ import Settings from "./Settings.svelte";
 
   Label {
     font-size: 16px;
+    color: #121113;
   }
 
   Button {
@@ -26,7 +27,8 @@ import Settings from "./Settings.svelte";
     height: auto;
     width: auto;
     border-radius: 20%;
-    color: #E4E6C3;
+    padding: 16px 64px;
+    color: #F7F7F2;
     background-color: #899878;
   }
 
