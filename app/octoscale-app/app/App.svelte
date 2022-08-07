@@ -29,5 +29,10 @@ import Settings from "./Settings.svelte";
     color: #E4E6C3;
     background-color: #899878;
   }
+
+  Slider {
+    color: #899878;
+    background-color: #899878;
+  }
 </style>
 // Colours https://coolors.co/f7f7f2-e4e6c3-899878-9b1d20-121113
