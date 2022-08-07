@@ -12,7 +12,7 @@
   }
 </script>
 
-<canvas id="canvas" width="100%" height="100%" ready="canvasReady"/>
+<canvas id="canvas" width="100%" height="100%" on:ready={canvasReady}/>
 
 <style>
 </style>
