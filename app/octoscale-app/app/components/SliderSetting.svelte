@@ -3,7 +3,7 @@ import LabelledSetting from "./LabelledSetting.svelte";
 
   import NumberField, { ReturnPressEvent } from "./NumberField.svelte";
   const SIGNIFICANT_FIGURES = 3;
-  export let label: String
+  export let label: string
   export let min = 0;
   export let max = 1;
   export let value = 0;

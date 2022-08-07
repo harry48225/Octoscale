@@ -6,6 +6,7 @@ import BottomNavigationBar from "./components/BottomNavigationBar.svelte";
 import ConnectionBanner from "./components/ConnectionBanner.svelte";
 import SettingsSection from "./components/SettingsSection.svelte";
 import SliderSetting from "./components/SliderSetting.svelte";
+import ToggleSetting from "./components/ToggleSetting.svelte";
 import Home from "./Home.svelte";
 
 </script>
@@ -17,12 +18,8 @@ import Home from "./Home.svelte";
     <ConnectionBanner/>
     <scrollView>
       <stackLayout>
-        <SettingsSection title="Developer settings">
-          <SliderSetting label="min cut-off"/>
-          <SliderSetting label="D cut-off"/>
-          <SliderSetting label="beta"/>
-          <SliderSetting label="settled tolerance"/>
-          <SliderSetting label="unsettled tolerance"/>
+        <SettingsSection title="General">
+          <ToggleSetting label="auto tare"/>
         </SettingsSection>
 
         <SettingsSection title="Developer settings">
