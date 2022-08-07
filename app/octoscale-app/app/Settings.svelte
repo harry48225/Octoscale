@@ -21,6 +21,7 @@ import Home from "./Home.svelte";
         <SettingsSection title="General">
           <ToggleSetting label="auto tare"/>
           <ToggleSetting label="beeps"/>
+          <ToggleSetting label="lighting"/>
         </SettingsSection>
 
         <SettingsSection title="Timer">
