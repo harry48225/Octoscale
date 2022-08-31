@@ -15,8 +15,8 @@
 Adafruit_SH1107 display = Adafruit_SH1107(64, 128, &Wire);
 
 // HX711 circuit wiring
-#define LOADCELL_DOUT_PIN 17
-#define LOADCELL_SCK_PIN 18
+#define LOADCELL_DOUT_PIN 48
+#define LOADCELL_SCK_PIN 45
 
 Scale scale = Scale(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
 
