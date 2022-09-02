@@ -2,6 +2,7 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SH110X.h>
+#include <Adafruit_SSD1306.h>
 #include <Fonts/FreeMono12pt7b.h>
 #include <Fonts/FreeMono18pt7b.h>
 #include "scale.h"
@@ -14,7 +15,8 @@
 #define BUTTON_B  38
 #define BUTTON_C  33
 
-Adafruit_SH1107 display = Adafruit_SH1107(64, 128, &Wire);
+Adafruit_SSD1306 display;
+//Adafruit_SH1107 display = Adafruit_SH1107(64, 128, &Wire, 14);
 
 // HX711 circuit wiring
 #define LOADCELL_DOUT_PIN 48
@@ -41,9 +43,13 @@ float brewMass = 0;
 
 
 void setup() {
+  Wire.begin(12, 13);
+  display = Adafruit_SSD1306(64, 128, &Wire, 14);
+  //display = Adafruit_SH1107(64, 128, &Wire, 14);
   Serial.begin(9600);
   delay(250); // wait for the OLED to power up
-  display.begin(0x3C, true); // Address 0x3C default
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C); // Address 0x3C default
+  //display.begin(0x3C, true);
   // Show image buffer on the display hardware.
   // Since the buffer is intialized with an Adafruit splashscreen
   // internally, this will display the splashscreen.
@@ -72,7 +78,7 @@ void displayMass(double mass) {
   display.printf("%-3.1f\n",mass);
   display.setFont();
   display.setCursor(0,16+10);
-  //display.printf("sttl: %.1f, dT: %.f\n", scale.getLastSettledReading(), scale.millisBetweenSettledReadings);
+  display.printf("sttl: %.1f, dT: %.f\n", scale.getLastSettledReading(), scale.millisBetweenSettledReadings);
 }
 
 void startTimer() {
@@ -152,7 +158,7 @@ void loop() {
     scale.updateReading();
     mass = scale.getReading();
   }
-  //displayMass(mass);
+  displayMass(mass);
   //BLE::update(mass);
   
   // handle timing states
@@ -233,5 +239,5 @@ void loop() {
 
   Graph::update(scale.getReading());
   //Graph::draw(display, 0, 41, 128, 22);
-  //display.display();
+  display.display();
 }
