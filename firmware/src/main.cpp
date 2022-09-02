@@ -1,17 +1,10 @@
 #include "HX711.h"
-#include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SH110X.h>
-#include <Adafruit_SSD1306.h>
-#include <Fonts/FreeMono12pt7b.h>
-#include <Fonts/FreeMono18pt7b.h>
 #include "scale.h"
 #include "graph.h"
 #include "bluetooth.h"
 #include "led.h"
 #include "buttons.h"
-
-Adafruit_SH1106G display = Adafruit_SH1106G(128, 64, &Wire, 14);
+#include "display.h"
 
 // HX711 circuit wiring
 #define LOADCELL_DOUT_PIN 48
@@ -38,31 +31,12 @@ float brewMass = 0;
 
 
 void setup() {
-  Wire.begin(12, 13);
   Serial.begin(9600);
-  delay(250); // wait for the OLED to power up
-  display.begin(0x3C, true);
 
-  // Clear the buffer.
-  display.clearDisplay();
-  display.display();
-  display.setRotation(0);
-  display.setTextSize(1);
-  display.setTextColor(SSD1306_WHITE);
-  display.setCursor(0,0);
-
+  Display::init();
   BLE::init();
   LEDS::init();
   Buttons::init();
-}
-
-void displayMass(double mass) {
-  display.setCursor(0,16);
-  display.setFont(&FreeMono18pt7b);
-  display.printf("%-3.1f\n",mass);
-  display.setFont();
-  display.setCursor(0,16+10);
-  //display.printf("sttl: %.1f, dT: %.f\n", scale.getLastSettledReading(), scale.millisBetweenSettledReadings);
 }
 
 void startTimer() {
@@ -74,42 +48,8 @@ void startTimer() {
 
 void stopTimer() {
   state = TIMING_STOPPED;
-  display.clearDisplay();
-  display.setCursor(8,30);
-  display.println("<<brew complete>>");
-  display.display();
+  Display::showBrewCompleteAnimation();
   delay(500);
-}
-
-void displayTimer(long seconds) {
-  display.print("timing: ");
-  display.printf("%02d:%02d", seconds / 60, seconds % 60);
-}
-
-void displayBrewCompleteAnimation() {
-  for (int i = 0; i < 5; i++) {
-    display.clearDisplay();
-    display.setCursor(20,30);
-    display.println("<<BREW COMPLETE>>");
-    display.display();
-    delay(500);
-    display.clearDisplay();
-    display.display();
-    delay(500);
-  }
-}
-
-void displayBrewStats() {
-  display.printf("in %02dm:%02ds,", brewDuration / 60, brewDuration % 60);
-}
-
-void displayAutoTare() {
-  display.clearDisplay();
-  display.setCursor(0,12);
-  display.setFont(&FreeMono12pt7b);
-  display.println("AUTO");
-  display.println("TARE");
-  display.display();
 }
 
 void loop() {
@@ -130,8 +70,7 @@ void loop() {
     BLE::clearPendingTare();
   }
 
-  display.clearDisplay();
-  display.setCursor(0,0);
+  Display::clear();
 
   double mass = -1;
   if (state == TIMING_STOPPED) {
@@ -140,14 +79,15 @@ void loop() {
     scale.updateReading();
     mass = scale.getReading();
   }
-  displayMass(mass);
+  
+  Display::showMass(mass);
   BLE::update(mass);
   
   // handle timing states
   if (state == TIMER_WAITING_FOR_START) {
     Graph::reset();
     Graph::stop();
-    display.println("timer primed");
+    Display::showTimerPrimed();
   if (!scale.hasSettled) {
       startTimer();
       BLE::startTiming();
@@ -156,7 +96,7 @@ void loop() {
 
   if (state == TIMING) {
     long seconds = (millis() - startTime)/1000;
-    displayTimer(seconds);
+    Display::showTimer(seconds);
     // This should probably be in millis ... 
     BLE::updateTimerDuration(seconds);
     // Something greater than 50g must have been taken off the scale
@@ -177,12 +117,12 @@ void loop() {
   }
 
   if (state == TIMING_STOPPED) {
-    displayBrewStats();
+    Display::showBrewStats(brewDuration);
   }
 
   // Do auto tare
   if (autotareEnabled && scale.hasSettled && abs(scale.getReading() - scale.getLastSettledReading()) > 100 && scale.millisBetweenSettledReadings < 2000) {
-    displayAutoTare();
+    Display::showAutoTare();
     // Take some more readings
     for (int i = 0; i < 40; i++) {
       scale.updateReading();
@@ -220,6 +160,6 @@ void loop() {
   // }
 
   Graph::update(scale.getReading());
-  Graph::draw(display, 0, 41, 128, 22);
-  display.display();
+  //Graph::draw(Display::getDisplay(), 0, 41, 128, 22);
+  Display::show();
 }
