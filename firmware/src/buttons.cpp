@@ -1,5 +1,6 @@
 #include "buttons.h"
 #include <Arduino.h>
+#include "led.h"
 
 namespace Buttons {
   int aVal = 0;
@@ -25,6 +26,9 @@ namespace Buttons {
 
     aPressed = newA > A_THRESHOLD; 
     bPressed = newB > B_THRESHOLD;
+
+    if (aPressed) Leds::aTapped();
+    if (bPressed) Leds::bTapped();
 
     Serial.print(aPressed);
     Serial.print(", ");

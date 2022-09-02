@@ -1,6 +1,11 @@
 #define PIN 1 
 #define NUMPIXELS 9
 
-namespace LEDS {
+namespace Leds {
   void init();
+  void aTapped();
+  void bTapped();
+
+  void clear();
+  void show();
 }

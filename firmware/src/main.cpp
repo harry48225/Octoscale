@@ -35,7 +35,7 @@ void setup() {
 
   Display::init();
   BLE::init();
-  LEDS::init();
+  Leds::init();
   Buttons::init();
 }
 
@@ -53,14 +53,13 @@ void stopTimer() {
 }
 
 void loop() {
+  Leds::clear();
   Buttons::loop();
   //Serial.println(BLE::isDeviceConnected());
   // Serial.print(Buttons::a());
   // Serial.print(", ");
   // Serial.println(Buttons::b());
   //Serial.printf("\r a: %d, b: %d                                               ", touchRead(BUTTON_A_PIN), touchRead(BUTTON_B_PIN));
-
-
   if(Buttons::a()) state = TIMER_WAITING_FOR_START;
 
   if(Buttons::b()) {
@@ -68,9 +67,11 @@ void loop() {
     while (Buttons::b())
     {
       Buttons::loop();
-      delay(100);
+      Leds::show();
+      delay(10);
     }
-
+    Leds::clear();
+    Leds::show();
     while (!scale.hasSettled)
     {
       scale.updateReading();
@@ -177,4 +178,5 @@ void loop() {
   Graph::update(scale.getReading());
   //Graph::draw(Display::getDisplay(), 0, 41, 128, 22);
   Display::show();
+  Leds::show();
 }
