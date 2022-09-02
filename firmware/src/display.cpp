@@ -30,9 +30,21 @@ namespace Display {
       mass = 0;
     }
 
-    display.setCursor(0,32);
+    char massChars[16];
+    sprintf(massChars, "%-3.1f", mass);
+
+    String massString(massChars);
+
+    while (massString.length() < 5) {
+      massString = " " + massString;
+    }
+
+    Serial.println(massString);
+    
     display.setFont(&FreeMono18pt7b);
-    display.printf("%-3.1f\n", mass);
+
+    display.setCursor(0, 40);
+    display.printf(massString.c_str());
     display.setFont();
     display.setCursor(0,16+10);
     //display.printf("sttl: %.1f, dT: %.f\n", scale.getLastSettledReading(), scale.millisBetweenSettledReadings);
