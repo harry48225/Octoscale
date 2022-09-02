@@ -6,14 +6,21 @@ namespace Buttons {
   int aVal = 0;
   int bVal = 0;
 
-  bool aPressed = false;
-  bool bPressed = false; 
+  bool aPressed = true;
+  bool bPressed = true; 
 
   void init() {
     pinMode(BUTTON_A_PIN, INPUT);
     pinMode(BUTTON_B_PIN, INPUT);
     aVal = touchRead(BUTTON_A_PIN);
     bVal = touchRead(BUTTON_B_PIN);
+
+    while (aPressed || bPressed)
+    {
+      loop();
+      delay(10);
+    }
+    
   }
 
   void loop() {
