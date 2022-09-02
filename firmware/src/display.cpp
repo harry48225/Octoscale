@@ -23,10 +23,16 @@ namespace Display {
     display.setCursor(0,0);
   }
 
-  void showMass(double mass) {
-    display.setCursor(0,16);
+  void showMass(double rawMass) {
+    double mass = rawMass;
+
+    if (mass > -0.1 && mass < 0) {
+      mass = 0;
+    }
+
+    display.setCursor(0,32);
     display.setFont(&FreeMono18pt7b);
-    display.printf("%-3.1f\n",mass);
+    display.printf("%-3.1f\n", mass);
     display.setFont();
     display.setCursor(0,16+10);
     //display.printf("sttl: %.1f, dT: %.f\n", scale.getLastSettledReading(), scale.millisBetweenSettledReadings);
