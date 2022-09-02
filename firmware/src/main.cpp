@@ -41,7 +41,7 @@ float brewMass = 0;
 
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   delay(250); // wait for the OLED to power up
   display.begin(0x3C, true); // Address 0x3C default
   // Show image buffer on the display hardware.
@@ -123,116 +123,115 @@ void displayAutoTare() {
 }
 
 void loop() {
-  delay(100);
   Buttons::loop();
   //Serial.println(BLE::isDeviceConnected());
-  Serial.print(Buttons::a());
-  Serial.print(", ");
-  Serial.println(Buttons::b());
+  // Serial.print(Buttons::a());
+  // Serial.print(", ");
+  // Serial.println(Buttons::b());
   //Serial.printf("\r a: %d, b: %d                                               ", touchRead(BUTTON_A_PIN), touchRead(BUTTON_B_PIN));
 
 
-  // if(!digitalRead(BUTTON_A)) state = TIMER_WAITING_FOR_START;
+  if(!digitalRead(BUTTON_A)) state = TIMER_WAITING_FOR_START;
 
-  // if(!digitalRead(BUTTON_B)) scale.tare();
+  if(!digitalRead(BUTTON_B)) scale.tare();
 
-  // if(!digitalRead(BUTTON_C)) state=CALIBRATION;
+  if(!digitalRead(BUTTON_C)) state=CALIBRATION;
 
-  // if (BLE::isPendingTare()) {
-  //   scale.tare();
-  //   BLE::clearPendingTare();
-  // }
+  if (BLE::isPendingTare()) {
+    scale.tare();
+    BLE::clearPendingTare();
+  }
 
-  // display.clearDisplay();
-  // display.setCursor(0,0);
+  display.clearDisplay();
+  display.setCursor(0,0);
 
-  // double mass = -1;
-  // if (state == TIMING_STOPPED) {
-  //   mass = brewMass;
-  // } else {
-  //   scale.updateReading();
-  //   mass = scale.getReading();
-  // }
-  // displayMass(mass);
-  // BLE::update(mass);
+  double mass = -1;
+  if (state == TIMING_STOPPED) {
+    mass = brewMass;
+  } else {
+    scale.updateReading();
+    mass = scale.getReading();
+  }
+  //displayMass(mass);
+  //BLE::update(mass);
   
-  // // handle timing states
-  // if (state == TIMER_WAITING_FOR_START) {
-  //   Graph::reset();
-  //   Graph::stop();
-  //  display.println("timer primed");
-  //  if (!scale.hasSettled) {
-  //     startTimer();
-  //     BLE::startTiming();
-  //  }
-  // }
+  // handle timing states
+  if (state == TIMER_WAITING_FOR_START) {
+    Graph::reset();
+    Graph::stop();
+    //display.println("timer primed");
+  if (!scale.hasSettled) {
+      startTimer();
+      BLE::startTiming();
+   }
+  }
 
-  // if (state == TIMING) {
-  //   long seconds = (millis() - startTime)/1000;
-  //   displayTimer(seconds);
-  //   // This should probably be in millis ... 
-  //   BLE::updateTimerDuration(seconds);
-  //   // Something greater than 50g must have been taken off the scale
-  //   if (scale.getLastSettledReading() - scale.getReading() > STOP_TIMER_REMOVAL_MASS) {
-  //     if (!brewStatsGathered) {
-  //       brewDuration = (millis() - startTime)/1000;
-  //       brewMass = scale.getLastSettledReading();
-  //       Graph::stop();
-  //     }
-  //     if (scale.hasSettled) {
-  //       stopTimer();
-  //       BLE::stopTiming();
-  //     }
-  //   } else {
-  //     brewStatsGathered = false;
-  //     Graph::resume();
-  //   }
-  // }
+  if (state == TIMING) {
+    long seconds = (millis() - startTime)/1000;
+    displayTimer(seconds);
+    // This should probably be in millis ... 
+    BLE::updateTimerDuration(seconds);
+    // Something greater than 50g must have been taken off the scale
+    if (scale.getLastSettledReading() - scale.getReading() > STOP_TIMER_REMOVAL_MASS) {
+      if (!brewStatsGathered) {
+        brewDuration = (millis() - startTime)/1000;
+        brewMass = scale.getLastSettledReading();
+        Graph::stop();
+      }
+      if (scale.hasSettled) {
+        stopTimer();
+        BLE::stopTiming();
+      }
+    } else {
+      brewStatsGathered = false;
+      Graph::resume();
+    }
+  }
 
-  // if (state == TIMING_STOPPED) {
-  //   displayBrewStats();
-  // }
+  if (state == TIMING_STOPPED) {
+    //displayBrewStats();
+  }
 
-  // // Do auto tare
-  // if (autotareEnabled && scale.hasSettled && abs(scale.getReading() - scale.getLastSettledReading()) > 100 && scale.millisBetweenSettledReadings < 2000) {
-  //   displayAutoTare();
-  //   // Take some more readings
-  //   for (int i = 0; i < 40; i++) {
-  //     scale.updateReading();
-  //     delay(20);
-  //   }
-  //   scale.tare();
-  //   delay(200);
-  // }
+  // Do auto tare
+  if (autotareEnabled && scale.hasSettled && abs(scale.getReading() - scale.getLastSettledReading()) > 100 && scale.millisBetweenSettledReadings < 2000) {
+    //displayAutoTare();
+    // Take some more readings
+    for (int i = 0; i < 40; i++) {
+      scale.updateReading();
+      delay(20);
+    }
+    scale.tare();
+    delay(200);
+  }
     
-  // if (state == CALIBRATION) {
-  //   display.clearDisplay();
-  //   display.println("Calibration mode");
-  //   display.println("Place a 100g mass");
-  //   display.println("Then press A");
-  //   display.display();
-  //   scale.setScale();
-  //   scale.tareLoadCell();
-  //   scale.tare();
+  if (state == CALIBRATION) {
+    display.clearDisplay();
+    display.println("Calibration mode");
+    display.println("Place a 100g mass");
+    display.println("Then press A");
+    display.display();
+    scale.setScale();
+    scale.tareLoadCell();
+    scale.tare();
 
-  //   while(digitalRead(BUTTON_A)) delay(10);
+    while(digitalRead(BUTTON_A)) delay(10);
     
-  //   float factor = scale.getUnits(255) / 100.f;
+    float factor = scale.getUnits(255) / 100.f;
 
-  //   scale.setScale(factor);
+    scale.setScale(factor);
 
-  //   display.clearDisplay();
-  //   display.setCursor(0,0);
-  //   display.println("Calibrated!");
-  //   display.print("Factor: ");
-  //   display.print(factor);
-  //   display.display();
-  //   delay(2000);
+    display.clearDisplay();
+    display.setCursor(0,0);
+    display.println("Calibrated!");
+    display.print("Factor: ");
+    display.print(factor);
+    display.display();
+    delay(2000);
 
-  //   state = IDLE;
-  // }
+    state = IDLE;
+  }
 
-  // Graph::update(scale.getReading());
-  // Graph::draw(display, 0, 41, 128, 22);
-  // display.display();
+  Graph::update(scale.getReading());
+  //Graph::draw(display, 0, 41, 128, 22);
+  //display.display();
 }

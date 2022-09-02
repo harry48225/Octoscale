@@ -16,20 +16,19 @@ namespace Buttons {
   }
 
   void loop() {
-    int newA = touchRead(BUTTON_A_PIN);
-    int newB = touchRead(BUTTON_B_PIN);
+    int newA = 0.3 * touchRead(BUTTON_A_PIN) + 0.7 * aVal;
+    int newB = 0.3 * touchRead(BUTTON_B_PIN) + 0.7 * bVal;
 
-    if (newA > aVal + THRESHOLD) {
-      aPressed = true; 
-    } else if (newA < aVal - THRESHOLD) {
-      aPressed = false;
-    }
+    Serial.print(newA);
+    Serial.print(", ");
+    Serial.println(newB);
 
-    if (newB > bVal + THRESHOLD) {
-      bPressed = true; 
-    } else if (newB < bVal - THRESHOLD) {
-      bPressed = false;
-    }
+    aPressed = newA > A_THRESHOLD; 
+    bPressed = newB > B_THRESHOLD;
+
+    Serial.print(aPressed);
+    Serial.print(", ");
+    Serial.println(bPressed);
 
     aVal = newA;
     bVal = newB;

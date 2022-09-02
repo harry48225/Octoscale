@@ -1,7 +1,8 @@
 #define BUTTON_A_PIN 2
 #define BUTTON_B_PIN 9
 
-#define THRESHOLD 300
+#define A_THRESHOLD 25000
+#define B_THRESHOLD 30700
 
 namespace Buttons {
   void init();
