@@ -5,6 +5,7 @@
 #include "led.h"
 #include "buttons.h"
 #include "display.h"
+#include "animations.h"
 
 // HX711 circuit wiring
 #define LOADCELL_DOUT_PIN 48
@@ -72,9 +73,11 @@ void loop() {
     }
     Leds::clear();
     Leds::show();
+    Animations::Tare::reset();
     while (!scale.hasSettled)
     {
       scale.updateReading();
+      Animations::Tare::update();
       delay(10);
     }
     
