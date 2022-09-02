@@ -9,5 +9,5 @@ namespace Graph {
   void update(float newReading);
   void stop();
   void resume();
-  void draw(Adafruit_SH1107 &display, int x0, int y0, int width, int height);
+  void draw(Adafruit_SH1106G &display, int x0, int y0, int width, int height);
 }

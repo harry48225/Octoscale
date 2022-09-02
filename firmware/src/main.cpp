@@ -11,13 +11,7 @@
 #include "led.h"
 #include "buttons.h"
 
-#define BUTTON_A  1
-#define BUTTON_B  38
-#define BUTTON_C  33
-
-//Adafruit_SSD1306 display = Adafruit_SSD1306(128, 64, &Wire, 14);
 Adafruit_SH1106G display = Adafruit_SH1106G(128, 64, &Wire, 14);
-//Adafruit_SH1107 display = Adafruit_SH1107(64, 128, &Wire, 14);
 
 // HX711 circuit wiring
 #define LOADCELL_DOUT_PIN 48
@@ -45,16 +39,9 @@ float brewMass = 0;
 
 void setup() {
   Wire.begin(12, 13);
-  //display = Adafruit_SSD1306(128, 64, &Wire, 14);
-  //display = Adafruit_SH1107(64, 128, &Wire, 14);
   Serial.begin(9600);
   delay(250); // wait for the OLED to power up
-  //display.begin(SSD1306_SWITCHCAPVCC, 0x3C, true); // Address 0x3C default
   display.begin(0x3C, true);
-  //display.begin(0x3C, true);
-  // Show image buffer on the display hardware.
-  // Since the buffer is intialized with an Adafruit splashscreen
-  // internally, this will display the splashscreen.
 
   // Clear the buffer.
   display.clearDisplay();
@@ -64,11 +51,6 @@ void setup() {
   display.setTextColor(SSD1306_WHITE);
   display.setCursor(0,0);
 
-  // setup buttons
-  pinMode(BUTTON_A, INPUT_PULLUP);
-  pinMode(BUTTON_B, INPUT_PULLUP);
-  pinMode(BUTTON_C, INPUT_PULLUP);
-
   BLE::init();
   LEDS::init();
   Buttons::init();
@@ -76,7 +58,7 @@ void setup() {
 
 void displayMass(double mass) {
   display.setCursor(0,16);
-  //display.setFont(&FreeMono18pt7b);
+  display.setFont(&FreeMono18pt7b);
   display.printf("%-3.1f\n",mass);
   display.setFont();
   display.setCursor(0,16+10);
@@ -139,11 +121,9 @@ void loop() {
   //Serial.printf("\r a: %d, b: %d                                               ", touchRead(BUTTON_A_PIN), touchRead(BUTTON_B_PIN));
 
 
-  if(!digitalRead(BUTTON_A)) state = TIMER_WAITING_FOR_START;
+  if(Buttons::a()) state = TIMER_WAITING_FOR_START;
 
-  if(!digitalRead(BUTTON_B)) scale.tare();
-
-  if(!digitalRead(BUTTON_C)) state=CALIBRATION;
+  if(Buttons::b()) scale.tare();
 
   if (BLE::isPendingTare()) {
     scale.tare();
@@ -161,13 +141,13 @@ void loop() {
     mass = scale.getReading();
   }
   displayMass(mass);
-  //BLE::update(mass);
+  BLE::update(mass);
   
   // handle timing states
   if (state == TIMER_WAITING_FOR_START) {
     Graph::reset();
     Graph::stop();
-    //display.println("timer primed");
+    display.println("timer primed");
   if (!scale.hasSettled) {
       startTimer();
       BLE::startTiming();
@@ -197,12 +177,12 @@ void loop() {
   }
 
   if (state == TIMING_STOPPED) {
-    //displayBrewStats();
+    displayBrewStats();
   }
 
   // Do auto tare
   if (autotareEnabled && scale.hasSettled && abs(scale.getReading() - scale.getLastSettledReading()) > 100 && scale.millisBetweenSettledReadings < 2000) {
-    //displayAutoTare();
+    displayAutoTare();
     // Take some more readings
     for (int i = 0; i < 40; i++) {
       scale.updateReading();
@@ -212,34 +192,34 @@ void loop() {
     delay(200);
   }
     
-  if (state == CALIBRATION) {
-    display.clearDisplay();
-    display.println("Calibration mode");
-    display.println("Place a 100g mass");
-    display.println("Then press A");
-    display.display();
-    scale.setScale();
-    scale.tareLoadCell();
-    scale.tare();
+  // if (state == CALIBRATION) {
+  //   display.clearDisplay();
+  //   display.println("Calibration mode");
+  //   display.println("Place a 100g mass");
+  //   display.println("Then press A");
+  //   display.display();
+  //   scale.setScale();
+  //   scale.tareLoadCell();
+  //   scale.tare();
 
-    while(digitalRead(BUTTON_A)) delay(10);
+  //   while(digitalRead(BUTTON_A)) delay(10);
     
-    float factor = scale.getUnits(255) / 100.f;
+  //   float factor = scale.getUnits(255) / 100.f;
 
-    scale.setScale(factor);
+  //   scale.setScale(factor);
 
-    display.clearDisplay();
-    display.setCursor(0,0);
-    display.println("Calibrated!");
-    display.print("Factor: ");
-    display.print(factor);
-    display.display();
-    delay(2000);
+  //   display.clearDisplay();
+  //   display.setCursor(0,0);
+  //   display.println("Calibrated!");
+  //   display.print("Factor: ");
+  //   display.print(factor);
+  //   display.display();
+  //   delay(2000);
 
-    state = IDLE;
-  }
+  //   state = IDLE;
+  // }
 
   Graph::update(scale.getReading());
-  //Graph::draw(display, 0, 41, 128, 22);
+  Graph::draw(display, 0, 41, 128, 22);
   display.display();
 }

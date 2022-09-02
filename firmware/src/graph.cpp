@@ -54,7 +54,7 @@ namespace Graph {
     return (int) (prop * (float)range);
   }
 
-  void draw(Adafruit_SH1107 &display, int x0, int y0, int width, int height) {
+  void draw(Adafruit_SH1106G &display, int x0, int y0, int width, int height) {
     // Draw the axis
     display.fillRect(x0, y0, width, height, SH110X_BLACK);
     display.drawLine(x0, y0, x0, y0+height, SH110X_WHITE);
