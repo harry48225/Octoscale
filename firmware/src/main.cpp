@@ -23,7 +23,7 @@ enum State {
 #define STOP_TIMER_REMOVAL_MASS 50
 
 State state = IDLE;
-bool autotareEnabled = true;
+bool autotareEnabled = false;
 unsigned long startTime = 0;
 bool brewStatsGathered = false;
 unsigned long brewDuration = 0;
@@ -63,7 +63,22 @@ void loop() {
 
   if(Buttons::a()) state = TIMER_WAITING_FOR_START;
 
-  if(Buttons::b()) scale.tare();
+  if(Buttons::b()) {
+
+    while (Buttons::b())
+    {
+      Buttons::loop();
+      delay(100);
+    }
+
+    while (!scale.hasSettled)
+    {
+      scale.updateReading();
+      delay(10);
+    }
+    
+    scale.tare();
+  }
 
   if (BLE::isPendingTare()) {
     scale.tare();
