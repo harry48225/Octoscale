@@ -65,23 +65,30 @@ void loop() {
 
   if(Buttons::b()) {
 
-    while (Buttons::b())
-    {
+    unsigned long firstPressed = millis();
+
+    while (Buttons::b()) {
       Buttons::loop();
       Leds::show();
       delay(10);
     }
-    Leds::clear();
-    Leds::show();
-    Animations::Tare::reset();
-    while (!scale.hasSettled)
-    {
-      scale.updateReading();
-      Animations::Tare::update();
-      delay(10);
+
+    unsigned long durationPressed = millis() - firstPressed;
+
+    if (durationPressed > 10000) {
+      state = CALIBRATION;
+    } else {
+      Leds::clear();
+      Leds::show();
+      Animations::Tare::reset();
+      while (!scale.hasSettled) {
+        scale.updateReading();
+        Animations::Tare::update();
+        delay(10);
+      }
+      
+      scale.tare();
     }
-    
-    scale.tare();
   }
 
   if (BLE::isPendingTare()) {
@@ -151,32 +158,82 @@ void loop() {
     delay(200);
   }
     
-  // if (state == CALIBRATION) {
-  //   display.clearDisplay();
-  //   display.println("Calibration mode");
-  //   display.println("Place a 100g mass");
-  //   display.println("Then press A");
-  //   display.display();
-  //   scale.setScale();
-  //   scale.tareLoadCell();
-  //   scale.tare();
+  if (state == CALIBRATION) {
+    Display::showCalibrationScreen();
 
-  //   while(digitalRead(BUTTON_A)) delay(10);
+    scale.setScale();
+    scale.tareLoadCell();
+
+    scale.updateReading();
+    scale.updateReading();
+    scale.updateReading();
+    scale.updateReading();
+    scale.updateReading();
+    while (!scale.hasSettled) {
+      scale.updateReading();
+    }
+
+    while(!Buttons::b()) {
+      delay(10);
+      Leds::clear();
+      Buttons::loop();
+      Leds::show();
+    }
+
+    while(Buttons::b()) {
+      delay(10);
+      Leds::clear();
+      Buttons::loop();
+      Leds::show();
+      scale.updateReading();
+    }
+
+    Leds::clear();
+    Leds::show();
+    // Animations::Tare::reset();
+    // while (!scale.hasSettled) {
+    //   scale.updateReading();
+    //   Animations::Tare::update();
+    //   delay(10);
+    // }
+    // scale.setScale();
+    // scale.tareLoadCell();
+    // Leds::clear();
+    // Leds::show();
+    // Animations::Tare::reset();
+    // scale.updateReading();
+    // scale.updateReading();
+    // scale.updateReading();
+    // scale.updateReading();
+    // scale.updateReading();
+    // scale.updateReading();
+    // while (!scale.hasSettled) {
+    //   scale.updateReading();
+    //   scale.tareLoadCell();
+    //   Animations::Tare::update();
+    //   delay(10);
+    // }
+    delay(5000);
     
-  //   float factor = scale.getUnits(255) / 100.f;
+    scale.updateReading();
+    scale.updateReading();
+    scale.updateReading();
+    scale.updateReading();
+    scale.updateReading();
+    while (!scale.hasSettled) {
+      scale.updateReading();
+    }
+    
 
-  //   scale.setScale(factor);
+    float factor = scale.getReading() / 100.f;
 
-  //   display.clearDisplay();
-  //   display.setCursor(0,0);
-  //   display.println("Calibrated!");
-  //   display.print("Factor: ");
-  //   display.print(factor);
-  //   display.display();
-  //   delay(2000);
+    scale.setScale(factor);
 
-  //   state = IDLE;
-  // }
+    Display::showCalibrationCompleteScreen(factor);
+    delay(2000);
+
+    state = IDLE;
+  }
 
   Graph::update(scale.getReading());
   //Graph::draw(Display::getDisplay(), 0, 41, 128, 22);

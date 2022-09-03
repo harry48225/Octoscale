@@ -13,6 +13,9 @@ namespace Display {
   void showBrewCompleteAnimation();
   void showBrewStats(unsigned long duration);
   void showAutoTare();
+  
+  void showCalibrationScreen();
+  void showCalibrationCompleteScreen(float factor);
 
   void clear();
   void show();

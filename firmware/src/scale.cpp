@@ -22,6 +22,7 @@ void Scale::tare() {
 }
 
 void Scale::tareLoadCell() {
+  offset = 0;
   loadCell.tare();
 }
 
@@ -60,7 +61,7 @@ void Scale::updateReading() {
   double a = smoothingFactor(t_e, cutoff);
   double x_hat = exponentialSmoothing(a, x, x_prev);
 
-  //Serial.printf("\r x_hat: %.f, dx_hat: %.f, last_settled: %.f                                         ", x_hat, dx_hat, lastSettledReading);
+  Serial.printf("\r x: %.f x_hat: %.f, dx_hat: %.f, last_settled: %.f                                         ", x, x_hat, dx_hat, lastSettledReading);
   if (abs(dx_hat) < SETTLED_TOLERANCE) {
     if (!hasSettled) {
       millisBetweenSettledReadings = (millis() - lastSettledMillis);

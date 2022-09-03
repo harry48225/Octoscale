@@ -85,6 +85,22 @@ namespace Display {
     display.display();
   }
 
+  void showCalibrationScreen() {
+    clear();
+    display.println("Calibration mode");
+    display.println("Place a 100g mass");
+    display.println("Then press B");
+    show();
+  }
+
+  void showCalibrationCompleteScreen(float factor) {
+    clear();
+    display.println("Calibrated!");
+    display.println("Factor: ");
+    display.println(factor);
+    show();
+  }
+
   void clear() {
     display.clearDisplay();
     display.setCursor(0,0);
