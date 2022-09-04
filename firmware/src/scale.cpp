@@ -1,6 +1,8 @@
 #include "scale.h"
 #include "Arduino.h"
 #include "HX711.h"
+#include "led.h"
+#include "animations.h"
 
 Scale::Scale(int doutPin, int sckPin) {
   loadCell.set_scale(4411.92);
@@ -17,6 +19,18 @@ double Scale::getLastSettledReading() {
 }
 
 void Scale::tare() {
+  Leds::clear();
+  Leds::show();
+  Animations::Tare::reset();
+
+  unsettle();
+  unsigned long start = millis();
+  while (!hasSettled || millis() - start < 2000) {
+    updateReading();
+    Animations::Tare::update();
+    delay(10);
+  }
+  
   offset = smoothedReading;
   lastSettledReading = offset;
 }
@@ -36,6 +50,10 @@ void Scale::setScale(float factor) {
 
 float Scale::getUnits(int samples) {
   return loadCell.get_units(samples);
+}
+
+void Scale::unsettle() {
+  hasSettled = false;
 }
 
 double Scale::smoothingFactor(double t_e, double cutoff) {

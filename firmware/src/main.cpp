@@ -77,18 +77,9 @@ void loop() {
 
     if (durationPressed > 10000) {
       state = CALIBRATION;
-    } else {
-      Leds::clear();
-      Leds::show();
-      Animations::Tare::reset();
-      while (!scale.hasSettled) {
-        scale.updateReading();
-        Animations::Tare::update();
-        delay(10);
-      }
-      
-      scale.tare();
     }
+      
+    scale.tare();
   }
 
   if (BLE::isPendingTare()) {
@@ -164,15 +155,12 @@ void loop() {
     scale.setScale();
     scale.tareLoadCell();
 
-    scale.updateReading();
-    scale.updateReading();
-    scale.updateReading();
-    scale.updateReading();
-    scale.updateReading();
+    scale.unsettle();
     while (!scale.hasSettled) {
       scale.updateReading();
     }
 
+    // wait for b to be pressed
     while(!Buttons::b()) {
       delay(10);
       Leds::clear();
@@ -180,6 +168,7 @@ void loop() {
       Leds::show();
     }
 
+    // wait for b to be released
     while(Buttons::b()) {
       delay(10);
       Leds::clear();
@@ -190,43 +179,14 @@ void loop() {
 
     Leds::clear();
     Leds::show();
-    // Animations::Tare::reset();
-    // while (!scale.hasSettled) {
-    //   scale.updateReading();
-    //   Animations::Tare::update();
-    //   delay(10);
-    // }
-    // scale.setScale();
-    // scale.tareLoadCell();
-    // Leds::clear();
-    // Leds::show();
-    // Animations::Tare::reset();
-    // scale.updateReading();
-    // scale.updateReading();
-    // scale.updateReading();
-    // scale.updateReading();
-    // scale.updateReading();
-    // scale.updateReading();
-    // while (!scale.hasSettled) {
-    //   scale.updateReading();
-    //   scale.tareLoadCell();
-    //   Animations::Tare::update();
-    //   delay(10);
-    // }
     delay(5000);
     
-    scale.updateReading();
-    scale.updateReading();
-    scale.updateReading();
-    scale.updateReading();
-    scale.updateReading();
+    scale.unsettle();
     while (!scale.hasSettled) {
       scale.updateReading();
     }
     
-
     float factor = scale.getReading() / 100.f;
-
     scale.setScale(factor);
 
     Display::showCalibrationCompleteScreen(factor);
