@@ -127,6 +127,11 @@ void loop() {
       startTimer();
       BLE::startTiming();
     }
+
+    while (Buttons::b()) {
+      Buttons::loop();
+      state = IDLE;
+    }    
   }
 
   if (state == TIMING) {
