@@ -6,6 +6,7 @@
 #include "buttons.h"
 #include "display.h"
 #include "animations.h"
+#include "debug.h"
 
 // HX711 circuit wiring
 #define LOADCELL_DOUT_PIN 48
@@ -32,7 +33,7 @@ float brewMass = 0;
 
 
 void setup() {
-  Serial.begin(9600);
+  DEBUG_SERIAL.begin(9600);
 
   Display::init();
   BLE::init();
@@ -56,11 +57,11 @@ void stopTimer() {
 void loop() {
   Leds::clear();
   Buttons::loop();
-  //Serial.println(BLE::isDeviceConnected());
-  // Serial.print(Buttons::a());
-  // Serial.print(", ");
-  // Serial.println(Buttons::b());
-  //Serial.printf("\r a: %d, b: %d                                               ", touchRead(BUTTON_A_PIN), touchRead(BUTTON_B_PIN));
+  //DEBUG_SERIAL.println(BLE::isDeviceConnected());
+  // DEBUG_SERIAL.print(Buttons::a());
+  // DEBUG_SERIAL.print(", ");
+  // DEBUG_SERIAL.println(Buttons::b());
+  //DEBUG_SERIAL.printf("\r a: %d, b: %d                                               ", touchRead(BUTTON_A_PIN), touchRead(BUTTON_B_PIN));
   if(Buttons::a()) state = TIMER_WAITING_FOR_START;
 
   if(Buttons::b()) {

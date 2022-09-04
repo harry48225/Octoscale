@@ -70,9 +70,9 @@ namespace BLE {
 
     BLEDevice::init("octoscale");
     // if (esp_bt_sleep_enable() == ESP_OK) {
-    //   Serial.println("BT SLEEPING");
+    //   DEBUG_SERIAL.println("BT SLEEPING");
     // } else {
-    //   Serial.println("SLEEP ERROR");
+    //   DEBUG_SERIAL.println("SLEEP ERROR");
     // }
     BLEServer *pServer = BLEDevice::createServer();
     pServer->setCallbacks(new MyServerCallbacks());

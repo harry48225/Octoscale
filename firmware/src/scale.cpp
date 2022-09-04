@@ -3,6 +3,7 @@
 #include "HX711.h"
 #include "led.h"
 #include "animations.h"
+#include "debug.h"
 
 Scale::Scale(int doutPin, int sckPin) {
   loadCell.set_scale(4411.92);
@@ -79,7 +80,7 @@ void Scale::updateReading() {
   double a = smoothingFactor(t_e, cutoff);
   double x_hat = exponentialSmoothing(a, x, x_prev);
 
-  Serial.printf("\r x: %.1f x_hat: %.1f, dx_hat: %.1f, last_settled: %.1f                                         ", x, x_hat, dx_hat, lastSettledReading);
+  DEBUG_SERIAL.printf("\r x: %.1f x_hat: %.1f, dx_hat: %.1f, last_settled: %.1f                                         ", x, x_hat, dx_hat, lastSettledReading);
   if (abs(dx_hat) < SETTLED_TOLERANCE) {
     if (!hasSettled) {
       millisBetweenSettledReadings = (millis() - lastSettledMillis);

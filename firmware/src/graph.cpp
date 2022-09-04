@@ -50,7 +50,7 @@ namespace Graph {
   int linearIterpolate(float x, float min, float max, int range) {
     if (max == min) return -1;
     float prop = (x - min)/(max - min);
-    //Serial.printf("prop: %f, range: %d, prop*range: %f \n", prop, range, prop * (float) range);
+    //DEBUG_SERIAL.printf("prop: %f, range: %d, prop*range: %f \n", prop, range, prop * (float) range);
     return (int) (prop * (float)range);
   }
 
@@ -71,7 +71,7 @@ namespace Graph {
       largestY = max(largestY, readings[i][1]);
     }
 
-    //Serial.printf("smol x: %f, big x: %f, smol y: %f, big y: %f", smallestX, largestX, smallestY, largestY);
+    //DEBUG_SERIAL.printf("smol x: %f, big x: %f, smol y: %f, big y: %f", smallestX, largestX, smallestY, largestY);
     int x_prev = -1;
     int y_prev = -1;
     // Now scale and plot the points
@@ -81,7 +81,7 @@ namespace Graph {
       
       if (x_prev != -1 && y_prev != -1) {
         display.drawLine(x_prev, y_prev, x, y, SH110X_WHITE);
-        //Serial.printf("plotting at %d, %d \n", x, y);
+        //DEBUG_SERIAL.printf("plotting at %d, %d \n", x, y);
       }
 
       x_prev = x;

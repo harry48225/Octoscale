@@ -5,6 +5,7 @@
 #include <Adafruit_GFX.h>
 #include <Fonts/FreeMono12pt7b.h>
 #include <Fonts/FreeMono18pt7b.h>
+#include "debug.h"
 
 namespace Display {
   Adafruit_SH1106G display = Adafruit_SH1106G(128, 64, &Wire, 14);
@@ -39,7 +40,7 @@ namespace Display {
       massString = " " + massString;
     }
 
-    Serial.println(massString);
+    DEBUG_SERIAL.println(massString);
     
     display.setFont(&FreeMono18pt7b);
 

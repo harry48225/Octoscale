@@ -1,6 +1,7 @@
 #include "buttons.h"
 #include <Arduino.h>
 #include "led.h"
+#include "debug.h"
 
 namespace Buttons {
   int aVal = 0;
@@ -27,9 +28,9 @@ namespace Buttons {
     int newA = 0.3 * touchRead(BUTTON_A_PIN) + 0.7 * aVal;
     int newB = 0.3 * touchRead(BUTTON_B_PIN) + 0.7 * bVal;
 
-    Serial.print(newA);
-    Serial.print(", ");
-    Serial.println(newB);
+    DEBUG_SERIAL.print(newA);
+    DEBUG_SERIAL.print(", ");
+    DEBUG_SERIAL.println(newB);
 
     aPressed = newA > A_THRESHOLD; 
     bPressed = newB > B_THRESHOLD;
@@ -37,9 +38,9 @@ namespace Buttons {
     if (aPressed) Leds::aTapped();
     if (bPressed) Leds::bTapped();
 
-    Serial.print(aPressed);
-    Serial.print(", ");
-    Serial.println(bPressed);
+    DEBUG_SERIAL.print(aPressed);
+    DEBUG_SERIAL.print(", ");
+    DEBUG_SERIAL.println(bPressed);
 
     aVal = newA;
     bVal = newB;

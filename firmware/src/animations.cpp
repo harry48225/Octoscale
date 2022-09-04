@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "led.h"
+#include "debug.h"
 
 namespace Animations {
   namespace Tare {
@@ -15,7 +16,7 @@ namespace Animations {
       unsigned long delta = millis() - lastUpdated;
       lastUpdated = millis();
       led += delta / 100.0;
-      Serial.println(led);
+      DEBUG_SERIAL.println(led);
 
       while (led >= NUMPIXELS) {
         led -= NUMPIXELS;
