@@ -24,7 +24,7 @@ namespace Display {
     display.setCursor(0,0);
   }
 
-  void showMass(double rawMass) {
+  void showMass(double rawMass, int x, int y) {
     double mass = rawMass;
 
     if (mass > -0.1 && mass < 0) {
@@ -44,7 +44,7 @@ namespace Display {
     
     display.setFont(&FreeMono18pt7b);
 
-    display.setCursor(0, 40);
+    display.setCursor(x, y);
     display.printf(massString.c_str());
     display.setFont();
     display.setCursor(0,16+10);
@@ -56,8 +56,10 @@ namespace Display {
     display.printf("%02d:%02d", seconds / 60, seconds % 60);
   }
 
-  void showTimerPrimed() {
-    display.println("timer primed");
+  void showTimerPriming() {
+    clear();    
+    display.println("timer priming");
+    show();    
   }
 
   void showBrewCompleteAnimation() {

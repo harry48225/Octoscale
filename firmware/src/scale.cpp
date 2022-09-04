@@ -57,6 +57,14 @@ void Scale::unsettle() {
   hasSettled = false;
 }
 
+void Scale::waitForSettle() {
+  unsettle();
+  while (!hasSettled) {
+    updateReading();
+    delay(10);
+  }
+}
+
 double Scale::smoothingFactor(double t_e, double cutoff) {
   double r = 2 * PI * cutoff * t_e;
   return r / (r+1);

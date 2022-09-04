@@ -7,9 +7,9 @@
 namespace Display {
   void init();
 
-  void showMass(double mass);
+  void showMass(double mass, int x = 0, int y = 40);
   void showTimer(long seconds);
-  void showTimerPrimed();
+  void showTimerPriming();
   void showBrewCompleteAnimation();
   void showBrewStats(unsigned long duration);
   void showAutoTare();

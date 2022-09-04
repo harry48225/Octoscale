@@ -16,6 +16,7 @@ Scale scale = Scale(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
 
 enum State {
   IDLE,
+  TIMER_PRIMING,
   TIMER_WAITING_FOR_START,
   TIMING,
   TIMING_STOPPED,
@@ -62,10 +63,13 @@ void loop() {
   // DEBUG_SERIAL.print(", ");
   // DEBUG_SERIAL.println(Buttons::b());
   //DEBUG_SERIAL.printf("\r a: %d, b: %d                                               ", touchRead(BUTTON_A_PIN), touchRead(BUTTON_B_PIN));
-  if(Buttons::a()) state = TIMER_WAITING_FOR_START;
+  if(Buttons::a()) {
+    if (state == IDLE) {
+      state = TIMER_PRIMING;
+    }
+  }
 
   if(Buttons::b()) {
-
     unsigned long firstPressed = millis();
 
     while (Buttons::b()) {
@@ -97,19 +101,27 @@ void loop() {
     scale.updateReading();
     mass = scale.getReading();
   }
-  
-  Display::showMass(mass);
+
   BLE::update(mass);
   
+  if (state == IDLE) {
+    Display::showMass(mass);
+  }
+
   // handle timing states
-  if (state == TIMER_WAITING_FOR_START) {
+  if (state == TIMER_PRIMING) {
     Graph::reset();
     Graph::stop();
-    Display::showTimerPrimed();
-  if (!scale.hasSettled) {
+    Display::showTimerPriming();
+    scale.tare();
+    state = TIMER_WAITING_FOR_START;
+  }
+
+  if (state == TIMER_WAITING_FOR_START) {
+    if (!scale.hasSettled) {
       startTimer();
       BLE::startTiming();
-   }
+    }
   }
 
   if (state == TIMING) {

@@ -22,6 +22,7 @@ class Scale {
     void setScale(float factor);
     float getUnits(int samples);
     void unsettle();
+    void waitForSettle();
 
     bool hasSettled = false;
   private:
