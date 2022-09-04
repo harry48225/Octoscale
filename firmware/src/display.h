@@ -10,6 +10,7 @@ namespace Display {
   void showMass(double mass, int x = 0, int y = 40);
   void showTimer(long seconds, double mass);
   void showTimerPriming();
+  void showTimerWaitingForStart(double mass);
   void showBrewCompleteAnimation();
   void showBrewStats(unsigned long duration);
   void showAutoTare();

@@ -58,40 +58,6 @@ void stopTimer() {
 void loop() {
   Leds::clear();
   Buttons::loop();
-  //DEBUG_SERIAL.println(BLE::isDeviceConnected());
-  // DEBUG_SERIAL.print(Buttons::a());
-  // DEBUG_SERIAL.print(", ");
-  // DEBUG_SERIAL.println(Buttons::b());
-  //DEBUG_SERIAL.printf("\r a: %d, b: %d                                               ", touchRead(BUTTON_A_PIN), touchRead(BUTTON_B_PIN));
-  if(Buttons::a()) {
-    if (state == IDLE) {
-      state = TIMER_PRIMING;
-    }
-  }
-
-  if(Buttons::b()) {
-    unsigned long firstPressed = millis();
-
-    while (Buttons::b()) {
-      Buttons::loop();
-      Leds::show();
-      delay(10);
-    }
-
-    unsigned long durationPressed = millis() - firstPressed;
-
-    if (durationPressed > 10000) {
-      state = CALIBRATION;
-    }
-      
-    scale.tare();
-  }
-
-  if (BLE::isPendingTare()) {
-    scale.tare();
-    BLE::clearPendingTare();
-  }
-
   Display::clear();
 
   double mass = -1;
@@ -103,9 +69,43 @@ void loop() {
   }
 
   BLE::update(mass);
+  //DEBUG_SERIAL.println(BLE::isDeviceConnected());
+  // DEBUG_SERIAL.print(Buttons::a());
+  // DEBUG_SERIAL.print(", ");
+  // DEBUG_SERIAL.println(Buttons::b());
+  //DEBUG_SERIAL.printf("\r a: %d, b: %d                                               ", touchRead(BUTTON_A_PIN), touchRead(BUTTON_B_PIN));
   
   if (state == IDLE) {
     Display::showMass(mass);
+
+    if(Buttons::a()) {
+      if (state == IDLE) {
+        state = TIMER_PRIMING;
+      }
+    }
+
+    if(Buttons::b()) {
+      unsigned long firstPressed = millis();
+
+      while (Buttons::b()) {
+        Buttons::loop();
+        Leds::show();
+        delay(10);
+      }
+
+      unsigned long durationPressed = millis() - firstPressed;
+
+      if (durationPressed > 10000) {
+        state = CALIBRATION;
+      }
+        
+      scale.tare();
+    }
+
+    if (BLE::isPendingTare()) {
+      scale.tare();
+      BLE::clearPendingTare();
+    }
   }
 
   // handle timing states
@@ -118,6 +118,11 @@ void loop() {
   }
 
   if (state == TIMER_WAITING_FOR_START) {
+    Display::showTimerWaitingForStart(mass);
+    if (Buttons::b()) {
+      scale.tare();
+    }
+
     if (!scale.hasSettled) {
       startTimer();
       BLE::startTiming();
@@ -144,10 +149,21 @@ void loop() {
       brewStatsGathered = false;
       Graph::resume();
     }
+
+    while (Buttons::b()) {
+      state = IDLE;
+      delay(10);
+      Buttons::loop();
+    }
   }
 
   if (state == TIMING_STOPPED) {
     Display::showBrewStats(brewDuration);
+
+    if (Buttons::b()) {
+      state = IDLE;
+      delay(10);
+    }
   }
 
   // Do auto tare

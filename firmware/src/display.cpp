@@ -65,6 +65,12 @@ namespace Display {
     show();    
   }
 
+  void showTimerWaitingForStart(double mass) {
+    clear();
+    showMass(mass);
+    show();
+  }
+
   void showBrewCompleteAnimation() {
     for (int i = 0; i < 5; i++) {
       display.clearDisplay();
