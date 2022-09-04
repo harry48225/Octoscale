@@ -51,9 +51,12 @@ namespace Display {
     //display.printf("sttl: %.1f, dT: %.f\n", scale.getLastSettledReading(), scale.millisBetweenSettledReadings);
   }
 
-  void showTimer(long seconds) {
+  void showTimer(long seconds, double mass) {
+    clear();
     display.print("timing: ");
     display.printf("%02d:%02d", seconds / 60, seconds % 60);
+    showMass(mass);
+    show();
   }
 
   void showTimerPriming() {

@@ -126,7 +126,7 @@ void loop() {
 
   if (state == TIMING) {
     long seconds = (millis() - startTime)/1000;
-    Display::showTimer(seconds);
+    Display::showTimer(seconds, mass);
     // This should probably be in millis ... 
     BLE::updateTimerDuration(seconds);
     // Something greater than 50g must have been taken off the scale
