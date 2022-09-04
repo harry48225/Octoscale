@@ -3,7 +3,7 @@
 #include "HX711.h"
 
 Scale::Scale(int doutPin, int sckPin) {
-  loadCell.set_scale(3396.47);
+  loadCell.set_scale(4411.92);
   loadCell.begin(doutPin, sckPin);
   loadCell.tare();
 }
