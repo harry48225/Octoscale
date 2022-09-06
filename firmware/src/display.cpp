@@ -67,6 +67,7 @@ namespace Display {
 
   void showTimerWaitingForStart(double mass) {
     clear();
+    display.println("timer primed");
     showMass(mass);
     show();
   }

@@ -6,8 +6,8 @@
 #define BETA 1
 #define PI 3.14159265358979323846
 
-#define SETTLED_TOLERANCE 10
-#define UNSETTLED_TOLERANCE 50
+#define SETTLED_TOLERANCE 5
+#define UNSETTLED_TOLERANCE 5
 
 class Scale {
   public:
