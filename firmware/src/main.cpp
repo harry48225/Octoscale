@@ -7,6 +7,7 @@
 #include "display.h"
 #include "animations.h"
 #include "debug.h"
+#include "timer.h"
 
 // HX711 circuit wiring
 #define LOADCELL_DOUT_PIN 48
@@ -42,21 +43,8 @@ void setup() {
   Buttons::init();
 }
 
-void startTimer() {
-  startTime = millis();
-  Graph::reset();
-  autotareEnabled = false;
-  state = TIMING;
-}
-
-void stopTimer() {
-  state = TIMING_STOPPED;
-  Display::showBrewCompleteAnimation();
-  delay(500);
-}
-
 void gatherBrewStats() {
-  brewDuration = (millis() - startTime)/1000;
+  brewDuration = Timer::getSecondsElapsed();
   brewMass = scale.getLastSettledReading();
   Graph::stop();
 }
@@ -75,12 +63,7 @@ void loop() {
   }
 
   BLE::update(mass);
-  //DEBUG_SERIAL.println(BLE::isDeviceConnected());
-  // DEBUG_SERIAL.print(Buttons::a());
-  // DEBUG_SERIAL.print(", ");
-  // DEBUG_SERIAL.println(Buttons::b());
-  //DEBUG_SERIAL.printf("\r a: %d, b: %d                                               ", touchRead(BUTTON_A_PIN), touchRead(BUTTON_B_PIN));
-  
+
   if (state == IDLE) {
     Display::showMass(mass);
 
@@ -125,13 +108,9 @@ void loop() {
 
   if (state == TIMER_WAITING_FOR_START) {
     Display::showTimerWaitingForStart(mass);
-    if (Buttons::b()) {
-      scale.tare();
-    }
-
     if (!scale.hasSettled) {
-      startTimer();
-      BLE::startTiming();
+      Timer::start();
+      state = TIMING;
     }
 
     while (Buttons::b()) {
@@ -141,18 +120,15 @@ void loop() {
   }
 
   if (state == TIMING) {
-    long seconds = (millis() - startTime)/1000;
+    long seconds = Timer::getSecondsElapsed();
     Display::showTimer(seconds, mass);
-    // This should probably be in millis ... 
     BLE::updateTimerDuration(seconds);
-    // Something greater than 50g must have been taken off the scale
+
     if (scale.getLastSettledReading() - scale.getReading() > STOP_TIMER_REMOVAL_MASS) {
-      if (!brewStatsGathered) {
-        gatherBrewStats();
-      }
+      if (!brewStatsGathered) gatherBrewStats();
       if (scale.hasSettled) {
-        stopTimer();
-        BLE::stopTiming();
+        Timer::stop();
+        state = TIMING_STOPPED;
       }
     } else {
       brewStatsGathered = false;
@@ -167,7 +143,7 @@ void loop() {
       }
       Leds::clear();
       Leds::show();
-      stopTimer();
+      Timer::stop();
       state = TIMING_STOPPED;
     }
 
@@ -181,8 +157,9 @@ void loop() {
   if (state == TIMING_STOPPED) {
     Display::showBrewStats(brewMass, brewDuration);
 
-    if (Buttons::b()) {
+    while (Buttons::b()) {
       state = IDLE;
+      Buttons::loop();
       delay(10);
     }
   }
