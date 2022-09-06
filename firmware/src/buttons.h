@@ -8,4 +8,6 @@ namespace Buttons {
   void loop();
   bool a();
   bool b();
+
+  void waitForRelease();
 }

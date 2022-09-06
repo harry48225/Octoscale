@@ -68,20 +68,12 @@ void loop() {
     Display::showMass(mass);
 
     if(Buttons::a()) {
-      if (state == IDLE) {
-        state = TIMER_PRIMING;
-      }
+      if (state == IDLE) state = TIMER_PRIMING;
     }
 
     if(Buttons::b()) {
       unsigned long firstPressed = millis();
-
-      while (Buttons::b()) {
-        Buttons::loop();
-        Leds::show();
-        delay(10);
-      }
-
+      Buttons::waitForRelease();
       unsigned long durationPressed = millis() - firstPressed;
 
       if (durationPressed > 10000) {
@@ -113,8 +105,8 @@ void loop() {
       state = TIMING;
     }
 
-    while (Buttons::b()) {
-      Buttons::loop();
+    if (Buttons::b()) {
+      Buttons::waitForRelease();
       state = IDLE;
     }    
   }
@@ -138,19 +130,16 @@ void loop() {
     if (Buttons::a()) {
       gatherBrewStats();
       Leds::show();
-      while (Buttons::a()) {
-        Buttons::loop();
-      }
+      Buttons::waitForRelease();
       Leds::clear();
       Leds::show();
       Timer::stop();
       state = TIMING_STOPPED;
     }
 
-    while (Buttons::b()) {
+    if (Buttons::b()) {
       state = IDLE;
-      delay(10);
-      Buttons::loop();
+      Buttons::waitForRelease();
     }
   }
 

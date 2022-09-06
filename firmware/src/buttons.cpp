@@ -52,4 +52,11 @@ namespace Buttons {
   bool b() {
     return bPressed;
   }
+
+  void waitForRelease() {
+    while (a() || b()) {
+      loop();
+      delay(10);
+    }
+  }
 }
