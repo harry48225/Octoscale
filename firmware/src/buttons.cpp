@@ -7,6 +7,9 @@ namespace Buttons {
   int aVal = 0;
   int bVal = 0;
 
+  int lowestA = 40000;
+  int lowestB = 40000;
+
   bool aPressed = true;
   bool bPressed = true; 
 
@@ -14,26 +17,19 @@ namespace Buttons {
     pinMode(BUTTON_A_PIN, INPUT);
     pinMode(BUTTON_B_PIN, INPUT);
     aVal = touchRead(BUTTON_A_PIN);
-    bVal = touchRead(BUTTON_B_PIN);
-
-    while (aPressed || bPressed)
-    {
-      loop();
-      delay(10);
-    }
-    
+    bVal = touchRead(BUTTON_B_PIN);    
   }
 
   void loop() {
-    int newA = 0.3 * touchRead(BUTTON_A_PIN) + 0.7 * aVal;
-    int newB = 0.3 * touchRead(BUTTON_B_PIN) + 0.7 * bVal;
+    int newA = 0.2 * touchRead(BUTTON_A_PIN) + 0.8 * aVal;
+    int newB = 0.2 * touchRead(BUTTON_B_PIN) + 0.8 * bVal;
 
     DEBUG_SERIAL.print(newA);
     DEBUG_SERIAL.print(", ");
     DEBUG_SERIAL.println(newB);
 
-    aPressed = newA > A_THRESHOLD; 
-    bPressed = newB > B_THRESHOLD;
+    aPressed = newA > lowestA + THRESHOLD; 
+    bPressed = newB > lowestB + THRESHOLD;
 
     if (aPressed) Leds::aTapped();
     if (bPressed) Leds::bTapped();
@@ -44,6 +40,9 @@ namespace Buttons {
 
     aVal = newA;
     bVal = newB;
+
+    lowestA = min(lowestA, aVal);
+    lowestB = min(lowestB, bVal);
   }
 
   bool a() {
