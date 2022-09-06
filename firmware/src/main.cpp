@@ -55,6 +55,12 @@ void stopTimer() {
   delay(500);
 }
 
+void gatherBrewStats() {
+  brewDuration = (millis() - startTime)/1000;
+  brewMass = scale.getLastSettledReading();
+  Graph::stop();
+}
+
 void loop() {
   Leds::clear();
   Buttons::loop();
@@ -142,9 +148,7 @@ void loop() {
     // Something greater than 50g must have been taken off the scale
     if (scale.getLastSettledReading() - scale.getReading() > STOP_TIMER_REMOVAL_MASS) {
       if (!brewStatsGathered) {
-        brewDuration = (millis() - startTime)/1000;
-        brewMass = scale.getLastSettledReading();
-        Graph::stop();
+        gatherBrewStats();
       }
       if (scale.hasSettled) {
         stopTimer();
@@ -155,6 +159,18 @@ void loop() {
       Graph::resume();
     }
 
+    if (Buttons::a()) {
+      gatherBrewStats();
+      Leds::show();
+      while (Buttons::a()) {
+        Buttons::loop();
+      }
+      Leds::clear();
+      Leds::show();
+      stopTimer();
+      state = TIMING_STOPPED;
+    }
+
     while (Buttons::b()) {
       state = IDLE;
       delay(10);
@@ -163,7 +179,7 @@ void loop() {
   }
 
   if (state == TIMING_STOPPED) {
-    Display::showBrewStats(brewDuration);
+    Display::showBrewStats(brewMass, brewDuration);
 
     if (Buttons::b()) {
       state = IDLE;

@@ -12,7 +12,7 @@ namespace Display {
   void showTimerPriming();
   void showTimerWaitingForStart(double mass);
   void showBrewCompleteAnimation();
-  void showBrewStats(unsigned long duration);
+  void showBrewStats(double mass, unsigned long duration);
   void showAutoTare();
   
   void showCalibrationScreen();

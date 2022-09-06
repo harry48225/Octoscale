@@ -85,8 +85,8 @@ namespace Display {
     }
   }
 
-  void showBrewStats(unsigned long duration) {
-    display.printf("in %02dm:%02ds,", duration / 60, duration % 60);
+  void showBrewStats(double mass, unsigned long duration) {
+    display.printf("%-3.1fg in %02dm:%02ds,", mass, duration / 60, duration % 60);
   }
 
   void showAutoTare() {
