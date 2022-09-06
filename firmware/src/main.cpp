@@ -73,6 +73,7 @@ void loop() {
 
     if(Buttons::b()) {
       unsigned long firstPressed = millis();
+      Leds::show();
       Buttons::waitForRelease();
       unsigned long durationPressed = millis() - firstPressed;
 
