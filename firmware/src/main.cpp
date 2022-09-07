@@ -8,6 +8,7 @@
 #include "animations.h"
 #include "debug.h"
 #include "timer.h"
+#include "speaker.h"
 
 // HX711 circuit wiring
 #define LOADCELL_DOUT_PIN 48
@@ -41,6 +42,7 @@ void setup() {
   BLE::init();
   Leds::init();
   Buttons::init();
+  Speaker::init();
 }
 
 void gatherBrewStats() {

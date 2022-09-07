@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include "led.h"
 #include "debug.h"
+#include "speaker.h"
 
 namespace Buttons {
   int aVal = 0;
@@ -33,9 +34,14 @@ namespace Buttons {
     aPressed = newA > lowestA + THRESHOLD; 
     bPressed = newB > lowestB + THRESHOLD;
 
-    if (aPressed) Leds::aTapped();
-    if (bPressed) Leds::bTapped();
-
+    if (aPressed) {
+      Leds::aTapped();
+      Speaker::buttonBeep();
+    }
+    if (bPressed) {
+      Leds::bTapped();
+      Speaker::buttonBeep();
+    }
     DEBUG_SERIAL.print(aPressed);
     DEBUG_SERIAL.print(", ");
     DEBUG_SERIAL.println(bPressed);
