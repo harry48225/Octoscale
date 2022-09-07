@@ -17,7 +17,9 @@ namespace Buttons {
     pinMode(BUTTON_A_PIN, INPUT);
     pinMode(BUTTON_B_PIN, INPUT);
     aVal = touchRead(BUTTON_A_PIN);
-    bVal = touchRead(BUTTON_B_PIN);    
+    bVal = touchRead(BUTTON_B_PIN);
+    lowestA = aVal;
+    lowestB = bVal;    
   }
 
   void loop() {
