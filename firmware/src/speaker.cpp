@@ -2,18 +2,34 @@
 #include "speaker.h"
 
 namespace Speaker {
+  float volume = 0;
+  int frequency = 0;
+
   void init() {
-    pinMode(SPEAKER_PIN, OUTPUT);
+    ledcSetup(CHANNEL, 2000, RESOLUTION);
+    ledcAttachPin(SPEAKER_PIN, CHANNEL);
+    setVolume(0.1);
+  }
+
+  void clear() {
+    frequency = 0;
+  }
+
+  void sound() {
+    if (frequency > 0) {
+      ledcWriteTone(CHANNEL, frequency);
+      ledcWrite(CHANNEL, 128.0 * volume);
+    } else {
+      ledcWriteTone(CHANNEL, 0);
+      ledcWrite(CHANNEL, 0);
+    }
+  }
+
+  void setVolume(float newVolume) {
+    volume = newVolume;
   }
 
   void buttonBeep(unsigned long duration) {
-    unsigned long start = millis();
-
-    while (millis() < start + duration) {
-      digitalWrite(SPEAKER_PIN, HIGH);
-      delay(BUTTON_TONE);
-      digitalWrite(SPEAKER_PIN, LOW);
-      delay(BUTTON_TONE);
-    }
+    frequency = 1000;
   }
 }

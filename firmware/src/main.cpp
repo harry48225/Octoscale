@@ -52,6 +52,7 @@ void gatherBrewStats() {
 }
 
 void loop() {
+  Speaker::clear();
   Leds::clear();
   Buttons::loop();
   Display::clear();
@@ -76,7 +77,10 @@ void loop() {
     if(Buttons::b()) {
       unsigned long firstPressed = millis();
       Leds::show();
+      Speaker::sound();
       Buttons::waitForRelease();
+      Speaker::clear();
+      Speaker::sound();
       unsigned long durationPressed = millis() - firstPressed;
 
       if (durationPressed > 10000) {
@@ -218,4 +222,5 @@ void loop() {
   //Graph::draw(Display::getDisplay(), 0, 41, 128, 22);
   Display::show();
   Leds::show();
+  Speaker::sound();
 }
