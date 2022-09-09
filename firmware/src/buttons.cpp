@@ -12,7 +12,12 @@ namespace Buttons {
   int lowestB = 40000;
 
   bool aPressed = true;
-  bool bPressed = true; 
+  bool bPressed = true;
+
+  bool aPressedLatching = true;
+  bool bPressedLatching = true;
+
+  unsigned long durationPressed = 0;
 
   void init() {
     pinMode(BUTTON_A_PIN, INPUT);
@@ -23,7 +28,7 @@ namespace Buttons {
     lowestB = bVal;    
   }
 
-  void loop() {
+  void update() {
     int newA = 0.2 * touchRead(BUTTON_A_PIN) + 0.8 * aVal;
     int newB = 0.2 * touchRead(BUTTON_B_PIN) + 0.8 * bVal;
 
@@ -34,18 +39,6 @@ namespace Buttons {
     aPressed = newA > lowestA + THRESHOLD; 
     bPressed = newB > lowestB + THRESHOLD;
 
-    if (aPressed) {
-      Leds::aTapped();
-      Speaker::buttonBeep();
-    }
-    if (bPressed) {
-      Leds::bTapped();
-      Speaker::buttonBeep();
-    }
-    DEBUG_SERIAL.print(aPressed);
-    DEBUG_SERIAL.print(", ");
-    DEBUG_SERIAL.println(bPressed);
-
     aVal = newA;
     bVal = newB;
 
@@ -53,17 +46,58 @@ namespace Buttons {
     lowestB = min(lowestB, bVal);
   }
 
+  void loop() {
+    aPressedLatching = false;
+    bPressedLatching = false;
+    
+    update();
+
+    if (aPressed) {
+      Leds::aTapped();
+      Speaker::buttonBeep();
+      aPressedLatching = true;
+    }
+    if (bPressed) {
+      Leds::bTapped();
+      Speaker::buttonBeep();
+      bPressedLatching = true;
+    }
+
+    DEBUG_SERIAL.print(aPressed);
+    DEBUG_SERIAL.print(", ");
+    DEBUG_SERIAL.println(bPressed);
+
+
+    if (aPressed || bPressed) {
+      Leds::show();
+      Speaker::sound();
+
+      unsigned long start = millis();
+      waitForRelease();
+      durationPressed = millis() - start;
+
+      Leds::clear();
+      Speaker::clear();
+      Leds::show();
+      Speaker::sound();
+    }
+  }
+
   bool a() {
-    return aPressed;
+    return aPressedLatching;
   }
 
   bool b() {
-    return bPressed;
+    return bPressedLatching;
+  }
+
+  unsigned long getDurationPressed() {
+    return durationPressed;
   }
 
   void waitForRelease() {
-    while (a() || b()) {
-      loop();
+    while (aPressed || bPressed) {
+      update();
       delay(10);
     }
   }

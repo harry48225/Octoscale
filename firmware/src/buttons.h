@@ -8,6 +8,7 @@ namespace Buttons {
   void loop();
   bool a();
   bool b();
-
+  unsigned long getDurationPressed();
+  
   void waitForRelease();
 }

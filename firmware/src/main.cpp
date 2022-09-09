@@ -75,15 +75,7 @@ void loop() {
     }
 
     if(Buttons::b()) {
-      unsigned long firstPressed = millis();
-      Leds::show();
-      Speaker::sound();
-      Buttons::waitForRelease();
-      Speaker::clear();
-      Speaker::sound();
-      unsigned long durationPressed = millis() - firstPressed;
-
-      if (durationPressed > 10000) {
+      if (Buttons::getDurationPressed() > 10000) {
         state = CALIBRATION;
       }
         
@@ -112,10 +104,7 @@ void loop() {
       state = TIMING;
     }
 
-    if (Buttons::b()) {
-      Buttons::waitForRelease();
-      state = IDLE;
-    }    
+    if (Buttons::b()) state = IDLE;
   }
 
   if (state == TIMING) {
@@ -136,28 +125,17 @@ void loop() {
 
     if (Buttons::a()) {
       gatherBrewStats();
-      Leds::show();
-      Buttons::waitForRelease();
-      Leds::clear();
-      Leds::show();
       Timer::stop();
       state = TIMING_STOPPED;
     }
 
-    if (Buttons::b()) {
-      state = IDLE;
-      Buttons::waitForRelease();
-    }
+    if (Buttons::b()) state = IDLE;
   }
 
   if (state == TIMING_STOPPED) {
     Display::showBrewStats(brewMass, brewDuration);
 
-    while (Buttons::b()) {
-      state = IDLE;
-      Buttons::loop();
-      delay(10);
-    }
+    if (Buttons::b()) state = IDLE;
   }
 
   // Do auto tare
@@ -185,19 +163,7 @@ void loop() {
 
     // wait for b to be pressed
     while(!Buttons::b()) {
-      delay(10);
-      Leds::clear();
       Buttons::loop();
-      Leds::show();
-    }
-
-    // wait for b to be released
-    while(Buttons::b()) {
-      delay(10);
-      Leds::clear();
-      Buttons::loop();
-      Leds::show();
-      scale.updateReading();
     }
 
     Leds::clear();
