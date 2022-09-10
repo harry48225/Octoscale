@@ -3,7 +3,7 @@
 
 namespace Speaker {
   float volume = 0;
-  int frequency = 0;
+  long frequency = 0;
 
   void init() {
     ledcSetup(CHANNEL, 2000, RESOLUTION);
@@ -31,5 +31,13 @@ namespace Speaker {
 
   void buttonBeep() {
     frequency = 1000;
+  }
+
+  void beep(long beepFrequency, long duration) {
+    frequency = beepFrequency;
+    sound();
+    delay(duration);
+    clear();
+    sound();
   }
 }

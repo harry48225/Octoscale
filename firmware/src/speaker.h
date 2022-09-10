@@ -9,5 +9,5 @@ namespace Speaker {
   void setVolume(float volume);
   void buttonBeep();
 
-  void 
+  void beep(long frequency, long duration = 200);
 }
