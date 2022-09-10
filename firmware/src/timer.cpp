@@ -3,6 +3,7 @@
 #include "bluetooth.h"
 #include "display.h"
 #include "speaker.h"
+#include "led.h"
 
 namespace Timer {
   bool timing = false;
@@ -14,14 +15,26 @@ namespace Timer {
 
     while (secondsRemaining > 0) {
       Display::showCountdown(secondsRemaining);
-      Speaker::beep(
-        200 + 200 * ((countdownDurationSeconds - secondsRemaining))/countdownDurationSeconds,
-        200
-      );
+
+      if (secondsRemaining == 1) {
+        Leds::fillPixelsRgb(255, 85, 0);
+        Leds::show();
+        Speaker::beep(750, 200);
+      } else if (secondsRemaining == 2) {
+        Leds::fillPixelsRgb(255, 0, 0);
+        Leds::show();
+        Speaker::beep(500, 200);
+      } else {
+        Leds::fillPixelsRgb(255, 0, 0);
+        Leds::show();
+        delay(200);
+      }
       delay(800);
       secondsRemaining--;    
     }
 
+    Leds::fillPixelsRgb(0, 255, 0);
+    Leds::show();
     Speaker::beep(1000, 400);
     start();
   }

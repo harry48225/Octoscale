@@ -9,6 +9,7 @@ namespace Leds {
   void bTapped();
 
   void setPixelColourRgb(uint16_t n, uint8_t r, uint8_t g, uint8_t b);
+  void fillPixelsRgb(uint8_t r, uint8_t g, uint8_t b);
 
   void clear();
   void show();

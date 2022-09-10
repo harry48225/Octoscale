@@ -22,6 +22,12 @@ namespace Leds {
     pixels.setPixelColor(n, pixels.Color(r, g, b));
   }
 
+  void fillPixelsRgb(uint8_t r, uint8_t g, uint8_t b) {
+    for (int i = 0; i < NUMPIXELS; i++) {
+      setPixelColourRgb(i, r, g, b);
+    } 
+  }
+
   void clear() {
     pixels.clear();
   }
