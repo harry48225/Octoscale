@@ -114,6 +114,12 @@ namespace Display {
     show();
   }
 
+  void showCountdown(int seconds) {
+    clear();
+    display.println(seconds);
+    show();
+  }
+
   void clear() {
     display.clearDisplay();
     display.setCursor(0,0);

@@ -18,6 +18,8 @@ namespace Display {
   void showCalibrationScreen();
   void showCalibrationCompleteScreen(float factor);
 
+  void showCountdown(int seconds);
+
   void clear();
   void show();
 
