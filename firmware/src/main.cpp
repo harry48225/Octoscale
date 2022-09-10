@@ -86,28 +86,36 @@ void loop() {
       scale.tare();
       BLE::clearPendingTare();
     }
-  }
-
-  // handle timing states
-  if (state == TIMER_PRIMING) {
+  } 
+  else if (state == TIMER_PRIMING) {
     Graph::reset();
     Graph::stop();
     Display::showTimerPriming();
     scale.tare();
     state = TIMER_WAITING_FOR_START;
   }
-
-  if (state == TIMER_WAITING_FOR_START) {
+  else if (state == TIMER_WAITING_FOR_START) {
     Display::showTimerWaitingForStart(mass);
-    if (!scale.hasSettled) {
-      Timer::start();
-      state = TIMING;
-    }
-
     if (Buttons::b()) state = IDLE;
-  }
 
-  if (state == TIMING) {
+    if (!scale.hasSettled || Buttons::a()) {
+      auto start = millis();
+      while (!Buttons::a() && millis() - start < 200) {
+        Buttons::loop();
+        delay(50);
+      }
+
+      if (Buttons::a()) {
+        scale.tare();
+        Timer::startWithCountDown(5);
+        state = TIMING; 
+      } else {
+        Timer::start();
+        state = TIMING;
+      }
+    }
+  }
+  else if (state == TIMING) {
     long seconds = Timer::getSecondsElapsed();
     Display::showTimer(seconds, mass);
     BLE::updateTimerDuration(seconds);
@@ -131,8 +139,7 @@ void loop() {
 
     if (Buttons::b()) state = IDLE;
   }
-
-  if (state == TIMING_STOPPED) {
+  else if (state == TIMING_STOPPED) {
     Display::showBrewStats(brewMass, brewDuration);
 
     if (Buttons::b()) state = IDLE;
