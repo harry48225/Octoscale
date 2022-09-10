@@ -7,5 +7,7 @@ namespace Speaker {
   void clear();
   void sound();
   void setVolume(float volume);
-  void buttonBeep(unsigned long duration = 100);
+  void buttonBeep();
+
+  void 
 }

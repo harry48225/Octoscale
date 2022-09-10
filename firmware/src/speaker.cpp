@@ -29,7 +29,7 @@ namespace Speaker {
     volume = newVolume;
   }
 
-  void buttonBeep(unsigned long duration) {
+  void buttonBeep() {
     frequency = 1000;
   }
 }
