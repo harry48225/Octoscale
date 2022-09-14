@@ -89,7 +89,7 @@ namespace BLE {
     BLEServer *pServer = BLEDevice::createServer();
     pServer->setCallbacks(new MyServerCallbacks());
 
-    BLEService *pService = pServer->createService(SERVICE_UUID);
+    BLEService *pService = pServer->createService(BLEUUID(SERVICE_UUID), 64);
 
     massCharacteristic.setValue("0");
     massCharacteristic.addDescriptor(&massDescriptor);
