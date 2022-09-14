@@ -6,6 +6,7 @@
 #include <Fonts/FreeMono12pt7b.h>
 #include <Fonts/FreeMono18pt7b.h>
 #include "debug.h"
+#include "bluetooth.h"
 
 namespace Display {
   Adafruit_SH1106G display = Adafruit_SH1106G(128, 64, &Wire, 14);
@@ -120,12 +121,23 @@ namespace Display {
     show();
   }
 
+  void showStatusBar() {
+    display.setCursor(0, 0);
+    display.fillRect(0, 0, 128, 8, SH110X_BLACK);
+    if (BLE::isDeviceConnected()) {
+      display.println("bluetooth connected");
+    } else {
+      display.println("not connected");
+    }
+  }
+
   void clear() {
     display.clearDisplay();
     display.setCursor(0,0);
   }
 
   void show() {
+    showStatusBar();
     display.display();
   }
 

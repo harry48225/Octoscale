@@ -46,11 +46,11 @@ namespace BLE {
   class MyServerCallbacks: public BLEServerCallbacks {
     void onConnect(BLEServer* pServer) {
       deviceConnected = true;
+      BLEDevice::startAdvertising();
     };
  
     void onDisconnect(BLEServer* pServer) {
       deviceConnected = false;
-      BLEDevice::startAdvertising();
     }
   };
 
@@ -69,11 +69,6 @@ namespace BLE {
     esp_bt_controller_init(&cfg);
 
     BLEDevice::init("octoscale");
-    // if (esp_bt_sleep_enable() == ESP_OK) {
-    //   DEBUG_SERIAL.println("BT SLEEPING");
-    // } else {
-    //   DEBUG_SERIAL.println("SLEEP ERROR");
-    // }
     BLEServer *pServer = BLEDevice::createServer();
     pServer->setCallbacks(new MyServerCallbacks());
 
