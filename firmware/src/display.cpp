@@ -8,6 +8,15 @@
 #include "debug.h"
 #include "bluetooth.h"
 
+// 'bluetooth', 8x8px
+const unsigned char epd_bitmap_bluetooth [] PROGMEM = {
+	0x3c, 0x76, 0x52, 0x66, 0x66, 0x52, 0x76, 0x3c
+};
+// 'bluetooth-disconnected', 8x8px
+const unsigned char epd_bitmap_bluetooth_disconnected [] PROGMEM = {
+	0x3c, 0x16, 0x82, 0x46, 0x62, 0x51, 0x78, 0x3c
+};
+
 namespace Display {
   Adafruit_SH1106G display = Adafruit_SH1106G(128, 64, &Wire, 14);
 
@@ -125,9 +134,9 @@ namespace Display {
     display.setCursor(0, 0);
     display.fillRect(0, 0, 128, 8, SH110X_BLACK);
     if (BLE::isDeviceConnected()) {
-      display.println("bluetooth connected");
+      display.drawBitmap(120, 0, epd_bitmap_bluetooth, 8, 8, SH110X_WHITE);
     } else {
-      display.println("not connected");
+      display.drawBitmap(120, 0, epd_bitmap_bluetooth_disconnected, 8, 8, SH110X_WHITE);
     }
   }
 
