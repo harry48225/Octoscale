@@ -3,6 +3,7 @@
 #include "led.h"
 #include "debug.h"
 #include "speaker.h"
+#include "bluetooth.h"
 
 namespace Buttons {
   int aVal = 0;
@@ -27,8 +28,8 @@ namespace Buttons {
 
     aVal = touchRead(BUTTON_A_PIN);
     bVal = touchRead(BUTTON_B_PIN);
-    lowestA = aVal;
-    lowestB = bVal;    
+    lowestA = min(lowestA, aVal);
+    lowestB = min(lowestB, bVal);
   }
 
   void update() {
@@ -83,6 +84,16 @@ namespace Buttons {
       Speaker::clear();
       Leds::show();
       Speaker::sound();
+    }
+
+    if (BLE::isPendingAButton()) {
+      aPressedLatching = true;
+      BLE::clearPendingAButton();
+    }
+
+    if (BLE::isPendingBButton()) {
+      bPressedLatching = true;
+      BLE::clearPendingBButton();
     }
   }
 

@@ -9,6 +9,9 @@
 #define TARE_CHARACTERISTIC_UUID "17769036-e46f-494f-921c-0a545be290ea"
 #define TIMER_IS_TIMING_CHARACTERISTIC_UUID "eae9e056-2747-403d-a4b1-f7e9543f3099"
 #define TIMER_DURATION_CHARACTERISTIC_UUID "04fc7405-1900-415c-b5b7-7dcfdf55859f"
+#define A_BUTTON_CHARACTERISTIC_UUID "bee6b99c-8ba8-40b2-bda1-fbea0e23696d"
+#define B_BUTTON_CHARACTERISTIC_UUID "e96bdf52-9eae-44dc-bcca-55ef50a8a924"
+
 
 // Should we be able to start the timer from the app
 // or just be able to prime it?
@@ -24,6 +27,20 @@ namespace BLE {
 
   BLECharacteristic tareCharacteristic(
     TARE_CHARACTERISTIC_UUID,
+    BLECharacteristic::PROPERTY_READ | 
+    BLECharacteristic::PROPERTY_WRITE |
+    BLECharacteristic::PROPERTY_NOTIFY
+  );
+
+  BLECharacteristic aButtonCharacteristic(
+    A_BUTTON_CHARACTERISTIC_UUID,
+    BLECharacteristic::PROPERTY_READ | 
+    BLECharacteristic::PROPERTY_WRITE |
+    BLECharacteristic::PROPERTY_NOTIFY
+  );
+
+  BLECharacteristic bButtonCharacteristic(
+    B_BUTTON_CHARACTERISTIC_UUID,
     BLECharacteristic::PROPERTY_READ | 
     BLECharacteristic::PROPERTY_WRITE |
     BLECharacteristic::PROPERTY_NOTIFY
@@ -81,6 +98,12 @@ namespace BLE {
     tareCharacteristic.setValue("0");
     pService->addCharacteristic(&tareCharacteristic);
 
+    aButtonCharacteristic.setValue("0");
+    pService->addCharacteristic(&aButtonCharacteristic);
+
+    bButtonCharacteristic.setValue("0");
+    pService->addCharacteristic(&bButtonCharacteristic);
+
     isTimingCharacteristic.setValue("0");
     isTimingCharacteristic.addDescriptor(&isTimingDescriptor);
     pService->addCharacteristic(&isTimingCharacteristic);
@@ -112,6 +135,24 @@ namespace BLE {
 
   void clearPendingTare() {
     tareCharacteristic.setValue("0");
+  }
+
+  bool isPendingAButton() {
+    String a = aButtonCharacteristic.getValue().c_str();
+    return a.equals("1"); 
+  }
+
+  void clearPendingAButton() {
+    aButtonCharacteristic.setValue("0");
+  }
+
+  bool isPendingBButton() {
+    String b = bButtonCharacteristic.getValue().c_str();
+    return b.equals("1"); 
+  }
+
+  void clearPendingBButton() {
+    bButtonCharacteristic.setValue("0");
   }
 
   void startTiming() {
