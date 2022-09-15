@@ -4,7 +4,8 @@ import { writable } from 'svelte/store';
 
 const SERVICE_UUID = "ade4af7e-f409-473c-ace4-c49d11393be3";
 const MASS_CHARACTERISTIC_UUID = "4f00104b-12c2-40d7-b6b9-d3e654222b25";
-const TARE_CHARACTERISTIC_UUID = "17769036-e46f-494f-921c-0a545be290ea";
+const A_BUTTON_CHARACTERISTIC_UUID = "bee6b99c-8ba8-40b2-bda1-fbea0e23696d";
+const B_BUTTON_CHARACTERISTIC_UUID = "e96bdf52-9eae-44dc-bcca-55ef50a8a924";
 const TIMER_IS_TIMING_CHARACTERISTIC_UUID = "eae9e056-2747-403d-a4b1-f7e9543f3099";
 const TIMER_DURATION_CHARACTERISTIC_UUID = "04fc7405-1900-415c-b5b7-7dcfdf55859f";
 
@@ -111,7 +112,7 @@ let interpolateMassLoop = async () => {
   setTimeout(interpolateMassLoop, 20);
 }
 
-export const tare = async () => {
+const writeCharacteristic = async (uuid: string, value: string) => {
   const ble = getBluetoothInstance();
   try {
     if (!scaleUUID) {
@@ -120,13 +121,18 @@ export const tare = async () => {
     await ble.write({
       peripheralUUID: scaleUUID,
       serviceUUID: SERVICE_UUID,
-      characteristicUUID: TARE_CHARACTERISTIC_UUID,
-      value: "1",
+      characteristicUUID: uuid,
+      value: value,
       encoding: 'utf-8',
     });
   } catch (err) {
     console.log(err);
   }
 }
+
+const writeButton = async (uuid: string) => writeCharacteristic(uuid, "1");
+
+export const aButton = async () => writeButton(A_BUTTON_CHARACTERISTIC_UUID);
+export const bButton = async () => writeButton(B_BUTTON_CHARACTERISTIC_UUID);
 
 interpolateMassLoop();

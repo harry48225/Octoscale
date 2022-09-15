@@ -2,7 +2,7 @@
   import MassDisplay from './components/MassDisplay.svelte';
   import Timer from './components/Timer.svelte';
   import { onMount } from 'svelte';
-  import { connectToScale, displayedMass, tare, isTiming, timerDurationSeconds } from  './bleManager';
+  import { connectToScale, displayedMass, tare, isTiming, timerDurationSeconds, aButton, bButton } from  './bleManager';
   import ActionButtons from './components/ActionButtons.svelte';
   import ConnectionBanner from './components/ConnectionBanner.svelte';
   import Graph from './components/Graph.svelte';
@@ -33,8 +33,8 @@
     <Timer isTiming={timing} durationSeconds={duration}/>
     <Graph/>
     <ActionButtons>
-      <button text="time" />
-      <button on:tap="{tare}" text="tare"/>
+      <button on:tap="{aButton}" text="time" />
+      <button on:tap="{bButton}" text="tare"/>
     </ActionButtons>
     <BottomNavigationBar/>
   </flexboxLayout>
