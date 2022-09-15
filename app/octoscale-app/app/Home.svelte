@@ -48,7 +48,7 @@
   let massUnsubscribe: Unsubscriber;
   let timerDurationUnsubscribe: Unsubscriber;
 
-  onMount(async () => {
+  const create = async () => {
     await connectToScale();
 
     timingUnsubscribe = isTiming.subscribe(val => {
@@ -64,19 +64,22 @@
     massUnsubscribe = mass.subscribe(val => massValue = val);
     timerDurationUnsubscribe = timerDurationSeconds.subscribe(val => {duration = val;});
     animation = requestAnimationFrame(updateGraph);
-  });
+  };
 
 
   const destroy = () => {
     console.log("onDestroy")
-    timingUnsubscribe();
-    massUnsubscribe();
-    timerDurationUnsubscribe();
-    cancelAnimationFrame(animation);
+
+    try {
+      timingUnsubscribe();
+      massUnsubscribe();
+      timerDurationUnsubscribe();
+      cancelAnimationFrame(animation);
+    } catch {}
   }
 </script>
 
-<page on:navigatedFrom={destroy}>
+<page on:navigatedFrom={destroy} on:navigatedTo={create}>
   <actionBar title="octoscale">
   </actionBar>
   <flexboxLayout>
@@ -88,7 +91,7 @@
       <button on:tap="{aButton}" text="time"/>
       <button on:tap="{bButton}" text="tare"/>
     </ActionButtons>
-    <BottomNavigationBar/>
+    <BottomNavigationBar currentPage="home"/>
   </flexboxLayout>
 </page>
 

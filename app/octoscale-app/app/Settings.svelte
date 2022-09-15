@@ -42,7 +42,7 @@ import Home from "./Home.svelte";
       <button>query scale</button>
       <button>apply</button>
     </ActionButtons>
-    <BottomNavigationBar/>
+    <BottomNavigationBar currentPage="settings"/>
   </flexboxLayout>
 </page>
 

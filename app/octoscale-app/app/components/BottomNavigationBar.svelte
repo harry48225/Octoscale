@@ -1,13 +1,15 @@
-<script>
+<script lang=ts>
 
 import { navigate } from "svelte-native";
 import Settings from "~/Settings.svelte";
 import Home from '../Home.svelte';
 
+export let currentPage: string;
+
 </script>
 <flexboxLayout>
-  <button text="🏠" on:tap={() => navigate({page: Home})}/>
-  <button text="🔧" on:tap={() => navigate({page: Settings})}/>
+  <button text="🏠" on:tap={() => currentPage === "home" || navigate({page: Home})}/>
+  <button text="🔧" on:tap={() => currentPage === "settings" || navigate({page: Settings})}/>
 </flexboxLayout>
 
 <style lang="scss">
