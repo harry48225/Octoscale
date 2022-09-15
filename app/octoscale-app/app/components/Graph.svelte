@@ -1,10 +1,17 @@
 <script lang="ts">
   import { Canvas } from '@nativescript/canvas';
+    import { onMount } from 'svelte';
+  import { Writable } from 'svelte/store';
+  import { GraphData } from '~/models/GraphData';
 
-  type Point = {x: number, y: number}
-  export const data: Point[] = [{x: 0, y: 0}, {x: 10, y: 10}, {x: 20, y: 30}, {x: 30, y: 35}, {x: 50, y: 38}, {x: 53, y: 39}];
+  export let dataStore: Writable<GraphData>;
 
-  const drawFilledRegion = (canvas: Canvas, ctx: CanvasRenderingContext2D, data: Point[]) => {
+  onMount(() => {
+    dataStore.subscribe(val => update(val));
+  })
+  let canvas: Canvas | undefined;
+
+  const drawFilledRegion = (canvas: Canvas, ctx: CanvasRenderingContext2D, data: GraphData) => {
     ctx.fillStyle = '#E4E6C3';
     ctx.beginPath();
     ctx.moveTo(data[0].x, data[0].y);
@@ -19,7 +26,7 @@
     ctx.fill();
   };
 
-  const getDataScale = (canvasHeight: number, canvasWidth: number, filledProportionX: number = 0.8, filledProportionY: number = 0.8) => {
+  const getDataScale = (data: GraphData, canvasHeight: number, canvasWidth: number, filledProportionX: number = 0.8, filledProportionY: number = 0.8) => {
     const maxY = Math.max(...data.map(p => p.y));
     const maxX = Math.max(...data.map(p => p.x));
 
@@ -29,7 +36,7 @@
     return [xScale, yScale];
   }
 
-  const drawGraphLine = (canvas: Canvas, ctx: CanvasRenderingContext2D, data: Point[]) => {
+  const drawGraphLine = (canvas: Canvas, ctx: CanvasRenderingContext2D, data: GraphData) => {
     ctx.strokeStyle = '#899878';
     ctx.lineWidth = 8;
 
@@ -42,7 +49,7 @@
     ctx.stroke();
   };
 
-  const drawGraphEndMarker = (canvas: Canvas, ctx: CanvasRenderingContext2D, data: Point[]) => {
+  const drawGraphEndMarker = (canvas: Canvas, ctx: CanvasRenderingContext2D, data: GraphData) => {
     const lastPoint = data[data.length - 1];
     //ctx.moveTo(data[lastIndex].x, data[lastIndex].y);
     ctx.beginPath();
@@ -53,14 +60,24 @@
 
   const canvasReady = (args: any) => {
     console.log('canvas ready');
-    const canvas = args.object;
-    console.log(canvas);
+    const potentialCanvas = args.object;
+    if (potentialCanvas === undefined) return
+    let ctx = potentialCanvas.getContext('2d');
+    if (!(ctx instanceof CanvasRenderingContext2D)) return
+
+    canvas = potentialCanvas;
+    ctx.transform(1, 0, 0, -1, 0, potentialCanvas.height as number)
+  }
+
+  const update = (data: GraphData) => {
+    console.log(data);
+    if (canvas === undefined) return;
     let ctx = canvas.getContext('2d');
     if (!(ctx instanceof CanvasRenderingContext2D)) return
-    
-    ctx.transform(1, 0, 0, -1, 0, canvas.height as number)
 
-    const [xScale, yScale] = getDataScale(canvas.height, canvas.width);
+    if (data.length === 0) data = [{x: 0, y: 0}]; 
+
+    const [xScale, yScale] = getDataScale(data, canvas.height as number, canvas.width as number);
 
     const scaledData = data.map(p => ({x: p.x * xScale, y: p.y * yScale}));
 

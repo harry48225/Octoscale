@@ -7,7 +7,10 @@
   import ConnectionBanner from './components/ConnectionBanner.svelte';
   import Graph from './components/Graph.svelte';
   import BottomNavigationBar from './components/BottomNavigationBar.svelte';
+  import { GraphData } from './models/GraphData';
+  import { writable } from 'svelte/store';
         
+  const graphData = writable<GraphData>([]);
   let mass: number;
   displayedMass.subscribe(val => mass = val);
 
@@ -15,7 +18,13 @@
   isTiming.subscribe(val => timing = !!val);
 
   let duration: number;
-  timerDurationSeconds.subscribe(val => duration = val);
+  timerDurationSeconds.subscribe(val => {
+    duration = val;
+
+    if (duration === 0) graphData.set([]);
+
+    graphData.update((data) => [...data, {x: duration, y: mass}]);
+  });
 
   onMount(async () => {
       await connectToScale();
@@ -29,7 +38,7 @@
     <ConnectionBanner/>
     <MassDisplay mass={mass}/>
     <Timer isTiming={timing} durationSeconds={duration}/>
-    <Graph/>
+    <Graph dataStore={graphData}/>
     <ActionButtons>
       <button on:tap="{aButton}" text="time"/>
       <button on:tap="{bButton}" text="tare"/>
