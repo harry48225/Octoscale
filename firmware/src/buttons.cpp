@@ -40,8 +40,8 @@ namespace Buttons {
     DEBUG_SERIAL.print(", ");
     DEBUG_SERIAL.println(newB);
 
-    aPressed = newA > lowestA + THRESHOLD; 
-    bPressed = newB > lowestB + THRESHOLD;
+    aPressed = newA > lowestA + THRESHOLD_A; 
+    bPressed = newB > lowestB + THRESHOLD_B;
 
     aVal = newA;
     bVal = newB;
