@@ -19,15 +19,9 @@
   let duration: number = 0;
 
   let massValue = 0;
-  let updateInterval = 50;
-  let graphLock = false;
-  let runningGraphId = "";
   let animation = -1;
 
-  const updateGraph = (id: string) => {
-    //console.log(`${Date.now()}, ${id}, ${runningGraphId}`)
-    if (graphLock || id !== runningGraphId) return;
-    graphLock = true;
+  const updateGraph = () => {
     const millis = Date.now();
     graphData.update((data) => {
       let newData = [...data, {x: (millis - startTime)/1000, y: massValue}];
@@ -43,15 +37,11 @@
         }
 
         reducedData.push(newData[newData.length - 1]);
-
-        updateInterval *= 2;
         newData = reducedData
       }
       return newData;
     });
-    graphLock = false;
-    //setTimeout(() => updateGraph(id), updateInterval);
-    animation = requestAnimationFrame(() => updateGraph(runningGraphId));
+    animation = requestAnimationFrame(updateGraph);
   }
 
   let timingUnsubscribe: Unsubscriber;
@@ -72,12 +62,8 @@
     });
 
     massUnsubscribe = mass.subscribe(val => massValue = val);
-
     timerDurationUnsubscribe = timerDurationSeconds.subscribe(val => {duration = val;});
-
-    runningGraphId = Math.random().toFixed(3) + Math.random().toFixed(3);
-    //updateGraph(runningGraphId);
-    animation = requestAnimationFrame(() => updateGraph(runningGraphId));
+    animation = requestAnimationFrame(updateGraph);
   });
 
 
@@ -86,7 +72,6 @@
     timingUnsubscribe();
     massUnsubscribe();
     timerDurationUnsubscribe();
-    runningGraphId = "";
     cancelAnimationFrame(animation);
   }
 </script>

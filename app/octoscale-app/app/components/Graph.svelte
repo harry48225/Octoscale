@@ -5,8 +5,8 @@
   import { GraphData } from '~/models/GraphData';
 
   export let dataStore: Writable<GraphData>;
-  let lastMaxX = 0;
-  let lastMaxY = 0;
+  // let lastMaxX = 0;
+  // let lastMaxY = 0;
 
   onMount(() => {
     dataStore.subscribe(val => update(val));
@@ -29,11 +29,11 @@
   };
 
   const getDataScale = (data: GraphData, canvasHeight: number, canvasWidth: number, filledProportionX: number = 0.8, filledProportionY: number = 0.8) => {
-    const maxY = Math.max(lastMaxY, ...data.map(p => p.y));
-    const maxX = Math.max(lastMaxX, ...data.map(p => p.x));
+    const maxY = Math.max(...data.map(p => p.y));
+    const maxX = Math.max(...data.map(p => p.x));
 
-    lastMaxX = maxX;
-    lastMaxY = maxY;
+    // lastMaxX = maxX;
+    // lastMaxY = maxY;
 
     const yScale = (canvasHeight/maxY) * filledProportionY;
     const xScale = (canvasWidth/maxX) * filledProportionX;
