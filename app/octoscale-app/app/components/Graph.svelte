@@ -70,7 +70,6 @@
   }
 
   const update = (data: GraphData) => {
-    console.log(data);
     if (canvas === undefined) return;
     let ctx = canvas.getContext('2d');
     if (!(ctx instanceof CanvasRenderingContext2D)) return
@@ -80,9 +79,8 @@
     const [xScale, yScale] = getDataScale(data, canvas.height as number, canvas.width as number);
 
     const scaledData = data.map(p => ({x: p.x * xScale, y: p.y * yScale}));
-
     drawHorizontalTicks(canvas, ctx, xScale);
-    drawFilledRegion(canvas, ctx, scaledData);
+    //drawFilledRegion(canvas, ctx, scaledData);
     drawGraphLine(canvas, ctx, scaledData);
     drawGraphEndMarker(canvas, ctx, scaledData);
   }

@@ -1,5 +1,6 @@
 import { getBluetoothInstance } from '@nativescript-community/ble';
 import { request } from '@nativescript-community/perms';
+import { marginRightProperty } from '@nativescript/core';
 import { writable } from 'svelte/store';
 
 const SERVICE_UUID = "ade4af7e-f409-473c-ace4-c49d11393be3";
@@ -11,7 +12,11 @@ const TIMER_DURATION_CHARACTERISTIC_UUID = "04fc7405-1900-415c-b5b7-7dcfdf55859f
 
 let scaleUUID: string | undefined = undefined;
 export const isConnected = writable(false);
-let mass: number = 0.0;
+export const mass = writable(0.0);
+let massValue = 0;
+
+mass.subscribe((val) => massValue = val);
+
 export const displayedMass = writable(0.0);
 
 export const isTiming = writable(false);
@@ -85,7 +90,7 @@ export const connectToScale = async () => {
     characteristicUUID: MASS_CHARACTERISTIC_UUID,
     onNotify: (result) => {
       const massString = decodeResultValue(result.value);
-      mass = +massString;
+      mass.set(+massString);
     }
   })
 
@@ -108,7 +113,7 @@ const decodeResultValue = (val: ArrayBuffer) => {
 
 let interpolateMassLoop = async () => {
   // Should probably use a 1euro filter
-  displayedMass.update(dMass => dMass * 0.2 + mass * 0.8);
+  displayedMass.update(dMass => dMass * 0.2 + massValue * 0.8);
   setTimeout(interpolateMassLoop, 20);
 }
 

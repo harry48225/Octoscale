@@ -1,13 +1,13 @@
 <script lang="ts">
-  export let mass: number;
-
-  $: displayedMass = mass.toFixed(1);
+  import { displayedMass } from '../bleManager';
+  let mass = "0.0";
+  displayedMass.subscribe((val) => mass = val.toFixed(1));
 </script>
 
 <stackLayout>
   <label>
     <formattedString>
-      <span text="{displayedMass}"/>
+      <span text="{mass}"/>
     </formattedString>
   </label>
 </stackLayout>
