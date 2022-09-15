@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Canvas } from '@nativescript/canvas';
-    import { onMount } from 'svelte';
+  import { onMount } from 'svelte';
   import { Writable } from 'svelte/store';
   import { GraphData } from '~/models/GraphData';
 
@@ -31,6 +31,9 @@
   const getDataScale = (data: GraphData, canvasHeight: number, canvasWidth: number, filledProportionX: number = 0.8, filledProportionY: number = 0.8) => {
     const maxY = Math.max(lastMaxY, ...data.map(p => p.y));
     const maxX = Math.max(lastMaxX, ...data.map(p => p.x));
+
+    lastMaxX = maxX;
+    lastMaxY = maxY;
 
     const yScale = (canvasHeight/maxY) * filledProportionY;
     const xScale = (canvasWidth/maxX) * filledProportionX;
