@@ -5,6 +5,8 @@
   import { GraphData } from '~/models/GraphData';
 
   export let dataStore: Writable<GraphData>;
+  let lastMaxX = 0;
+  let lastMaxY = 0;
 
   onMount(() => {
     dataStore.subscribe(val => update(val));
@@ -27,8 +29,8 @@
   };
 
   const getDataScale = (data: GraphData, canvasHeight: number, canvasWidth: number, filledProportionX: number = 0.8, filledProportionY: number = 0.8) => {
-    const maxY = Math.max(...data.map(p => p.y));
-    const maxX = Math.max(...data.map(p => p.x));
+    const maxY = Math.max(lastMaxY, ...data.map(p => p.y));
+    const maxX = Math.max(lastMaxX, ...data.map(p => p.x));
 
     const yScale = (canvasHeight/maxY) * filledProportionY;
     const xScale = (canvasWidth/maxX) * filledProportionX;
@@ -78,9 +80,10 @@
 
     const [xScale, yScale] = getDataScale(data, canvas.height as number, canvas.width as number);
 
+    ctx.clearRect(0,0, canvas.width as number, canvas.height as number);
     const scaledData = data.map(p => ({x: p.x * xScale, y: p.y * yScale}));
     drawHorizontalTicks(canvas, ctx, xScale);
-    //drawFilledRegion(canvas, ctx, scaledData);
+    drawFilledRegion(canvas, ctx, scaledData);
     drawGraphLine(canvas, ctx, scaledData);
     drawGraphEndMarker(canvas, ctx, scaledData);
   }
@@ -103,8 +106,6 @@
       //   ctx.transform(1, 0, 0, -1, 0, canvas.height as number);
       // }
     }
-
-    console.log('done');
   }
 </script>
 

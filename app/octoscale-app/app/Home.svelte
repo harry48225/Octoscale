@@ -28,12 +28,30 @@
   timerDurationSeconds.subscribe(val => {duration = val;});
 
   let massValue = 0;
+  let updateInterval = 16;
+  let updatingGraph = false;
 
   const updateGraph = () => {
     const millis = Date.now();
-    graphData.update((data) => [...data, {x: (millis - startTime)/1000, y: massValue}]);
+    graphData.update((data) => {
+      let newData = [...data, {x: (millis - startTime)/1000, y: massValue}];
+      if (newData.length > 600) {
+        const reducedData = [newData[0]];
+        for (let i = 1; i < newData.length - 1; i+=2) {
+          reducedData.push(
+            {
+              x: (newData[i].x + newData[i+1].x) / 2 ,
+              y: (newData[i].y + newData[i+1].y) / 2
+            }
+          )
+        }
 
-    setTimeout(updateGraph, 16);
+        updateInterval *= 2;
+        newData = reducedData
+      }
+      return newData;
+    });
+    setTimeout(updateGraph, updateInterval);
   }
 
   onMount(async () => {
@@ -41,7 +59,10 @@
 
     mass.subscribe(val => massValue = val);
 
-    updateGraph();
+    if (!updatingGraph) {
+      updatingGraph = true;
+      updateGraph();
+    }
   });
 </script>
 
