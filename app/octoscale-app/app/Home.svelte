@@ -50,7 +50,7 @@
       lastGraphUpdateMillis = Date.now();
       graphData.update((data) => {
         let newData = [...data, {x: (millis - startTime)/1000, y: massValue}];
-        if (newData.length > 600) {
+        if (newData.length > 1200) {
           newData = reduceData(newData);
           graphUpdateInterval *= 2;
         }
@@ -76,6 +76,7 @@
       if (!wasTiming && timing) {
         startTime = Date.now();
         resetGraph();
+        graphData.set([{x: 0, y: 0}])
       }
     });
 
