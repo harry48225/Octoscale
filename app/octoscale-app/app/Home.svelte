@@ -24,6 +24,10 @@
   let graphUpdateInterval = 16;
   let lastGraphUpdateMillis = -1;
 
+  let timingUnsubscribe: Unsubscriber;
+  let massUnsubscribe: Unsubscriber;
+  let timerDurationUnsubscribe: Unsubscriber;
+
   const reduceData = (data: GraphData) => {
     const reducedData = [data[0]];
     for (let i = 1; i < data.length - 1; i+=2) {
@@ -56,9 +60,11 @@
     animation = requestAnimationFrame(updateGraph);
   }
 
-  let timingUnsubscribe: Unsubscriber;
-  let massUnsubscribe: Unsubscriber;
-  let timerDurationUnsubscribe: Unsubscriber;
+  const resetGraph = () => {
+    graphData.set([]);
+    lastGraphUpdateMillis = 0;
+    graphUpdateInterval = 16;
+  }
 
   const create = async () => {
     await connectToScale();
@@ -69,13 +75,13 @@
 
       if (!wasTiming && timing) {
         startTime = Date.now();
-        graphData.set([]);
+        resetGraph();
       }
     });
 
     massUnsubscribe = mass.subscribe(val => massValue = val);
     timerDurationUnsubscribe = timerDurationSeconds.subscribe(val => {duration = val;});
-    graphUpdateInterval = 16;
+    resetGraph();
     animation = requestAnimationFrame(updateGraph);
   };
 

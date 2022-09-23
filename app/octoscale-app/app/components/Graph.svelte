@@ -26,7 +26,7 @@
     ctx.fill();
   };
 
-  const getDataScale = (data: GraphData, canvasHeight: number, canvasWidth: number, filledProportionX: number = 1, filledProportionY: number = 0.9) => {
+  const getDataScale = (data: GraphData, canvasHeight: number, canvasWidth: number, filledProportionX: number = 0.9, filledProportionY: number = 0.9) => {
     const maxY = Math.max(...data.map(p => p.y));
     const maxX = Math.max(...data.map(p => p.x));
 
