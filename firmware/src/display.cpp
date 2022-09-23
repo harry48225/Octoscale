@@ -8,14 +8,47 @@
 #include "debug.h"
 #include "bluetooth.h"
 
-// 'bluetooth', 8x8px
-const unsigned char epd_bitmap_bluetooth [] PROGMEM = {
-	0x3c, 0x76, 0x52, 0x66, 0x66, 0x52, 0x76, 0x3c
+// 'battery-full', 8x8px
+const unsigned char epd_bitmap_battery_full [] PROGMEM = {
+	0x18, 0x3c, 0x7e, 0x7e, 0x7e, 0x7e, 0x7e, 0x3c
+};
+// 'battery-empty', 8x8px
+const unsigned char epd_bitmap_battery_empty [] PROGMEM = {
+	0x18, 0x24, 0x42, 0x42, 0x42, 0x42, 0x42, 0x3c
+};
+// 'battery-1-3', 8x8px
+const unsigned char epd_bitmap_battery_1_3 [] PROGMEM = {
+	0x18, 0x24, 0x42, 0x42, 0x42, 0x7e, 0x7e, 0x3c
+};
+// 'battery-2-3', 8x8px
+const unsigned char epd_bitmap_battery_2_3 [] PROGMEM = {
+	0x18, 0x24, 0x42, 0x7e, 0x7e, 0x7e, 0x7e, 0x3c
+};
+// 'charging', 8x8px
+const unsigned char epd_bitmap_charging [] PROGMEM = {
+	0x00, 0x04, 0x0f, 0x3c, 0x4f, 0x84, 0x40, 0x30
 };
 // 'bluetooth-disconnected', 8x8px
 const unsigned char epd_bitmap_bluetooth_disconnected [] PROGMEM = {
 	0x3c, 0x16, 0x82, 0x46, 0x62, 0x51, 0x78, 0x3c
 };
+// 'bluetooth', 8x8px
+const unsigned char epd_bitmap_bluetooth [] PROGMEM = {
+	0x3c, 0x76, 0x52, 0x66, 0x66, 0x52, 0x76, 0x3c
+};
+
+// Array of all bitmaps for convenience. (Total bytes used to store images in PROGMEM = 224)
+const int epd_bitmap_allArray_LEN = 7;
+const unsigned char* epd_bitmap_allArray[7] = {
+	epd_bitmap_battery_1_3,
+	epd_bitmap_battery_2_3,
+	epd_bitmap_battery_empty,
+	epd_bitmap_battery_full,
+	epd_bitmap_bluetooth,
+	epd_bitmap_bluetooth_disconnected,
+	epd_bitmap_charging
+};
+
 
 namespace Display {
   Adafruit_SH1106G display = Adafruit_SH1106G(128, 64, &Wire, 14);
