@@ -7,6 +7,7 @@
 #include <Fonts/FreeMono18pt7b.h>
 #include "debug.h"
 #include "bluetooth.h"
+#include "battery.h"
 
 // 'battery-full', 8x8px
 const unsigned char epd_bitmap_battery_full [] PROGMEM = {
@@ -165,7 +166,8 @@ namespace Display {
 
   void showStatusBar() {
     display.setCursor(0, 0);
-    display.fillRect(120, 0, 128, 8, SH110X_BLACK);
+    display.fillRect(0, 0, 128, 8, SH110X_BLACK);
+    display.print(Battery::getVoltage());
     if (BLE::isDeviceConnected()) {
       display.drawBitmap(120, 0, epd_bitmap_bluetooth, 8, 8, SH110X_WHITE);
     } else {
