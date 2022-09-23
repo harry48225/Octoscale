@@ -1,8 +1,6 @@
 <script lang="ts">
   import MassDisplay from './components/MassDisplay.svelte';
-  import Timer from './components/Timer.svelte';
-  import { onMount, onDestroy, beforeUpdate } from 'svelte';
-  import { connectToScale, mass, displayedMass, isTiming, timerDurationSeconds, aButton, bButton } from  './bleManager';
+  import { connectToScale, mass, isTiming, timerDurationSeconds, aButton, bButton } from  './bleManager';
   import ActionButtons from './components/ActionButtons.svelte';
   import ConnectionBanner from './components/ConnectionBanner.svelte';
   import Graph from './components/Graph.svelte';

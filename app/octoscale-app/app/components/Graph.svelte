@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Canvas } from '@nativescript/canvas';
+  import { Canvas, CanvasRenderingContext2D } from '@nativescript/canvas';
   import { onMount } from 'svelte';
   import { Writable } from 'svelte/store';
   import { GraphData } from '~/models/GraphData';
@@ -73,6 +73,7 @@
     if (canvas === undefined) return;
     let ctx = canvas.getContext('2d');
     if (!(ctx instanceof CanvasRenderingContext2D)) return
+    ctx.setTransform(1, 0, 0, -1, 0, canvas.height as number);
 
     if (data.length === 0) data = [{x: 0, y: 0}]; 
 
