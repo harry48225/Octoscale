@@ -167,6 +167,8 @@ namespace Display {
   void showStatusBar() {
     display.setCursor(0, 0);
     display.fillRect(0, 0, 128, 8, SH110X_BLACK);
+    display.print(Battery::getValue());
+    display.print(", ");
     display.print(Battery::getVoltage());
     if (BLE::isDeviceConnected()) {
       display.drawBitmap(120, 0, epd_bitmap_bluetooth, 8, 8, SH110X_WHITE);

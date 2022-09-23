@@ -3,14 +3,20 @@
 #include <Arduino.h>
 
 namespace Battery {
-  double m = (4.19 - 4.11)/(1277 - 1250);
-  double c = 4.11;
+  double m_v = (4.19 - 4.11)/(1277 - 1250);
+  double c_v = 4.11;
+
+  double m = (1.00)/(4.10 - 3.5);
 
   void init() {
     pinMode(BATTERY_SENSE_PIN, INPUT);
   }
 
   double getVoltage() {
-    return  m * (analogRead(BATTERY_SENSE_PIN) - 1250) + c;
+    return  m_v * (analogRead(BATTERY_SENSE_PIN) - 1250) + c_v;
+  }
+
+  double getValue() {
+    return m*(getVoltage() - 3.5);
   }
 }
