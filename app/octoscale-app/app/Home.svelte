@@ -21,26 +21,38 @@
   let massValue = 0;
   let animation = -1;
 
+  let graphUpdateInterval = 16;
+  let lastGraphUpdateMillis = -1;
+
+  const reduceData = (data: GraphData) => {
+    const reducedData = [data[0]];
+    for (let i = 1; i < data.length - 1; i+=2) {
+      reducedData.push(
+        {
+          x: (data[i].x + data[i+1].x) / 2 ,
+          y: (data[i].y + data[i+1].y) / 2
+        }
+      )
+    }
+
+    reducedData.push(data[data.length - 1]);
+    return reducedData;
+  }
+
   const updateGraph = () => {
     const millis = Date.now();
-    graphData.update((data) => {
-      let newData = [...data, {x: (millis - startTime)/1000, y: massValue}];
-      if (newData.length > 600) {
-        const reducedData = [newData[0]];
-        for (let i = 1; i < newData.length - 1; i+=2) {
-          reducedData.push(
-            {
-              x: (newData[i].x + newData[i+1].x) / 2 ,
-              y: (newData[i].y + newData[i+1].y) / 2
-            }
-          )
-        }
 
-        reducedData.push(newData[newData.length - 1]);
-        newData = reducedData
-      }
-      return newData;
-    });
+    if (millis - lastGraphUpdateMillis > graphUpdateInterval) {
+      lastGraphUpdateMillis = Date.now();
+      graphData.update((data) => {
+        let newData = [...data, {x: (millis - startTime)/1000, y: massValue}];
+        if (newData.length > 600) {
+          newData = reduceData(newData);
+          graphUpdateInterval *= 2;
+        }
+        return newData;
+      });
+    }
     animation = requestAnimationFrame(updateGraph);
   }
 
