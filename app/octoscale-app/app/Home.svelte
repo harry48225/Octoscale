@@ -75,6 +75,7 @@
 
     massUnsubscribe = mass.subscribe(val => massValue = val);
     timerDurationUnsubscribe = timerDurationSeconds.subscribe(val => {duration = val;});
+    graphUpdateInterval = 16;
     animation = requestAnimationFrame(updateGraph);
   };
 
