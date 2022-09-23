@@ -1,7 +1,4 @@
 <script lang="ts">
-  import { fade } from 'svelte-native/transitions';
-
-  export let isTiming: boolean;
   export let durationSeconds: number;
 
   const makeTwoDigits = (num: number) => {
@@ -12,9 +9,7 @@
 </script>
 
 <flexboxLayout>
-  {#if isTiming}
-  <label class="duration" text="{timeString}"/>
-  {/if}
+  <label class="duration" text="sssssss {timeString}"/>
 </flexboxLayout>
 
 

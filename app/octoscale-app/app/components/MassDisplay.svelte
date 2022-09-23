@@ -1,31 +1,36 @@
 <script lang="ts">
-  import { displayedMass } from '../bleManager';
+  import { FlexboxLayout } from '@nativescript/core';
+import { displayedMass } from '../bleManager';
+  import Timer from './Timer.svelte';
   let mass = "0.0";
   displayedMass.subscribe((val) => mass = val.toFixed(1));
 </script>
 
-<stackLayout>
-  <label>
-    <formattedString>
+<flexboxLayout>
+  <label>{mass}
+    <!-- <formattedString>
       <span text="{mass}"/>
-    </formattedString>
+    </formattedString> -->
   </label>
-</stackLayout>
+  <!-- <Timer durationSeconds={100}/> -->
+</flexboxLayout>
 
 <style lang="scss">
-  StackLayout {
+  FlexboxLayout {
+    flex: none;
     background-color: #E4E6C3;
     margin: 16px;
     border-radius: 64px;
-    min-height: 360px;
     padding-top: -16px;
+    justify-content: space-around;
 
     Label {
       text-align: center;
-      width: 100%;
       font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
       font-size: 96px;
       color: #222725;
-  }
+      margin: 16px 32px;
+      min-height: 120px;
+    }
   }
 </style>

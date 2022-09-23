@@ -108,11 +108,12 @@
 </script>
 
 <flexboxLayout>
-  <canvas id="canvas" width="100%" height="100%" on:ready={canvasReady}/>
+  <canvas id="canvas" on:ready={canvasReady}/>
 </flexboxLayout>
 
 <style lang="scss">
   FlexboxLayout {
+    flex: auto;
     border-color: #899878;
     border-width: 8px;
     border-radius: 64px;

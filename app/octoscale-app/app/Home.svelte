@@ -105,7 +105,6 @@
   <flexboxLayout>
     <ConnectionBanner/>
     <MassDisplay/>
-    <Timer isTiming={timing} durationSeconds={duration}/>
     <Graph dataStore={graphData}/>
     <ActionButtons>
       <button on:tap="{aButton}" text="time"/>
