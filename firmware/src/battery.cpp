@@ -10,6 +10,7 @@ namespace Battery {
 
   void init() {
     pinMode(BATTERY_SENSE_PIN, INPUT);
+    pinMode(CHARGE_SENSE_PIN, INPUT);
   }
 
   double getVoltage() {
@@ -18,5 +19,9 @@ namespace Battery {
 
   double getValue() {
     return m*(getVoltage() - 3.5);
+  }
+
+  bool isCharging() {
+    return !digitalRead(CHARGE_SENSE_PIN);
   }
 }
