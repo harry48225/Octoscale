@@ -3,4 +3,9 @@ namespace Animations {
     void reset();
     void update();
   }
+
+  namespace Charging {
+    void reset();
+    void update();
+  }
 }

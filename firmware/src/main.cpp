@@ -67,6 +67,7 @@ void loop() {
 
   if (state == SLEEP_CHARGING) {
     Display::showSleepCharging();
+    Animations::Charging::update();
   } else {
     double mass = -1;
     if (state == TIMING_STOPPED) {

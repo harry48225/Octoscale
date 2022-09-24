@@ -28,6 +28,14 @@ namespace Leds {
     } 
   }
 
+  uint8_t getBrightness() {
+    return pixels.getBrightness();
+  }
+
+  void setBrightness(uint8_t brightness) {
+    pixels.setBrightness(brightness);
+  }
+
   void clear() {
     pixels.clear();
   }
