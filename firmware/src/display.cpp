@@ -166,12 +166,25 @@ namespace Display {
 
   void showStatusBar() {
     display.setCursor(0, 0);
-    display.fillRect(0, 0, 128, 8, SH110X_BLACK);
-    display.print(Battery::getValue());
-    display.print(", ");
-    display.print(Battery::getVoltage());
-    display.print(", ");
-    display.print(Battery::isCharging());
+    display.fillRect(80, 0, 128, 8, SH110X_BLACK);
+    
+    double batteryValue = Battery::getVoltage();
+    display.setCursor(80, 0);
+    display.print(batteryValue);
+    if (Battery::isCharging()) {
+      display.drawBitmap(110, 0, epd_bitmap_charging, 8, 8, SH110X_WHITE);
+    } else {
+      if (batteryValue > 0.9) {
+        display.drawBitmap(110, 0, epd_bitmap_battery_full, 8, 8, SH110X_WHITE);
+      } else if (batteryValue > 0.66) {
+        display.drawBitmap(110, 0, epd_bitmap_battery_2_3, 8, 8, SH110X_WHITE);
+      } else if (batteryValue > 0.33) {
+        display.drawBitmap(110, 0, epd_bitmap_battery_1_3, 8, 8, SH110X_WHITE);
+      } else {
+        display.drawBitmap(110, 0, epd_bitmap_battery_empty, 8, 8, SH110X_WHITE);
+      } 
+    }
+    
     if (BLE::isDeviceConnected()) {
       display.drawBitmap(120, 0, epd_bitmap_bluetooth, 8, 8, SH110X_WHITE);
     } else {

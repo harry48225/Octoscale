@@ -22,6 +22,6 @@ namespace Battery {
   }
 
   bool isCharging() {
-    return !digitalRead(CHARGE_SENSE_PIN);
+    return analogRead(CHARGE_SENSE_PIN) < 200;
   }
 }
