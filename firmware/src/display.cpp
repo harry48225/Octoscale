@@ -192,6 +192,12 @@ namespace Display {
     }
   }
 
+  void showSleepCharging() {
+    clear();
+    display.print("sleeping but charging");
+    display.display();
+  }
+
   void clear() {
     display.clearDisplay();
     display.setCursor(0,0);

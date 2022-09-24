@@ -20,6 +20,8 @@ namespace Display {
 
   void showCountdown(int seconds);
 
+  void showSleepCharging();
+
   void clear();
   void show();
 
