@@ -11,6 +11,7 @@ namespace Battery {
   void init() {
     pinMode(BATTERY_SENSE_PIN, INPUT);
     pinMode(CHARGE_SENSE_PIN, INPUT);
+    pinMode(POWER_SWITCH_SENSE_PIN, INPUT);
   }
 
   double getVoltage() {
@@ -23,5 +24,9 @@ namespace Battery {
 
   bool isCharging() {
     return analogRead(CHARGE_SENSE_PIN) < 200;
+  }
+
+  bool isPowerSwitchOn() {
+    return digitalRead(POWER_SWITCH_SENSE_PIN);
   }
 }
