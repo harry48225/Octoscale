@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Canvas, CanvasView, Cap, Paint, Style } from '@nativescript-community/ui-canvas';
+  import { Canvas, CanvasView, Cap, Join, Paint, Path, Style } from '@nativescript-community/ui-canvas';
   import { onMount } from 'svelte';
   import { Writable } from 'svelte/store';
   import { GraphData } from '~/models/GraphData';
@@ -12,7 +12,7 @@
     dataStore.subscribe(val => update(val));
   })
 
-  let data: GraphData;
+  let rawData: GraphData;
   
   let canvasView: CanvasView | undefined;
 
@@ -31,32 +31,41 @@
     // ctx.fill();
   };
 
-  const getDataScale = (data: GraphData, canvasHeight: number, canvasWidth: number, filledProportionX: number = 0.9, filledProportionY: number = 0.9): number[] => {
-    const maxY = Math.max(...data.map(p => p.y));
-    const maxX = Math.max(...data.map(p => p.x));
+  const getDataScale = (canvasHeight: number, canvasWidth: number, filledProportionX: number = 0.9, filledProportionY: number = 0.9): number[] => {
+    const maxY = Math.max(...rawData.map(p => p.y));
+    const maxX = Math.max(...rawData.map(p => p.x));
 
     const yScale = (canvasHeight/maxY) * filledProportionY;
-    let xScale = (canvasWidth/maxX) * filledProportionX;
-    xScale = 20;
+    const xScale = (canvasWidth/maxX) * filledProportionX;
     return [xScale, Math.floor(yScale)];
   }
 
-  const drawGraphLine = (canvas: Canvas) => {
+  const drawGraphLine = (canvas: Canvas, data: GraphData) => {
     // ctx.strokeStyle = '#899878';
     // ctx.lineWidth = 8;
 
     const paint = new Paint();
     paint.setColor('#899878');
-    paint.strokeWidth = 8;
+    paint.strokeWidth = 4;
     paint.setStyle(Style.STROKE);
-    paint.setStrokeCap(Cap.ROUND);
+    paint.setStrokeJoin(Join.ROUND);
+    paint.setStrokeCap(Cap.BUTT);
     // ctx.beginPath();
     // ctx.moveTo(data[0].x, data[0].y);
 
-    for (let i = 1; i < data.length; i++) {
+    const path = new Path();
+    
+    path.moveTo(data[0].x, data[0].y);
+
+    //canvas.drawLines(data.flatMap((p) => [p.x, p.y]), 0, data.length * 2, paint);
+
+    for (let i = 1; i < data.length - 2; i+=3) {
       //ctx.lineTo(data[i].x, data[i].y);
-      canvas.drawLine(data[i-1].x, data[i-1].y, data[i].x, data[i].y, paint);
+      //canvas.drawLine(data[i-1].x, data[i-1].y, data[i].x, data[i].y, paint);
+      path.cubicTo(data[i].x, data[i].y, data[i+1].x, data[i+1].y, data[i+2].x, data[i+2].y);
     }
+
+    canvas.drawPath(path, paint);
     // ctx.stroke();
   };
 
@@ -83,9 +92,8 @@
   const update = (newData: GraphData) => {
     if (updating) return
     //if (canvas === undefined) return;
-    data = newData;
+    rawData = newData;
     updating = true;
-    console.log(canvasView);
     canvasView?.nativeView.invalidate();
     // let ctx = canvas.getContext('2d');
     // if (!(ctx instanceof CanvasRenderingContext2D)) return
@@ -126,8 +134,12 @@
   }
 
   const onDraw = (event: { canvas: Canvas}) => {
-    console.log("on draw");
-    drawGraphLine(event.canvas);
+    const canvas = event.canvas;
+    if (rawData.length < 3) return;
+    const [xScale, yScale] = getDataScale(canvas.getHeight(), canvas.getWidth());
+    const scaledData = rawData.map(p => ({x: p.x * xScale, y: p.y * yScale}));
+    //event.canvas.scale(xScale, yScale);
+    drawGraphLine(event.canvas, scaledData);
   }
 </script>
 

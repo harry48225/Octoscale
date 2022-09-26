@@ -19,7 +19,7 @@
   let massValue = 0;
   let animation = -1;
 
-  let graphUpdateInterval = 16;
+  let graphUpdateInterval = 8;
   let lastGraphUpdateMillis = -1;
 
   let timingUnsubscribe: Unsubscriber;
@@ -48,7 +48,7 @@
       lastGraphUpdateMillis = Date.now();
       graphData.update((data) => {
         let newData = [...data, {x: (millis - startTime)/1000, y: massValue}];
-        if (newData.length > 800) {
+        if (newData.length > 1600) {
           newData = reduceData(newData);
           graphUpdateInterval *= 2;
         }
