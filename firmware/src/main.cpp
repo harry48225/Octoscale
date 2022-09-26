@@ -55,10 +55,8 @@ void gatherBrewStats() {
 
 void sleepLoop() {
   if (Battery::isCharging()) {
-    Display::showSleepCharging();
     Animations::Charging::update();
   } else {
-    Display::showSleepCharged();
     Animations::Charged::update();
   }
 }
