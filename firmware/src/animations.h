@@ -8,4 +8,9 @@ namespace Animations {
     void reset();
     void update();
   }
+
+  namespace Charged {
+    void reset();
+    void update();
+  }
 }

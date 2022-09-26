@@ -65,4 +65,42 @@ namespace Animations {
       Leds::setBrightness(oldBrightness);
     }
   }
+
+  namespace Charged {
+    unsigned long lastUpdated = 0;
+    int brightness = 0;
+    bool increasing = true;
+    
+    void reset() {
+      lastUpdated = millis();
+      brightness = 0;
+      increasing = true;
+    }
+
+    void update() {
+      unsigned long deltaTime = millis() - lastUpdated;
+      lastUpdated = millis();
+      auto delta = deltaTime / 10;
+      if (increasing) {
+        brightness += delta;
+        if (brightness > 255) {
+          brightness = 255;
+          increasing = false;
+        }
+      } else {
+        brightness -= delta;
+        if (brightness <= 0) {
+          brightness = 0;
+          increasing = true;
+        }
+      }
+
+      auto oldBrightness = Leds::getBrightness();
+      Leds::clear();
+      Leds::fillPixelsRgb(0, 255, 0);
+      Leds::setBrightness(brightness);
+      Leds::show();
+      Leds::setBrightness(oldBrightness);
+    }
+  }
 }
