@@ -84,24 +84,25 @@
     updating = false;
   }
 
-  const drawHorizontalTicks = (canvas: Canvas, ctx: CanvasRenderingContext2D, xScale: number) => {
-    // const tickWidth = 4;
-    // ctx.strokeStyle = '#899878';
-    // ctx.lineWidth = tickWidth;
-    // ctx.font = '60px Arial';
-    // for (let xCoordinate = tickWidth/2; xCoordinate < (canvas.width as number) - tickWidth/2; xCoordinate += 5*xScale) {
-    //   ctx.beginPath();
-    //   ctx.moveTo(xCoordinate, 0);
-    //   ctx.lineTo(xCoordinate, (canvas.height as number) * 0.9);
-    //   ctx.stroke();
+  const drawHorizontalTicks = (canvas: Canvas, xScale: number) => {
+    const tickWidth = 2;
+    
+    const paint = new Paint();
+    paint.setColor('#899878');
+    paint.strokeWidth = tickWidth;
+    paint.setStyle(Style.STROKE);
+    paint.setStrokeJoin(Join.ROUND);
+    paint.setStrokeCap(Cap.BUTT);
+    for (let xCoordinate = tickWidth/2; xCoordinate < canvas.getWidth() - tickWidth/2; xCoordinate += 5*xScale) {
+      canvas.drawLine(xCoordinate, 0, xCoordinate, canvas.getHeight() * 0.9, paint);
 
-    //   // if (xCoordinate < (canvas.width as number) - 200) {
-    //   //   console.log(`drawing tick at ${xCoordinate}, ${Math.floor((xCoordinate - tickWidth / 2)/xScale)}s`);
-    //   //   ctx.transform(1, 0, 0, -1, 0, canvas.height as number);
-    //   //   ctx.fillText(`s`, xCoordinate, 200);
-    //   //   ctx.transform(1, 0, 0, -1, 0, canvas.height as number);
-    //   // }
-    // }
+      // if (xCoordinate < (canvas.width as number) - 200) {
+      //   console.log(`drawing tick at ${xCoordinate}, ${Math.floor((xCoordinate - tickWidth / 2)/xScale)}s`);
+      //   ctx.transform(1, 0, 0, -1, 0, canvas.height as number);
+      //   ctx.fillText(`s`, xCoordinate, 200);
+      //   ctx.transform(1, 0, 0, -1, 0, canvas.height as number);
+      // }
+    }
   }
 
   const onDraw = (event: { canvas: Canvas}) => {
@@ -111,8 +112,9 @@
     const [xScale, yScale] = getDataScale(canvas.getHeight(), canvas.getWidth());
     const scaledData = rawData.map(p => ({x: p.x * xScale, y: p.y * yScale}));
     
+    drawHorizontalTicks(canvas, xScale);
     drawFilledRegion(canvas, scaledData);
-    drawGraphLine(event.canvas, scaledData);
+    drawGraphLine(canvas, scaledData);
     drawGraphEndMarker(canvas, scaledData);
   }
 </script>
