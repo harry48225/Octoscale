@@ -24,7 +24,7 @@ enum State {
   TIMING,
   TIMING_STOPPED,
   CALIBRATION,
-  SLEEP_CHARGING
+  SLEEP
 };
 
 #define STOP_TIMER_REMOVAL_MASS 50
@@ -53,6 +53,158 @@ void gatherBrewStats() {
   Graph::stop();
 }
 
+void sleepLoop() {
+  if (Battery::isCharging()) {
+    Display::showSleepCharging();
+    Animations::Charging::update();
+  } else {
+    Display::showSleepCharged();
+    Animations::Charged::update();
+  }
+}
+
+void awakeLoop() {
+  double mass = -1;
+  if (state == TIMING_STOPPED) {
+    mass = brewMass;
+  } else {
+    scale.updateReading();
+    mass = scale.getReading();
+  }
+
+  BLE::update(mass);
+
+  if (state == IDLE) {
+    Display::showMass(mass);
+
+    if(Buttons::a()) {
+      if (state == IDLE) state = TIMER_PRIMING;
+    }
+
+    if(Buttons::b()) {
+      if (Buttons::getDurationPressed() > 10000) {
+        state = CALIBRATION;
+      }
+        
+      scale.tare();
+    }
+
+    if (BLE::isPendingTare()) {
+      scale.tare();
+      BLE::clearPendingTare();
+    }
+  } 
+  else if (state == TIMER_PRIMING) {
+    Graph::reset();
+    Graph::stop();
+    Display::showTimerPriming();
+    scale.tare();
+    state = TIMER_WAITING_FOR_START;
+  }
+  else if (state == TIMER_WAITING_FOR_START) {
+    Display::showTimerWaitingForStart(mass);
+    if (Buttons::b()) state = IDLE;
+
+    if (!scale.hasSettled || Buttons::a()) {
+      auto start = millis();
+      while (!Buttons::a() && millis() - start < 200) {
+        Buttons::loop();
+        delay(50);
+      }
+
+      if (Buttons::a()) {
+        scale.tare();
+        Timer::startWithCountDown(5);
+        state = TIMING; 
+      } else {
+        Timer::start();
+        state = TIMING;
+      }
+    }
+  }
+  else if (state == TIMING) {
+    long seconds = Timer::getSecondsElapsed();
+    Display::showTimer(seconds, mass);
+    BLE::updateTimerDuration(seconds);
+
+    if (scale.getLastSettledReading() - scale.getReading() > STOP_TIMER_REMOVAL_MASS) {
+      if (!brewStatsGathered) gatherBrewStats();
+      if (scale.hasSettled) {
+        Timer::stop();
+        state = TIMING_STOPPED;
+      }
+    } else {
+      brewStatsGathered = false;
+      Graph::resume();
+    }
+
+    if (Buttons::a()) {
+      gatherBrewStats();
+      Timer::stop();
+      state = TIMING_STOPPED;
+    }
+
+    if (Buttons::b()) state = IDLE;
+  }
+  else if (state == TIMING_STOPPED) {
+    Display::showBrewStats(brewMass, brewDuration);
+
+    if (Buttons::b()) state = IDLE;
+  }
+
+  // Do auto tare
+  if (autotareEnabled && scale.hasSettled && abs(scale.getReading() - scale.getLastSettledReading()) > 100 && scale.millisBetweenSettledReadings < 2000) {
+    Display::showAutoTare();
+    // Take some more readings
+    for (int i = 0; i < 40; i++) {
+      scale.updateReading();
+      delay(20);
+    }
+    scale.tare();
+    delay(200);
+  }
+    
+  if (state == CALIBRATION) {
+    Display::showCalibrationScreen();
+
+    scale.setScale();
+    scale.tareLoadCell();
+
+    scale.unsettle();
+    while (!scale.hasSettled) {
+      scale.updateReading();
+    }
+
+    // wait for b to be pressed
+    while(!Buttons::b()) {
+      Buttons::loop();
+    }
+
+    Leds::clear();
+    Leds::show();
+    delay(5000);
+    
+    scale.unsettle();
+    while (!scale.hasSettled) {
+      scale.updateReading();
+    }
+    
+    float factor = scale.getReading() / 100.f;
+    scale.setScale(factor);
+
+    Display::showCalibrationCompleteScreen(factor);
+    delay(2000);
+
+    state = IDLE;
+  }
+
+  Graph::update(scale.getReading());
+  //Graph::draw(Display::getDisplay(), 0, 41, 128, 22);
+  Display::show();
+  Leds::show();
+  Speaker::sound();
+}
+
 void loop() {
   Speaker::clear();
   Leds::clear();
@@ -60,153 +212,14 @@ void loop() {
   Display::clear();
 
   if (Battery::isPowerSwitchOn()) {
-    if (state == SLEEP_CHARGING) state = IDLE;
+    if (state == SLEEP) state = IDLE;
   } else {
-    state = SLEEP_CHARGING;
+    state = SLEEP;
   }
 
-  if (state == SLEEP_CHARGING) {
-    Display::showSleepCharging();
-    Animations::Charging::update();
+  if (state == SLEEP) {
+    sleepLoop();
   } else {
-    double mass = -1;
-    if (state == TIMING_STOPPED) {
-      mass = brewMass;
-    } else {
-      scale.updateReading();
-      mass = scale.getReading();
-    }
-
-    BLE::update(mass);
-
-    if (state == IDLE) {
-      Display::showMass(mass);
-
-      if(Buttons::a()) {
-        if (state == IDLE) state = TIMER_PRIMING;
-      }
-
-      if(Buttons::b()) {
-        if (Buttons::getDurationPressed() > 10000) {
-          state = CALIBRATION;
-        }
-          
-        scale.tare();
-      }
-
-      if (BLE::isPendingTare()) {
-        scale.tare();
-        BLE::clearPendingTare();
-      }
-    } 
-    else if (state == TIMER_PRIMING) {
-      Graph::reset();
-      Graph::stop();
-      Display::showTimerPriming();
-      scale.tare();
-      state = TIMER_WAITING_FOR_START;
-    }
-    else if (state == TIMER_WAITING_FOR_START) {
-      Display::showTimerWaitingForStart(mass);
-      if (Buttons::b()) state = IDLE;
-
-      if (!scale.hasSettled || Buttons::a()) {
-        auto start = millis();
-        while (!Buttons::a() && millis() - start < 200) {
-          Buttons::loop();
-          delay(50);
-        }
-
-        if (Buttons::a()) {
-          scale.tare();
-          Timer::startWithCountDown(5);
-          state = TIMING; 
-        } else {
-          Timer::start();
-          state = TIMING;
-        }
-      }
-    }
-    else if (state == TIMING) {
-      long seconds = Timer::getSecondsElapsed();
-      Display::showTimer(seconds, mass);
-      BLE::updateTimerDuration(seconds);
-
-      if (scale.getLastSettledReading() - scale.getReading() > STOP_TIMER_REMOVAL_MASS) {
-        if (!brewStatsGathered) gatherBrewStats();
-        if (scale.hasSettled) {
-          Timer::stop();
-          state = TIMING_STOPPED;
-        }
-      } else {
-        brewStatsGathered = false;
-        Graph::resume();
-      }
-
-      if (Buttons::a()) {
-        gatherBrewStats();
-        Timer::stop();
-        state = TIMING_STOPPED;
-      }
-
-      if (Buttons::b()) state = IDLE;
-    }
-    else if (state == TIMING_STOPPED) {
-      Display::showBrewStats(brewMass, brewDuration);
-
-      if (Buttons::b()) state = IDLE;
-    }
-
-    // Do auto tare
-    if (autotareEnabled && scale.hasSettled && abs(scale.getReading() - scale.getLastSettledReading()) > 100 && scale.millisBetweenSettledReadings < 2000) {
-      Display::showAutoTare();
-      // Take some more readings
-      for (int i = 0; i < 40; i++) {
-        scale.updateReading();
-        delay(20);
-      }
-      scale.tare();
-      delay(200);
-    }
-      
-    if (state == CALIBRATION) {
-      Display::showCalibrationScreen();
-
-      scale.setScale();
-      scale.tareLoadCell();
-
-      scale.unsettle();
-      while (!scale.hasSettled) {
-        scale.updateReading();
-      }
-
-      // wait for b to be pressed
-      while(!Buttons::b()) {
-        Buttons::loop();
-      }
-
-      Leds::clear();
-      Leds::show();
-      delay(5000);
-      
-      scale.unsettle();
-      while (!scale.hasSettled) {
-        scale.updateReading();
-      }
-      
-      float factor = scale.getReading() / 100.f;
-      scale.setScale(factor);
-
-      Display::showCalibrationCompleteScreen(factor);
-      delay(2000);
-
-      state = IDLE;
-    }
-
-    Graph::update(scale.getReading());
-    //Graph::draw(Display::getDisplay(), 0, 41, 128, 22);
-    Display::show();
-    Leds::show();
-    Speaker::sound();
+    awakeLoop();
   }
 }
