@@ -48,7 +48,7 @@
       lastGraphUpdateMillis = Date.now();
       graphData.update((data) => {
         let newData = [...data, {x: (millis - startTime)/1000, y: massValue}];
-        if (newData.length > 1200) {
+        if (newData.length > 800) {
           newData = reduceData(newData);
           graphUpdateInterval *= 2;
         }
@@ -65,6 +65,7 @@
   }
 
   const create = async () => {
+    console.log("onCreate");
     await connectToScale();
 
     timingUnsubscribe = isTiming.subscribe(val => {
