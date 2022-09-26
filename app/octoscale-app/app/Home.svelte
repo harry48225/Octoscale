@@ -1,6 +1,6 @@
 <script lang="ts">
   import MassDisplay from './components/MassDisplay.svelte';
-  import { connectToScale, mass, isTiming, timerDurationSeconds, aButton, bButton } from  './bleManager';
+  import { connectToScale, mass, displayedMass, isTiming, timerDurationSeconds, aButton, bButton } from  './bleManager';
   import ActionButtons from './components/ActionButtons.svelte';
   import ConnectionBanner from './components/ConnectionBanner.svelte';
   import Graph from './components/Graph.svelte';
@@ -79,7 +79,7 @@
       }
     });
 
-    massUnsubscribe = mass.subscribe(val => massValue = val);
+    massUnsubscribe = displayedMass.subscribe(val => massValue = val);
     timerDurationUnsubscribe = timerDurationSeconds.subscribe(val => {duration = val;});
     resetGraph();
     animation = requestAnimationFrame(updateGraph);

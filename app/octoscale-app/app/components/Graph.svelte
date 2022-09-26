@@ -136,6 +136,7 @@
   const onDraw = (event: { canvas: Canvas}) => {
     const canvas = event.canvas;
     if (rawData.length < 3) return;
+    canvas.scale(1, -1, canvas.getWidth() / 2, canvas.getHeight() / 2);
     const [xScale, yScale] = getDataScale(canvas.getHeight(), canvas.getWidth());
     const scaledData = rawData.map(p => ({x: p.x * xScale, y: p.y * yScale}));
     //event.canvas.scale(xScale, yScale);
