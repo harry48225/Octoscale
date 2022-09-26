@@ -59,6 +59,7 @@ void sleepLoop() {
   } else {
     Animations::Charged::update();
   }
+  delay(10);
 }
 
 void awakeLoop() {
