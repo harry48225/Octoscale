@@ -45,7 +45,7 @@
 
     const yScale = (canvasHeight/maxY) * filledProportionY;
     const xScale = (canvasWidth/maxX) * filledProportionX;
-    return [xScale, Math.floor(yScale)];
+    return [xScale, yScale];
   }
 
   const drawGraphLine = (canvas: Canvas, data: GraphData) => {
