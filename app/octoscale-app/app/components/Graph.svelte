@@ -17,6 +17,26 @@
   let canvasView: CanvasView | undefined;
 
   const drawFilledRegion = (canvas: Canvas, data: GraphData) => {
+    const paint = new Paint();
+    paint.setColor('#E4E6C3');
+    paint.strokeWidth = 4;
+    paint.setStyle(Style.FILL);
+    paint.setStrokeJoin(Join.ROUND);
+    paint.setStrokeCap(Cap.BUTT);
+    const path = new Path();
+    
+    path.moveTo(data[0].x, data[0].y);
+
+    for (let i = 1; i < data.length - 2; i+=3) {
+      path.cubicTo(data[i].x, data[i].y, data[i+1].x, data[i+1].y, data[i+2].x, data[i+2].y);
+    }
+
+    path.quadTo(data[data.length -2].x, data[data.length -2].y, data[data.length -1].x, data[data.length -1].y);
+
+    path.lineTo(data[data.length - 1].x, data[0].y);
+    path.close();
+
+    canvas.drawPath(path, paint);
     // ctx.fillStyle = '#E4E6C3';
     // ctx.beginPath();
     // ctx.moveTo(data[0].x, data[0].y);
@@ -41,34 +61,23 @@
   }
 
   const drawGraphLine = (canvas: Canvas, data: GraphData) => {
-    // ctx.strokeStyle = '#899878';
-    // ctx.lineWidth = 8;
-
     const paint = new Paint();
     paint.setColor('#899878');
     paint.strokeWidth = 4;
     paint.setStyle(Style.STROKE);
     paint.setStrokeJoin(Join.ROUND);
     paint.setStrokeCap(Cap.BUTT);
-    // ctx.beginPath();
-    // ctx.moveTo(data[0].x, data[0].y);
-
     const path = new Path();
     
     path.moveTo(data[0].x, data[0].y);
 
-    //canvas.drawLines(data.flatMap((p) => [p.x, p.y]), 0, data.length * 2, paint);
-
     for (let i = 1; i < data.length - 2; i+=3) {
-      //ctx.lineTo(data[i].x, data[i].y);
-      //canvas.drawLine(data[i-1].x, data[i-1].y, data[i].x, data[i].y, paint);
       path.cubicTo(data[i].x, data[i].y, data[i+1].x, data[i+1].y, data[i+2].x, data[i+2].y);
     }
 
     path.quadTo(data[data.length -2].x, data[data.length -2].y, data[data.length -1].x, data[data.length -1].y);
 
     canvas.drawPath(path, paint);
-    // ctx.stroke();
   };
 
   const drawGraphEndMarker = (canvas: Canvas, data: GraphData) => {
@@ -146,6 +155,7 @@
     const [xScale, yScale] = getDataScale(canvas.getHeight(), canvas.getWidth());
     const scaledData = rawData.map(p => ({x: p.x * xScale, y: p.y * yScale}));
     //event.canvas.scale(xScale, yScale);
+    drawFilledRegion(canvas, scaledData);
     drawGraphLine(event.canvas, scaledData);
     drawGraphEndMarker(canvas, scaledData);
   }
