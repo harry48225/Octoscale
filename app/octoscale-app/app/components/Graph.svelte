@@ -65,12 +65,18 @@
       path.cubicTo(data[i].x, data[i].y, data[i+1].x, data[i+1].y, data[i+2].x, data[i+2].y);
     }
 
+    path.quadTo(data[data.length -2].x, data[data.length -2].y, data[data.length -1].x, data[data.length -1].y);
+
     canvas.drawPath(path, paint);
     // ctx.stroke();
   };
 
   const drawGraphEndMarker = (canvas: Canvas, data: GraphData) => {
-    // const lastPoint = data[data.length - 1];
+    const paint = new Paint();
+    paint.setColor('#899878');
+    paint.setStyle(Style.FILL);
+    const lastPoint = data[data.length - 1];
+    canvas.drawCircle(lastPoint.x, lastPoint.y, 6, paint);
     // //ctx.moveTo(data[lastIndex].x, data[lastIndex].y);
     // ctx.beginPath();
     // ctx.arc(lastPoint.x, lastPoint.y, 16, 0, 2*Math.PI);
@@ -141,6 +147,7 @@
     const scaledData = rawData.map(p => ({x: p.x * xScale, y: p.y * yScale}));
     //event.canvas.scale(xScale, yScale);
     drawGraphLine(event.canvas, scaledData);
+    drawGraphEndMarker(canvas, scaledData);
   }
 </script>
 
