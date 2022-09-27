@@ -1,6 +1,5 @@
 import { getBluetoothInstance } from '@nativescript-community/ble';
 import { request } from '@nativescript-community/perms';
-import { marginRightProperty } from '@nativescript/core';
 import { writable } from 'svelte/store';
 
 const SERVICE_UUID = "ade4af7e-f409-473c-ace4-c49d11393be3";
@@ -113,7 +112,13 @@ const decodeResultValue = (val: ArrayBuffer) => {
 
 let interpolateMassLoop = async () => {
   // Should probably use a 1euro filter
-  displayedMass.update(dMass => dMass * 0.2 + massValue * 0.8);
+  displayedMass.update(dMass => {
+    let newMass = dMass * 0.1 + massValue * 0.9;
+    if (newMass > -0.05 && newMass < 0) {
+      newMass = 0;
+    }
+    return newMass;
+  });
   setTimeout(interpolateMassLoop, 20);
 }
 
