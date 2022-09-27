@@ -6,7 +6,7 @@
 
   let timing = false;
   isTiming.subscribe((state) => {
-    timing = !!state;
+    timing = timing || !!state;
   })
 </script>
 
