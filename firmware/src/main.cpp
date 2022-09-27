@@ -131,6 +131,7 @@ void awakeLoop() {
       if (scale.hasSettled) {
         Timer::stop();
         state = TIMING_STOPPED;
+        BLE::stopTiming();
       }
     } else {
       brewStatsGathered = false;
@@ -140,6 +141,7 @@ void awakeLoop() {
     if (Buttons::a()) {
       gatherBrewStats();
       Timer::stop();
+      BLE::stopTiming();
       state = TIMING_STOPPED;
     }
 
