@@ -123,20 +123,18 @@
   }
 </script>
 
-<scrollView orientation="horizontal">
-  <stackLayout orientation="horizontal">
-    <flexboxLayout>
-      <flexboxLayout id="canvas-wrapper">
-        <canvas id="canvas" bind:this={canvasView} on:draw={onDraw}/>
-      </flexboxLayout>
+<carousel>
+  <carouselItem>
+    <flexboxLayout id="canvas-wrapper">
+      <canvas id="canvas" bind:this={canvasView} on:draw={onDraw}/>
     </flexboxLayout>
-    <flexboxLayout>
-      <SettingsSection title="Brew designer">
-        <SliderSetting  label="Preinfusion" stepSize=1 SIGNIFICANT_FIGURES=2 max="20"/>
-      </SettingsSection>
-    </flexboxLayout>
-  </stackLayout>
-</scrollView>
+  </carouselItem>
+  <carouselItem>
+    <SettingsSection title="Brew designer">
+      <SliderSetting  label="Preinfusion" stepSize=1 SIGNIFICANT_FIGURES=2 max="20"/>
+    </SettingsSection>
+  </carouselItem>
+</carousel>
 
 
 <style lang="scss">
