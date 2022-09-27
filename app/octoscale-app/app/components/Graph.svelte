@@ -84,6 +84,29 @@
     canvas.drawCircle(lastPoint.x, lastPoint.y, 6, paint);
   };
 
+  const drawTargetBrewLine = (canvas: Canvas, xScale: number, yScale: number) => {
+    const data: GraphData = [{x: 0, y: 0}, {x: preinfusion, y: 0}, {x: totalBrewTime, y: targetMass}]
+      .map((p) => ({x: p.x * xScale, y: p.y * yScale}));
+
+    const paint = new Paint();
+    paint.setColor('#9B1D20');
+    paint.strokeWidth = 4;
+    paint.setStyle(Style.STROKE);
+    paint.setStrokeJoin(Join.ROUND);
+    paint.setStrokeCap(Cap.BUTT);
+    const path = new Path();
+    
+    path.moveTo(data[0].x, data[0].y);
+
+    for (let i = 1; i < data.length; i++) {
+      path.lineTo(data[i].x, data[i].y);
+    }
+
+    path.lineTo(canvas.getWidth(), data[data.length - 1].y);
+
+    canvas.drawPath(path, paint);
+  }
+
   const update = (newData: GraphData) => {
     if (updating) return
     rawData = newData;
@@ -124,6 +147,7 @@
     drawFilledRegion(canvas, scaledData);
     drawGraphLine(canvas, scaledData);
     drawGraphEndMarker(canvas, scaledData);
+    drawTargetBrewLine(canvas, xScale, yScale);
   }
 </script>
 
