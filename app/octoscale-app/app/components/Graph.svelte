@@ -1,16 +1,20 @@
 <script lang="ts">
   import { Canvas, CanvasView, Cap, Join, Paint, Path, Style } from '@nativescript-community/ui-canvas';
-    import { FlexboxLayout } from '@nativescript/core';
+  import { FlexboxLayout } from '@nativescript/core';
   import { onMount } from 'svelte';
   import { Writable } from 'svelte/store';
   import { GraphData } from '~/models/GraphData';
-    import ActionButtons from './ActionButtons.svelte';
-    import SettingsSection from './SettingsSection.svelte';
-    import SliderSetting from './SliderSetting.svelte';
+  import SettingsSection from './SettingsSection.svelte';
+  import SliderSetting from './SliderSetting.svelte';
 
   export let dataStore: Writable<GraphData>;
 
   let updating = false;
+
+  let preinfusion: number;
+  let pullTime: number;
+  let targetMass: number;
+  $: totalBrewTime = preinfusion + pullTime;
 
   onMount(() => {
     dataStore.subscribe(val => update(val));
@@ -44,8 +48,8 @@
   };
 
   const getDataScale = (canvasHeight: number, canvasWidth: number, filledProportionX: number = 0.9, filledProportionY: number = 0.9): number[] => {
-    const maxY = Math.max(...rawData.map(p => p.y));
-    const maxX = Math.max(...rawData.map(p => p.x));
+    const maxY = Math.max(...rawData.map(p => p.y), targetMass + 10);
+    const maxX = Math.max(...rawData.map(p => p.x), totalBrewTime + 5);
 
     const yScale = (canvasHeight/maxY) * filledProportionY;
     const xScale = (canvasWidth/maxX) * filledProportionX;
@@ -134,9 +138,9 @@
     </carouselItem>
     <carouselItem>
       <SettingsSection title="Brew designer">
-        <SliderSetting label="Preinfusion" stepSize=1 SIGNIFICANT_FIGURES=2 max=20/>
-        <SliderSetting label="Pull time" stepSize=1 SIGNIFICANT_FIGURES=2 max=60/>
-        <SliderSetting label="Mass" stepSize=0.1 SIGNIFICANT_FIGURES=3 max=60/>
+        <SliderSetting bind:value={preinfusion} label="Preinfusion" stepSize=1 SIGNIFICANT_FIGURES=2 max=20/>
+        <SliderSetting bind:value={pullTime} label="Pull time" stepSize=1 SIGNIFICANT_FIGURES=2 max=60/>
+        <SliderSetting bind:value={targetMass} label="Mass" stepSize=0.1 SIGNIFICANT_FIGURES=3 max=60/>
       </SettingsSection>
     </carouselItem>
   </carousel>
