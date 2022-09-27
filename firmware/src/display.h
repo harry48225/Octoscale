@@ -21,7 +21,7 @@ namespace Display {
   void showCountdown(int seconds);
 
   void clear();
-  void show();
+  void show(bool statusBar = true);
 
   Adafruit_SH1106G getDisplay();
 }

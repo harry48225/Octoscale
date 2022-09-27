@@ -63,6 +63,10 @@ void sleepLoop() {
 }
 
 void awakeLoop() {
+  Speaker::clear();
+  Leds::clear();
+  Display::clear();
+  Buttons::loop();
   double mass = -1;
   if (state == TIMING_STOPPED) {
     mass = brewMass;
@@ -207,15 +211,18 @@ void awakeLoop() {
 }
 
 void loop() {
-  Speaker::clear();
-  Leds::clear();
-  Buttons::loop();
-  Display::clear();
-
   if (Battery::isPowerSwitchOn()) {
     if (state == SLEEP) state = IDLE;
   } else {
-    state = SLEEP;
+    if (state != SLEEP) {
+      state = SLEEP;
+      Display::clear();
+      Display::show(false);
+      Leds::clear();
+      Leds::show();
+      Speaker::clear();
+      Speaker::sound();
+    }
   }
 
   if (state == SLEEP) {

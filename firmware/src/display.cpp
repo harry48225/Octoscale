@@ -195,8 +195,8 @@ namespace Display {
     display.setCursor(0,0);
   }
 
-  void show() {
-    showStatusBar();
+  void show(bool statusBar) {
+    if (statusBar) showStatusBar();
     display.display();
   }
 
