@@ -138,15 +138,18 @@
 
   const onDraw = (event: { canvas: Canvas}) => {
     const canvas = event.canvas;
-    if (rawData.length < 3) return;
+    
     canvas.scale(1, -1, canvas.getWidth() / 2, canvas.getHeight() / 2);
     const [xScale, yScale] = getDataScale(canvas.getHeight(), canvas.getWidth());
     const scaledData = rawData.map(p => ({x: p.x * xScale, y: p.y * yScale}));
     
     drawHorizontalTicks(canvas, xScale);
-    drawFilledRegion(canvas, scaledData);
-    drawGraphLine(canvas, scaledData);
-    drawGraphEndMarker(canvas, scaledData);
+    
+    if (rawData.length >= 3) {
+      drawFilledRegion(canvas, scaledData);
+      drawGraphLine(canvas, scaledData);
+      drawGraphEndMarker(canvas, scaledData);
+    }
     drawTargetBrewLine(canvas, xScale, yScale);
   }
 </script>

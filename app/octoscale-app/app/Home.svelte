@@ -8,7 +8,7 @@
   import { GraphData } from './models/GraphData';
   import { Unsubscriber, writable } from 'svelte/store';
         
-  const graphData = writable<GraphData>([]);
+  const graphData = writable<GraphData>([{x: 0, y: 0}]);
 
   let timing: boolean = false;
 
@@ -47,12 +47,16 @@
     if (millis - lastGraphUpdateMillis > graphUpdateInterval) {
       lastGraphUpdateMillis = Date.now();
       graphData.update((data) => {
-        let newData = [...data, {x: (millis - startTime)/1000, y: massValue}];
-        if (newData.length > 1600) {
-          newData = reduceData(newData);
-          graphUpdateInterval *= 2;
+        if (timing) {
+          let newData = [...data, {x: (millis - startTime)/1000, y: massValue}];
+          if (newData.length > 1600) {
+           newData = reduceData(newData);
+           graphUpdateInterval *= 2;
+          }
+          return newData; 
         }
-        return newData;
+
+        return data;
       });
     }
     animation = requestAnimationFrame(updateGraph);
