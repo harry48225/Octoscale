@@ -167,9 +167,8 @@ namespace Display {
     display.setCursor(0, 0);
     display.fillRect(80, 0, 128, 8, SH110X_BLACK);
     
-    double batteryValue = Battery::getVoltage();
+    double batteryValue = Battery::getValue();
     display.setCursor(80, 0);
-    display.print(batteryValue);
     if (Battery::isCharging()) {
       display.drawBitmap(110, 0, epd_bitmap_charging, 8, 8, SH110X_WHITE);
     } else {
