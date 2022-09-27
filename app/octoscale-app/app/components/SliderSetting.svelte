@@ -2,12 +2,12 @@
 import LabelledSetting from "./LabelledSetting.svelte";
 
   import NumberField, { ReturnPressEvent } from "./NumberField.svelte";
-  const SIGNIFICANT_FIGURES = 3;
+  export let SIGNIFICANT_FIGURES = 3;
   export let label: string
   export let min = 0;
   export let max = 1;
   export let value = 0;
-  $: stepSize = 10**(Math.floor(Math.log10(max)) - SIGNIFICANT_FIGURES);
+  export let stepSize = 10**(Math.floor(Math.log10(max)) - SIGNIFICANT_FIGURES);
 
   const updateValue = (newValue: number) => {
     if (newValue.toPrecision(SIGNIFICANT_FIGURES) === value.toPrecision(SIGNIFICANT_FIGURES)) return

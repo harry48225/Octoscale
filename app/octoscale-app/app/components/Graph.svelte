@@ -1,8 +1,12 @@
 <script lang="ts">
   import { Canvas, CanvasView, Cap, Join, Paint, Path, Style } from '@nativescript-community/ui-canvas';
+    import { FlexboxLayout } from '@nativescript/core';
   import { onMount } from 'svelte';
   import { Writable } from 'svelte/store';
   import { GraphData } from '~/models/GraphData';
+    import ActionButtons from './ActionButtons.svelte';
+    import SettingsSection from './SettingsSection.svelte';
+    import SliderSetting from './SliderSetting.svelte';
 
   export let dataStore: Writable<GraphData>;
 
@@ -122,11 +126,15 @@
 <scrollView orientation="horizontal">
   <stackLayout orientation="horizontal">
     <flexboxLayout>
-      <canvas id="canvas" bind:this={canvasView} on:draw={onDraw}/>
+      <flexboxLayout id="canvas-wrapper">
+        <canvas id="canvas" bind:this={canvasView} on:draw={onDraw}/>
+      </flexboxLayout>
     </flexboxLayout>
-    <stackLayout>
-      <label>hi</label>
-    </stackLayout>
+    <flexboxLayout>
+      <SettingsSection title="Brew designer">
+        <SliderSetting  label="Preinfusion" stepSize=1 SIGNIFICANT_FIGURES=2 max="20"/>
+      </SettingsSection>
+    </flexboxLayout>
   </stackLayout>
 </scrollView>
 
@@ -134,19 +142,24 @@
 <style lang="scss">
   ScrollView {
     flex: auto;
-    margin: 32px;
+    margin: 32px 0px;
     overflow: hidden;
-    padding-left: 64px;
-    padding-right: 64px;
     
     StackLayout {
       width: 200%;
 
-      FlexboxLayout {
+      > * {
+        flex: auto;
+        flex-direction: column;
+        width: 50%;
+        padding: 0px 32px;
+      }
+
+      #canvas-wrapper {
         border-color: #899878;
         border-width: 8px;
         border-radius: 64px;
-        width: 50%;
+        padding: 0px 16px;
 
         Canvas {
           width: 100%;
