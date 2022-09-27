@@ -123,46 +123,41 @@
   }
 </script>
 
-<carousel>
-  <carouselItem>
-    <flexboxLayout id="canvas-wrapper">
-      <canvas id="canvas" bind:this={canvasView} on:draw={onDraw}/>
-    </flexboxLayout>
-  </carouselItem>
-  <carouselItem>
-    <SettingsSection title="Brew designer">
-      <SliderSetting  label="Preinfusion" stepSize=1 SIGNIFICANT_FIGURES=2 max="20"/>
-    </SettingsSection>
-  </carouselItem>
-</carousel>
-
+<!-- <gridLayout id="main"> -->
+  <flexboxLayout id="main">
+  <carousel height="96%"
+  width="100%" showIndicator={true} android:indicatorAnimation="worm" indicatorColor="#899878" indicatorColorUnselected="#E4E6C3">
+    <carouselItem>
+      <flexboxLayout id="canvas-wrapper">
+        <canvas id="canvas" bind:this={canvasView} on:draw={onDraw}/>
+      </flexboxLayout>
+    </carouselItem>
+    <carouselItem>
+      <SettingsSection title="Brew designer">
+        <SliderSetting  label="Preinfusion" stepSize=1 SIGNIFICANT_FIGURES=2 max="20"/>
+      </SettingsSection>
+    </carouselItem>
+  </carousel>
+</flexboxLayout>
+<!-- </gridLayout> -->
+  
 
 <style lang="scss">
-  ScrollView {
-    flex: auto;
-    margin: 32px 0px;
-    overflow: hidden;
-    
-    StackLayout {
-      width: 200%;
+  #main {
+    margin: 32px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  }
 
-      > * {
-        flex: auto;
-        flex-direction: column;
-        width: 50%;
-        padding: 0px 32px;
-      }
+  #canvas-wrapper {
+    border-color: #899878;
+    border-width: 8px;
+    border-radius: 64px;
+    padding: 0px 16px;
 
-      #canvas-wrapper {
-        border-color: #899878;
-        border-width: 8px;
-        border-radius: 64px;
-        padding: 0px 16px;
-
-        Canvas {
-          width: 100%;
-        }
-      }
+    Canvas {
+      width: 100%;
     }
   }
 </style>
