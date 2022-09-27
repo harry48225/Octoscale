@@ -159,17 +159,19 @@
   <flexboxLayout id="main">
   <carousel height="96%"
   width="100%" showIndicator={true} android:indicatorAnimation="worm" indicatorColor="#899878" indicatorColorUnselected="#E4E6C3">
-    <carouselItem>
+    <carouselItem id="carousel-item">
       <flexboxLayout id="canvas-wrapper">
         <canvas id="canvas" bind:this={canvasView} on:draw={onDraw}/>
       </flexboxLayout>
     </carouselItem>
-    <carouselItem>
-      <SettingsSection title="Brew designer">
-        <SliderSetting bind:value={preinfusion} label="Preinfusion" stepSize=1 SIGNIFICANT_FIGURES=2 max=20/>
-        <SliderSetting bind:value={pullTime} label="Pull time" stepSize=1 SIGNIFICANT_FIGURES=2 max=60/>
-        <SliderSetting bind:value={targetMass} label="Mass" stepSize=0.1 SIGNIFICANT_FIGURES=3 max=60/>
-      </SettingsSection>
+    <carouselItem id="carousel-item">
+      <flexboxLayout>  
+        <SettingsSection title="Brew designer">
+          <SliderSetting bind:value={preinfusion} label="Preinfusion" stepSize=1 SIGNIFICANT_FIGURES=2 max=20/>
+          <SliderSetting bind:value={pullTime} label="Pull time" stepSize=1 SIGNIFICANT_FIGURES=2 max=60/>
+          <SliderSetting bind:value={targetMass} label="Mass" stepSize=0.1 SIGNIFICANT_FIGURES=3 max=60/>
+        </SettingsSection>
+      </flexboxLayout>
     </carouselItem>
   </carousel>
 </flexboxLayout>
@@ -178,10 +180,14 @@
 
 <style lang="scss">
   #main {
-    margin: 32px;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+  }
+
+  #carousel-item > * {
+    flex-direction: column;
+    margin: 32px;
   }
 
   #canvas-wrapper {

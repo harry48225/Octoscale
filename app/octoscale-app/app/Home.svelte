@@ -113,7 +113,7 @@
       <button on:tap="{aButton}" text="time"/>
       <button on:tap="{bButton}" text="tare"/>
     </ActionButtons>
-    <BottomNavigationBar currentPage="home"/>
+    <!-- <BottomNavigationBar currentPage="home"/> -->
   </flexboxLayout>
 </page>
 
