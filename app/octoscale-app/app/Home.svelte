@@ -70,7 +70,7 @@
 
   const create = async () => {
     console.log("onCreate");
-    await connectToScale();
+    connectToScale();
 
     timingUnsubscribe = isTiming.subscribe(val => {
       const wasTiming = timing;

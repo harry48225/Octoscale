@@ -39,7 +39,7 @@ export const connectToScale = async () => {
 
   await ble.startScanning({
     filters:[{serviceUUID: SERVICE_UUID}],
-    seconds: 4,
+    seconds: 60,
     onDiscovered: (peripheral) => {
         console.log(`found ${peripheral.name}`)
         console.log(peripheral);
