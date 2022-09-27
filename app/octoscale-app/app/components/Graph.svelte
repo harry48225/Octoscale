@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Canvas, CanvasView, Cap, Join, Paint, Path, Style } from '@nativescript-community/ui-canvas';
+  import { Canvas, CanvasView, Cap, DashPathEffect, Join, Paint, Path, Style } from '@nativescript-community/ui-canvas';
   import { FlexboxLayout } from '@nativescript/core';
   import { onMount } from 'svelte';
   import { Writable } from 'svelte/store';
@@ -94,6 +94,7 @@
     paint.setStyle(Style.STROKE);
     paint.setStrokeJoin(Join.ROUND);
     paint.setStrokeCap(Cap.BUTT);
+    paint.setPathEffect(new DashPathEffect([16, 16], 0));
     const path = new Path();
     
     path.moveTo(data[0].x, data[0].y);
