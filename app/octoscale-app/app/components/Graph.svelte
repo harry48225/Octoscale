@@ -134,7 +134,9 @@
     </carouselItem>
     <carouselItem>
       <SettingsSection title="Brew designer">
-        <SliderSetting  label="Preinfusion" stepSize=1 SIGNIFICANT_FIGURES=2 max="20"/>
+        <SliderSetting label="Preinfusion" stepSize=1 SIGNIFICANT_FIGURES=2 max=20/>
+        <SliderSetting label="Pull time" stepSize=1 SIGNIFICANT_FIGURES=2 max=60/>
+        <SliderSetting label="Mass" stepSize=0.1 SIGNIFICANT_FIGURES=3 max=60/>
       </SettingsSection>
     </carouselItem>
   </carousel>
