@@ -16,6 +16,8 @@
   let targetMass: number;
   $: totalBrewTime = preinfusion + pullTime;
 
+  const zeroOffset = 20;
+
   onMount(() => {
     dataStore.subscribe(val => update(val));
   })
@@ -33,7 +35,7 @@
     paint.setStrokeCap(Cap.BUTT);
     const path = new Path();
     
-    path.moveTo(data[0].x, data[0].y);
+    path.moveTo(data[0].x, 0);
 
     for (let i = 1; i < data.length - 2; i+=3) {
       path.cubicTo(data[i].x, data[i].y, data[i+1].x, data[i+1].y, data[i+2].x, data[i+2].y);
@@ -41,7 +43,7 @@
 
     path.quadTo(data[data.length -2].x, data[data.length -2].y, data[data.length -1].x, data[data.length -1].y);
 
-    path.lineTo(data[data.length - 1].x, data[0].y);
+    path.lineTo(data[data.length - 1].x, 0);
     path.close();
 
     canvas.drawPath(path, paint);
@@ -86,7 +88,7 @@
 
   const drawTargetBrewLine = (canvas: Canvas, xScale: number, yScale: number) => {
     const data: GraphData = [{x: 0, y: 0}, {x: preinfusion, y: 0}, {x: totalBrewTime, y: targetMass}]
-      .map((p) => ({x: p.x * xScale, y: p.y * yScale}));
+      .map((p) => ({x: p.x * xScale, y: (p.y * yScale) + zeroOffset}));
 
     const paint = new Paint();
     paint.setColor('#9B1D20');
@@ -142,7 +144,7 @@
     
     canvas.scale(1, -1, canvas.getWidth() / 2, canvas.getHeight() / 2);
     const [xScale, yScale] = getDataScale(canvas.getHeight(), canvas.getWidth());
-    const scaledData = rawData.map(p => ({x: p.x * xScale, y: p.y * yScale}));
+    const scaledData = rawData.map(p => ({x: p.x * xScale, y: (p.y * yScale) + zeroOffset}));
     
     drawHorizontalTicks(canvas, xScale);
     
