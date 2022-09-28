@@ -193,7 +193,7 @@ void awakeLoop() {
     while (!scale.hasSettled) {
       scale.updateReading();
     }
-    
+
     float factor = scale.getReading() / 100.f;
     scale.setScale(factor);
 
@@ -211,6 +211,11 @@ void awakeLoop() {
 }
 
 void loop() {
+  while (Battery::getVoltage() <= CUTOFF_VOLTAGE) {
+    Display::showBatteryDepletedScreen();
+    delay(1000);
+  } 
+
   if (Battery::isPowerSwitchOn()) {
     if (state == SLEEP) state = IDLE;
   } else {

@@ -20,6 +20,8 @@ namespace Display {
 
   void showCountdown(int seconds);
 
+  void showBatteryDepletedScreen();
+
   void clear();
   void show(bool statusBar = true);
 
