@@ -213,7 +213,7 @@ void awakeLoop() {
 void loop() {
   while (Battery::getVoltage() <= CUTOFF_VOLTAGE) {
     Display::showBatteryDepletedScreen();
-    delay(1000);
+    delay(100);
   } 
 
   if (Battery::isPowerSwitchOn()) {

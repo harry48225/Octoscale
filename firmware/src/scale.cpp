@@ -6,7 +6,7 @@
 #include "debug.h"
 
 Scale::Scale(int doutPin, int sckPin) {
-  loadCell.set_scale(4411.92);
+  loadCell.set_scale(4385.23);
   loadCell.begin(doutPin, sckPin);
   loadCell.tare();
 }
