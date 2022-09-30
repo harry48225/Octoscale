@@ -211,13 +211,12 @@ void awakeLoop() {
 }
 
 void loop() {
-  while (Battery::getVoltage() <= CUTOFF_VOLTAGE) {
-    Display::showBatteryDepletedScreen();
-    delay(100);
-  } 
-
   if (Battery::isPowerSwitchOn()) {
     if (state == SLEEP) state = IDLE;
+    while (Battery::getVoltage() <= CUTOFF_VOLTAGE) {
+      Display::showBatteryDepletedScreen();
+      delay(100);
+    } 
   } else {
     if (state != SLEEP) {
       state = SLEEP;
