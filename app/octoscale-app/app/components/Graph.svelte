@@ -158,8 +158,8 @@
 </script>
 
 <!-- <gridLayout id="main"> -->
-  <flexboxLayout id="main">
-  <carousel height="96%"
+<flexboxLayout id="main">
+  <carousel height="98%"
   width="100%" showIndicator={true} android:indicatorAnimation="worm" indicatorColor="#899878" indicatorColorUnselected="#E4E6C3">
     <carouselItem id="carousel-item">
       <flexboxLayout id="canvas-wrapper">
@@ -171,7 +171,7 @@
         <SettingsSection title="Brew designer">
           <SliderSetting bind:value={preinfusion} label="Preinfusion" stepSize=1 SIGNIFICANT_FIGURES=2 max=20/>
           <SliderSetting bind:value={pullTime} label="Pull time" stepSize=1 SIGNIFICANT_FIGURES=2 max=60/>
-          <SliderSetting bind:value={targetMass} label="Mass" stepSize=0.1 SIGNIFICANT_FIGURES=3 max=60/>
+          <SliderSetting bind:value={targetMass} label="Mass" stepSize=0.5 SIGNIFICANT_FIGURES=3 max=60/>
         </SettingsSection>
       </flexboxLayout>
     </carouselItem>
@@ -185,11 +185,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 32px;
   }
 
   #carousel-item > * {
     flex-direction: column;
-    margin: 32px;
+    margin: 8 32px;
   }
 
   #canvas-wrapper {
