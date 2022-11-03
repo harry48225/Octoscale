@@ -6637,7 +6637,7 @@
     (property "Value" "MLT-8530" (id 1) (at 375.92 59.9439 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "Buzzer_Beeper:Buzzer_CUI_CPT-9019S-SMT" (id 2) (at 370.84 62.484 0)
+    (property "Footprint" "Buzzer_Beeper:MagneticBuzzer_Kobitone_254-EMB84Q-RO" (id 2) (at 370.84 62.484 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (id 3) (at 370.586 58.674 0)
@@ -9713,7 +9713,7 @@
       (reference "L1") (unit 1) (value "3.3uH") (footprint "Inductor_SMD:L_0805_2012Metric_Pad1.05x1.20mm_HandSolder")
     )
     (path "/25a2f8bb-8f78-45c9-98fb-96b5fc7ff6f5"
-      (reference "LS1") (unit 1) (value "MLT-8530") (footprint "Buzzer_Beeper:Buzzer_CUI_CPT-9019S-SMT")
+      (reference "LS1") (unit 1) (value "MLT-8530") (footprint "Buzzer_Beeper:MagneticBuzzer_Kobitone_254-EMB84Q-RO")
     )
     (path "/c37e8969-7aa1-405c-ac57-11bcdd0d562b"
       (reference "Q1") (unit 1) (value "AO3415_C181094") (footprint "easyeda2kicad:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR")
